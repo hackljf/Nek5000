@@ -373,6 +373,7 @@ c computed by multiplying rho by u_j
 
       call copy(tu,ud,nxyz)
 
+! needs fleg or removal altogether. not good modularity
       call sub2(res1(1,1,1,e,eq),tu,nxyz)
 
       return
