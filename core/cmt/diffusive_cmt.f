@@ -31,6 +31,7 @@
 ! somehow. In serious need of debugging and replacement.
       include 'SIZE'
       include 'GEOM' ! diagnostic
+      include 'SOLN' ! diagnostic
 
       parameter (ldd=lx1*ly1*lz1)
       common /ctmp1/ viscscr(lx1,ly1,lz1)
@@ -61,22 +62,45 @@
 
       if (eq.eq.2) then
       pi=4.0*atan(1.0)
-      do i=1,nxyz
+      do i=1,n
          x=xm1(i,1,1,e)-5.0
          y=ym1(i,1,1,e)
          r2=x**2+y**2
-         write(100,'(6e17.8)') x,y,flux(i,1),10.0*x*y/pi*exp(1-r2),
-     >                 flux(i,2),5.0*(y**2-x**2)/pi*exp(1-r2)
+         write(100,'(6e17.8)') x,y,flux(i,1),
+     >    vdiff(i,1,1,e,1)*10.0*x*y/pi*exp(1-r2),
+     >    flux(i,2),
+     <    vdiff(i,1,1,e,1)*5.0*(y**2-x**2)/pi*exp(1-r2)
       enddo
       elseif (eq .eq. 3) then
       pi=4.0*atan(1.0)
-      do i=1,nxyz
+      do i=1,n
          x=xm1(i,1,1,e)-5.0
          y=ym1(i,1,1,e)
          r2=x**2+y**2
          write(200,'(6e17.8)') x,y,
-     >                 flux(i,1),5.0*(y**2-x**2)/pi*exp(1-r2),
-     >   flux(i,2),-10.0*x*y/pi*exp(1-r2)
+     >                 flux(i,1),
+     > vdiff(i,1,1,e,1)*5.0*(y**2-x**2)/pi*exp(1-r2),
+     >   flux(i,2),-vdiff(i,1,1,e,1)*10.0*x*y/pi*exp(1-r2)
+      enddo
+      elseif (eq .eq. toteq) then
+      pi=4.0*atan(1.0)
+      do i=1,n
+         x=xm1(i,1,1,e)-5.0
+         y=ym1(i,1,1,e)
+         r2=x**2+y**2
+         beta=5.0
+         zeu=-0.5*beta*exp(1.0-r2)*y/pi
+         zev=0.5*beta*exp(1.0-r2)*x/pi
+         zemu=vdiff(i,1,1,e,1)
+         zek=vdiff(i,1,1,e,2)
+         write(6,*) 'duh sir ',zemu,zek
+         zeflux1=exp(1.0-r2)*zemu*
+     >   ( zeu*2.0*beta/pi*x*y+zev*beta/pi*(y**2-x**2) )!+zek*beta**2*
+!    >   x*exp(2.0*(1.0-r2))/1.4/pi/pi*0.25*(0.4)
+         zeflux2=exp(1.0-r2)*zemu*
+     >   ( zeu*beta/pi*(y**2-x**2)-zev*2.0*beta/pi*x*y )!+zek*beta**2*
+!    >   y*exp(2.0*(1.0-r2))/1.4/pi/pi*0.25*(0.4)
+         write(300,'(6e17.8)') x,y,flux(i,1),zeflux1,flux(i,2),zeflux2
       enddo
       endif
 

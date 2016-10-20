@@ -26,9 +26,9 @@
       iuj =iqp+nstate*nfq
 
 ! apply viscous flux jacobian A.
-!     call fluxj_ns_vol(diffh,gradu,e,eq)
+      call fluxj_ns_vol(diffh,gradu,e,eq)
 ! monolithic regularization for now
-      call fluxj_vol(diffh,gradu,e,eq)
+!     call fluxj_vol(diffh,gradu,e,eq)
 
       call diffh2graduf(e,eq,graduf) ! on faces for QQ^T and igu_cmt
 
@@ -97,12 +97,12 @@
 ! apply flux jacobian to get Ajac (U-{{U}})_i * n_k
          do j=1,ndim
             call rzero(ftmp1,nfq)
-            call agradu_sfc(ftmp1,qminus,hface(1,1,j),eq)
+!           call agradu_sfc(ftmp1,qminus,hface(1,1,j),eq)
 ! yes I know I should wrap this. Bite me.
-!           do k=1,ndim
-!              call agradu_ns_sfc(ftmp1,qminus,hface(1,1,k),
-!    >                               ftmp2,eq,j,k)
-!           enddo
+            do k=1,ndim
+               call agradu_ns_sfc(ftmp1,qminus,hface(1,1,k),
+     >                               ftmp2,eq,j,k)
+            enddo
             call add_face2full_cmt(nelt,nx1,ny1,nz1,iface_flux,
      >                      superhugeh(1,j),ftmp1)
          enddo
