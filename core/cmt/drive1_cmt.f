@@ -169,7 +169,7 @@ c-----------------------------------------------------------------------
          call surface_integral_full(res1(1,1,1,1,eq),flux(ieq))
       enddo
       dumchars='after_inviscid'
-      call dumpresidue(dumchars,1)
+!     call dumpresidue(dumchars,1)
 
                !                   -
       iuj=iflx ! overwritten with U -{{U}}
@@ -188,7 +188,7 @@ c-----------------------------------------------------------------------
       call   imqqtu(flux(iuj),flux(ium),flux(iup))
       call igtu_cmt(flux(iqm),flux(iuj),graduf) ! [[u]].{{gradv}}
       dumchars='after_igtu'
-      call dumpresidue(dumchars,1)
+!     call dumpresidue(dumchars,1)
 
       do e=1,nelt
 !-----------------------------------------------------------------------
@@ -216,7 +216,7 @@ c-----------------------------------------------------------------------
          enddo
       enddo
       dumchars='after_elm'
-      call dumpresidue(dumchars,1)
+!     call dumpresidue(dumchars,1)
 
 ! get the rest of Hij^{d*}
       call igu_cmt(flux(iqm),graduf)
@@ -226,7 +226,7 @@ c-----------------------------------------------------------------------
          call surface_integral_full(res1(1,1,1,1,eq),flux(ieq))
       enddo
       dumchars='end_of_rhs'
-      call dumpresidue(dumchars,1)
+!     call dumpresidue(dumchars,1)
       call exitt
 
       return
