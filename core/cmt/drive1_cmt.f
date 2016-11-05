@@ -186,7 +186,7 @@ c-----------------------------------------------------------------------
       ium=(iu1-1)*nfq+iqm
       iup=(iu1-1)*nfq+iqp
       call   imqqtu(flux(iuj),flux(ium),flux(iup))
-      call igtu_cmt(flux(iqm),flux(iuj),graduf) ! [[u]].{{gradv}}
+!     call igtu_cmt(flux(iqm),flux(iuj),graduf) ! [[u]].{{gradv}}
       dumchars='after_igtu'
 !     call dumpresidue(dumchars,1)
 
