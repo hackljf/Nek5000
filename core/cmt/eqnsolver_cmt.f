@@ -3,14 +3,6 @@
       include  'CMTDATA'
       include  'DG'
       include  'INPUT'
-!-----------------------------------------------------------------------
-! diagnostic
-!-----------------------------------------------------------------------
-      include 'GEOM' ! diagnostic
-      include 'SOLN' ! diagnostic
-!-----------------------------------------------------------------------
-! diagnostic
-!-----------------------------------------------------------------------
 
       integer lfq,heresize,hdsize
       parameter (lfq=lx1*lz1*2*ldim*lelcmt,
@@ -38,90 +30,6 @@
 ! monolithic regularization never
 !     call fluxj(diffh,gradu,e,eq)
 
-!-----------------------------------------------------------------------
-! diagnostic
-!-----------------------------------------------------------------------
-      if (eq.eq.2) then
-         if (e.eq.1) then
-            write(100,*) '#xmom:x,y,tau11,Adu,diff'
-            write(200,*) '#xmom:x,y,tau12,Adu,diff'
-            write(101,*) '#x,y,du1dx,gradu,diff,du1dy,gradu,diff'
-            write(102,*) '#x,y,du2dx,gradu,diff,du2dy,gradu,diff'
-            write(103,*) '#x,y,du3dx,gradu,diff,du3dy,gradu,diff'
-            write(105,*) '#x,y,du5dx,gradu,diff,du5dy,gradu,diff'
-         endif
-         pi=4.0*atan(1.0)
-         do i=1,nxyz
-            beta=5.0
-            x=xm1(i,1,1,e)-5.0
-            y=ym1(i,1,1,e)
-            onemr2=1.0-(x**2+y**2)
-            tau11=vdiff(i,1,1,e,imu)*(2.0*beta*x*y/pi)*exp(onemr2)
-            tau12=vdiff(i,1,1,e,imu)*(beta/pi)*(y**2-x**2)*exp(onemr2)
-            write(100,'(5e17.8)') x,y,tau11,diffh(i,1),diffh(i,1)-tau11
-            du1=du1dx(beta,x,y,1.0,1.4)
-            du2=du1dy(beta,x,y,1.0,1.4)
-            write(101,'(8e17.8)') x,y,gradu(i,1,1),du1,gradu(i,1,1)-du1,
-     >                                gradu(i,1,2),du2,gradu(i,1,2)-du2
-            du1=du2dx(beta,x,y,1.0,1.4)
-            du2=du2dy(beta,x,y,1.0,1.4)
-            write(102,'(8e17.8)') x,y,gradu(i,2,1),du1,gradu(i,2,1)-du1,
-     >                                gradu(i,2,2),du2,gradu(i,2,2)-du2
-            du1=du3dx(beta,x,y,1.0,1.4)
-            du2=du3dy(beta,x,y,1.0,1.4)
-            write(103,'(8e17.8)') x,y,gradu(i,3,1),du1,gradu(i,3,1)-du1,
-     >                                gradu(i,3,2),du2,gradu(i,3,2)-du2
-            du1=du5dx(beta,x,y,1.0,1.4)
-            du2=du5dy(beta,x,y,1.0,1.4)
-            write(105,'(8e17.8)') x,y,gradu(i,5,1),du1,gradu(i,5,1)-du1,
-     >                                gradu(i,5,2),du2,gradu(i,5,2)-du2
-            write(200,'(5e17.8)') x,y,tau12,diffh(i,2),diffh(i,2)-tau12
-         enddo
-      elseif(eq.eq.3) then
-         if (e.eq.1) then
-            write(300,*) '#ymom:x,y,tau21,Adu,diff'
-            write(400,*) '#ymom:x,y,tau22,Adu,diff'
-         endif
-         pi=4.0*atan(1.0)
-         do i=1,nxyz
-            beta=5.0
-            x=xm1(i,1,1,e)-5.0
-            y=ym1(i,1,1,e)
-            onemr2=1.0-(x**2+y**2)
-            tau22=-vdiff(i,1,1,e,imu)*(2.0*beta*x*y/pi)*exp(onemr2)
-            tau12=vdiff(i,1,1,e,imu)*(beta/pi)*(y**2-x**2)*exp(onemr2)
-            write(300,'(5e17.8)') x,y,tau12,diffh(i,1),diffh(i,1)-tau12
-            write(400,'(5e17.8)') x,y,tau22,diffh(i,2),diffh(i,2)-tau22
-         enddo
-      elseif(eq.eq.5) then
-         if (e.eq.1) then
-            write(500,*) '#energy:x,y,h1,diff'
-            write(600,*) '#energy:x,y,h2,diff'
-         endif
-         pi=4.0*atan(1.0)
-         do i=1,nxyz
-            beta=5.0
-            x=xm1(i,1,1,e)-5.0
-            y=ym1(i,1,1,e)
-            onemr2=1.0-(x**2+y**2)
-            uxinf=0.0
-            uyinf=0.0 ! betta match useric
-            zeu=uxinf-beta*exp(onemr2)*y/(2.0*pi)
-            zev=uyinf+beta*exp(onemr2)*x/(2.0*pi)
-            tau11=vdiff(i,1,1,e,imu)*(2.0*beta*x*y/pi)*exp(onemr2)
-            tau12=vdiff(i,1,1,e,imu)*(beta/pi)*(y**2-x**2)*exp(onemr2)
-            tau22=-vdiff(i,1,1,e,imu)*(2.0*beta*x*y/pi)*exp(onemr2)
-            du1=(tau11*zeu+zev*tau12)+vdiff(i,1,1,e,iknd)*
-     >          beta**2*x*0.25/1.4*0.4/pi/pi*exp(2.0*onemr2)
-            du2=(tau12*zeu+zev*tau22)+vdiff(i,1,1,e,iknd)*
-     >          beta**2*y*0.25/1.4*0.4/pi/pi*exp(2.0*onemr2)
-            write(500,'(5e17.8)') x,y,diffh(i,1),du1,diffh(i,1)-du1
-            write(600,'(5e17.8)') x,y,diffh(i,2),du2,diffh(i,2)-du2
-         enddo
-      endif
-! diagnostic
-!-----------------------------------------------------------------------
-
       call diffh2graduf(e,eq,graduf) ! on faces for QQ^T and igu_cmt
 
 ! volume integral involving "DG-ish" stiffness operator K
@@ -143,6 +51,7 @@
       include 'GEOM'
       include 'DG'      ! iface
       include 'CMTDATA'
+      include 'SOLN' ! for vz. goes away when agradu_ns works
 
 ! arguments
       real qminus(nx1*nz1,2*ndim,nelt,*)    ! intent(in)
@@ -211,16 +120,49 @@
                 ! once you get rid of that execrable "element loop" in
                 ! compute_rhs_and_dt
 !           call fluxj_ns(superhugeh,... THIS will be correctly strided as well
-            do j=1,ndim    ! flux direction
-               do k=1,ndim ! dU   direction
-                  ieijk=0
-                  if (eq .lt. toteq) ieijk=eijk3(eq-1,j,k) ! does this work in 2D?
-                  if (ieijk .eq. 0) then
-                     call agradu_ns(superhugeh(m,j),gradu(1,1,k),viscscr
-     >                             ,e,eq,j,k) ! the worst stride ever
-                  endif
-               enddo
-            enddo
+! JH110716 AND someday it will work
+!!            do j=1,ndim    ! flux direction
+!!               do k=1,ndim ! dU   direction
+!!                  ieijk=0
+!!                  if (eq .lt. toteq) ieijk=eijk3(eq-1,j,k) ! does this work in 2D?
+!!                  if (ieijk .eq. 0) then
+!!                     call agradu_ns(superhugeh(m,j),gradu(1,1,k),viscscr
+!!     >                             ,e,eq,j,k) ! the worst stride ever
+!!                  endif
+!!               enddo
+!!            enddo
+! JH110716 but not today. for now, here's a bloody chunk from agradu_ns
+! This is a disaster that I might want to program less cleverly
+            if (eq .lt. toteq) then
+! JH110716 Maxima routines added for every viscous flux.
+!          agradu_ns has failed all verification checks for homentropic vortex
+!          initialization.
+!          start over
+               if (eq.eq.2) then
+                  call A21kldUldxk(superhugeh(m,1),gradu,e)
+                  call A22kldUldxk(superhugeh(m,2),gradu,e)
+                  call A23kldUldxk(superhugeh(m,3),gradu,e)
+               elseif (eq.eq.3) then
+                  call A31kldUldxk(superhugeh(m,1),gradu,e)
+                  call A32kldUldxk(superhugeh(m,2),gradu,e)
+                  call A33kldUldxk(superhugeh(m,3),gradu,e)
+               elseif (eq.eq.4) then
+                  call A41kldUldxk(superhugeh(m,1),gradu,e)
+                  call A42kldUldxk(superhugeh(m,2),gradu,e)
+                  call A43kldUldxk(superhugeh(m,3),gradu,e)
+               endif
+
+            else ! Energy equation courtesy of thoroughly-checked maxima
+           ! until I can get agradu_ns working correctly
+               if (if3d) then
+                  call a53kldUldxk(superhugeh(m,3),gradu,e)
+               else
+                  call rzero(gradu(1,1,3),nx1*ny1*nz1*toteq)
+                  call rzero(vz(1,1,1,e),nx1*ny1*nz1)
+               endif
+               call a51kldUldxk(superhugeh(m,1),gradu,e)
+               call a52kldUldxk(superhugeh(m,2),gradu,e)
+            endif
 
             m=m+nxyz
 

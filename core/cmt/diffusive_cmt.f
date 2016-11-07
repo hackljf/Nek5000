@@ -51,27 +51,44 @@
       if (eq .lt. toteq) then ! TRIAGE. CAN'T GET AGRADU_NS to WORK
                               ! for ENERGY EQUATION. MAXIMA ROUTINES
                               ! BELOW
-      do j=1,ndim
-         do k=1,ndim
-            ieijk=0
-!           if (eq .lt. toteq .and. eq .gt. 1) ieijk=eijk3(eq-1,j,k) ! does this work in 2D?
-            if (eq.gt.1)ieijk=eijk3(eq-1,j,k) ! does this work in 2D?
-
-            if (ieijk .eq. 0) then
-              call agradu_ns(flux(1,j),gradu(1,1,k),viscscr,e,
-     >                           eq,j,k)
-            endif
-         enddo
-      enddo
+!!      do j=1,ndim
+!!         do k=1,ndim
+!!            ieijk=0
+!!!           if (eq .lt. toteq .and. eq .gt. 1) ieijk=eijk3(eq-1,j,k) ! does this work in 2D?
+!!            if (eq.gt.1)ieijk=eijk3(eq-1,j,k) ! does this work in 2D?
+!!
+!!            if (ieijk .eq. 0) then
+!!              call agradu_ns(flux(1,j),gradu(1,1,k),viscscr,e,
+!!     >                           eq,j,k)
+!!            endif
+!!         enddo
+!!      enddo
+! JH110716 Maxima routines added for every viscous flux.
+!          agradu_ns has failed all verification checks for homentropic vortex
+!          initialization.
+!          start over
+        if (eq.eq.2) then
+           call A21kldUldxk(flux(1,1),gradu,e)
+           call A22kldUldxk(flux(1,2),gradu,e)
+           call A23kldUldxk(flux(1,3),gradu,e)
+        elseif (eq.eq.3) then
+           call A31kldUldxk(flux(1,1),gradu,e)
+           call A32kldUldxk(flux(1,2),gradu,e)
+           call A33kldUldxk(flux(1,3),gradu,e)
+        elseif (eq.eq.4) then
+           call A41kldUldxk(flux(1,1),gradu,e)
+           call A42kldUldxk(flux(1,2),gradu,e)
+           call A43kldUldxk(flux(1,3),gradu,e)
+        endif
 
       else ! Energy equation courtesy of thoroughly-checked maxima
            ! until I can get agradu_ns working correctly
-!        if (if3d) then
-!           call a53kldUldxk(flux(1,3),gradu,e)
-!        else
+         if (if3d) then
+            call a53kldUldxk(flux(1,3),gradu,e)
+         else
             call rzero(gradu(1,1,3),nx1*ny1*nz1*toteq)
             call rzero(vz(1,1,1,e),nx1*ny1*nz1)
-!        endif
+         endif
          call a51kldUldxk(flux(1,1),gradu,e)
          call a52kldUldxk(flux(1,2),gradu,e)
       endif
@@ -332,6 +349,7 @@
 !-----------------------------------------------------------------------
 
       subroutine agradu_ns(gijklu,dut,visco,e,eq,jflux,kdir)
+! JH110716. Declaring defeat. Discard and start over
       include 'SIZE'
       include 'SOLN'
       include 'INPUT'
@@ -622,6 +640,260 @@
      2   cv*lambda*u2*dU2x-cv*lambdamu*u2*u3*dU1z+(K*u3**2-cv*mu
      3   *u3**2-cv*lambda*u2**2+K*u2**2-2*cv*mu*u2**2+K*u1**2-cv*mu*
      4   u1**2-E*K)*dU1y-cv*lambdamu*u1*u2*dU1x)/(cv*rho)
+      enddo
+      return
+      end
+      subroutine a53kldUldxk(flux,dU,ie)
+      include 'SIZE'
+      include 'SOLN'
+      include 'CMTDATA' ! gradu lurks
+      real lambda,mu,cv,K,rho,E,kmcvmu,lambdamu
+      real dU(nx1*ny1*nz1,toteq,3)
+      real flux(nx1*ny1*nz1)
+      npt=lx1*ly1*lz1
+      do i=1,npt
+         dU1x=dU(i,1,1)
+         dU2x=dU(i,2,1)
+         dU3x=dU(i,3,1)
+         dU4x=dU(i,4,1)
+         dU5x=dU(i,5,1)
+         dU1y=dU(i,1,2)
+         dU2y=dU(i,2,2)
+         dU3y=dU(i,3,2)
+         dU4y=dU(i,4,2)
+         dU5y=dU(i,5,2)
+         dU1z=dU(i,1,3)
+         dU2z=dU(i,2,3)
+         dU3z=dU(i,3,3)
+         dU4z=dU(i,4,3)
+         dU5z=dU(i,5,3)
+         rho   =vtrans(i,1,1,ie,irho)
+         cv    =vtrans(i,1,1,ie,icv)/rho
+         lambda=vdiff(i,1,1,ie,ilam)
+         mu    =vdiff(i,1,1,ie,imu)
+         K     =vdiff(i,1,1,ie,iknd)
+         u1    =vx(i,1,1,ie)
+         u2    =vy(i,1,1,ie)
+         u3    =vz(i,1,1,ie)
+         E     =U(i,1,1,toteq,ie)/rho
+         lambdamu=lambda+mu
+         kmcvmu=K-cv*mu
+         flux(i)=
+     >(K*(dU5z-E*dU1z)+c_v*u3*(lambda*dU4z+2*mu*dU4z+lambda*dU3y+lambda
+     1   *dU2x)-K*u3*dU4z+c_v*mu*u2*(dU4y+dU3z)+c_v*mu*u1*(dU4x+dU2z)-
+     2   K*u2*dU3z-K*u1*dU2z-c_v*(lambda+2*mu)*u3**2*dU1z+K*u3**2*dU1z+
+     3   K*u2**2*dU1z-c_v*mu*u2**2*dU1z+K*u1**2*dU1z-c_v*mu*u1**2*dU1z-c
+     4   _v*(lambda+mu)*u2*u3*dU1y-c_v*(lambda+mu)*u1*u3*dU1x)/(c_v*rho)
+      enddo
+      return
+      end
+
+      subroutine A21kldUldxk(flux,dU,ie)
+      include 'SIZE'
+      include 'SOLN'
+      include 'CMTDATA' ! gradu lurks
+      real lambda,mu,cv,K,rho,E,kmcvmu,lambdamu
+      real dU(nx1*ny1*nz1,toteq,3)
+      real flux(nx1*ny1*nz1)
+      npt=lx1*ly1*lz1
+      do i=1,npt
+         dU1x=dU(i,1,1)
+         dU2x=dU(i,2,1)
+         dU1y=dU(i,1,2)
+         dU3y=dU(i,3,2)
+         dU1z=dU(i,1,3)
+         dU4z=dU(i,4,3)
+         rho   =vtrans(i,1,1,ie,irho)
+         lambda=vdiff(i,1,1,ie,ilam)
+         mu    =vdiff(i,1,1,ie,imu)
+         u1    =vx(i,1,1,ie)
+         u2    =vy(i,1,1,ie)
+         u3    =vz(i,1,1,ie)
+         lambdamu=lambda+2.0*mu
+         flux(i)=
+     >(lambda*(dU4z+dU3y-u3*dU1z-u2*dU1y)+lambdamu*(dU2x-u1*dU1x))/rho
+      enddo
+      return
+      end
+      subroutine A22kldUldxk(flux,dU,ie)
+      include 'SIZE'
+      include 'SOLN'
+      include 'CMTDATA' ! gradu lurks
+      real lambda,mu,cv,K,rho,E,kmcvmu,lambdamu
+      real dU(nx1*ny1*nz1,toteq,3)
+      real flux(nx1*ny1*nz1)
+      npt=lx1*ly1*lz1
+      do i=1,npt
+         dU1x=dU(i,1,1)
+         dU3x=dU(i,3,1)
+         dU1y=dU(i,1,2)
+         dU2y=dU(i,2,2)
+         rho   =vtrans(i,1,1,ie,irho)
+         mu    =vdiff(i,1,1,ie,imu)
+         u1    =vx(i,1,1,ie)
+         u2    =vy(i,1,1,ie)
+         flux(i)=mu*(dU3x+dU2y-u1*dU1y-u2*dU1x)/rho
+      enddo
+      return
+      end
+      subroutine A23kldUldxk(flux,dU,ie)
+      include 'SIZE'
+      include 'SOLN'
+      include 'CMTDATA' ! gradu lurks
+      real lambda,mu,cv,K,rho,E,kmcvmu,lambdamu
+      real dU(nx1*ny1*nz1,toteq,3)
+      real flux(nx1*ny1*nz1)
+      npt=lx1*ly1*lz1
+      do i=1,npt
+         dU1x=dU(i,1,1)
+         dU4x=dU(i,4,1)
+         dU1z=dU(i,1,3)
+         dU2z=dU(i,2,3)
+         rho   =vtrans(i,1,1,ie,irho)
+         mu    =vdiff(i,1,1,ie,imu)
+         u1    =vx(i,1,1,ie)
+         u3    =vz(i,1,1,ie)
+         flux(i)=mu*(dU4x+dU2z-u1*dU1z-u3*dU1x)/rho
+      enddo
+      return
+      end
+
+      subroutine A31kldUldxk(flux,dU,ie)
+      include 'SIZE'
+      include 'SOLN'
+      include 'CMTDATA' ! gradu lurks
+      real lambda,mu,cv,K,rho,E,kmcvmu,lambdamu
+      real dU(nx1*ny1*nz1,toteq,3)
+      real flux(nx1*ny1*nz1)
+      npt=lx1*ly1*lz1
+      do i=1,npt
+         dU1x=dU(i,1,1)
+         dU3x=dU(i,3,1)
+         dU1y=dU(i,1,2)
+         dU2y=dU(i,2,2)
+         rho   =vtrans(i,1,1,ie,irho)
+         mu    =vdiff(i,1,1,ie,imu)
+         u1    =vx(i,1,1,ie)
+         u2    =vy(i,1,1,ie)
+         flux(i)=mu*(dU3x+dU2y-u1*dU1y-u2*dU1x)/rho
+      enddo
+      return
+      end
+      subroutine A32kldUldxk(flux,dU,ie)
+      include 'SIZE'
+      include 'SOLN'
+      include 'CMTDATA' ! gradu lurks
+      real lambda,mu,cv,K,rho,E,kmcvmu,lambdamu
+      real dU(nx1*ny1*nz1,toteq,3)
+      real flux(nx1*ny1*nz1)
+      npt=lx1*ly1*lz1
+      do i=1,npt
+         dU1x=dU(i,1,1)
+         dU2x=dU(i,2,1)
+         dU1y=dU(i,1,2)
+         dU3y=dU(i,3,2)
+         dU1z=dU(i,1,3)
+         dU4z=dU(i,4,3)
+         rho   =vtrans(i,1,1,ie,irho)
+         lambda=vdiff(i,1,1,ie,ilam)
+         mu    =vdiff(i,1,1,ie,imu)
+         u1    =vx(i,1,1,ie)
+         u2    =vy(i,1,1,ie)
+         u3    =vz(i,1,1,ie)
+         lambdamu=lambda+2.0*mu
+         flux(i)=(lambda*(dU4z+dU2x-u3*dU1z-u1*dU1x)+
+     >   lambdamu*(dU3y-u2*dU1y))/rho
+      enddo
+      return
+      end
+      subroutine A33kldUldxk(flux,dU,ie)
+      include 'SIZE'
+      include 'SOLN'
+      include 'CMTDATA' ! gradu lurks
+      real lambda,mu,cv,K,rho,E,kmcvmu,lambdamu
+      real dU(nx1*ny1*nz1,toteq,3)
+      real flux(nx1*ny1*nz1)
+      npt=lx1*ly1*lz1
+      do i=1,npt
+         dU1y=dU(i,1,2)
+         dU4y=dU(i,4,2)
+         dU1z=dU(i,1,3)
+         dU3z=dU(i,3,3)
+         rho   =vtrans(i,1,1,ie,irho)
+         mu    =vdiff(i,1,1,ie,imu)
+         u2    =vy(i,1,1,ie)
+         u3    =vz(i,1,1,ie)
+         flux(i)=mu*(dU4y+dU3z-u2*dU1z-u3*dU1y)/rho
+      enddo
+      return
+      end
+
+      subroutine A41kldUldxk(flux,dU,ie)
+      include 'SIZE'
+      include 'SOLN'
+      include 'CMTDATA' ! gradu lurks
+      real lambda,mu,cv,K,rho,E,kmcvmu,lambdamu
+      real dU(nx1*ny1*nz1,toteq,3)
+      real flux(nx1*ny1*nz1)
+      npt=lx1*ly1*lz1
+      do i=1,npt
+         dU1x=dU(i,1,1)
+         dU4x=dU(i,4,1)
+         dU1z=dU(i,1,3)
+         dU2z=dU(i,2,3)
+         rho   =vtrans(i,1,1,ie,irho)
+         mu    =vdiff(i,1,1,ie,imu)
+         u1    =vx(i,1,1,ie)
+         u3    =vz(i,1,1,ie)
+         flux(i)=mu*(dU4x+dU2z-u1*dU1z-u3*dU1x)/rho
+      enddo
+      return
+      end
+      subroutine A42kldUldxk(flux,dU,ie)
+      include 'SIZE'
+      include 'SOLN'
+      include 'CMTDATA' ! gradu lurks
+      real lambda,mu,cv,K,rho,E,kmcvmu,lambdamu
+      real dU(nx1*ny1*nz1,toteq,3)
+      real flux(nx1*ny1*nz1)
+      npt=lx1*ly1*lz1
+      do i=1,npt
+         dU1y=dU(i,1,2)
+         dU4y=dU(i,4,2)
+         dU1z=dU(i,1,3)
+         dU3z=dU(i,3,3)
+         rho   =vtrans(i,1,1,ie,irho)
+         mu    =vdiff(i,1,1,ie,imu)
+         u2    =vy(i,1,1,ie)
+         u3    =vz(i,1,1,ie)
+         flux(i)=mu*(dU4y+dU3z-u2*dU1z-u3*dU1y)/rho
+      enddo
+      return
+      end
+      subroutine A43kldUldxk(flux,dU,ie)
+      include 'SIZE'
+      include 'SOLN'
+      include 'CMTDATA' ! gradu lurks
+      real lambda,mu,cv,K,rho,E,kmcvmu,lambdamu
+      real dU(nx1*ny1*nz1,toteq,3)
+      real flux(nx1*ny1*nz1)
+      npt=lx1*ly1*lz1
+      do i=1,npt
+         dU1x=dU(i,1,1)
+         dU2x=dU(i,2,1)
+         dU1y=dU(i,1,2)
+         dU3y=dU(i,3,2)
+         dU1z=dU(i,1,3)
+         dU4z=dU(i,4,3)
+         rho   =vtrans(i,1,1,ie,irho)
+         lambda=vdiff(i,1,1,ie,ilam)
+         mu    =vdiff(i,1,1,ie,imu)
+         u1    =vx(i,1,1,ie)
+         u2    =vy(i,1,1,ie)
+         u3    =vz(i,1,1,ie)
+         lambdamu=lambda+2.0*mu
+         flux(i)=(lambda*(dU3y+dU2x-u2*dU1y-u1*dU1x)+
+     >lambdamu*(dU4z-u3*dU1z))/rho
       enddo
       return
       end
