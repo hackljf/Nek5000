@@ -62,8 +62,8 @@
       common /scrns/ superhugeh(lx1*ly1*lz1*lelt,3) ! like totalh, but super-huge
       common /scruz/ gradm1_t_overwrites(lx1*ly1*lz1*lelt) ! sigh
       real superhugeh,gradm1_t_overwrites
-      common /ctmp0/ viscscr(lx1,ly1,lz1)
-      real viscscr
+!     common /ctmp0/ viscscr(lx1,ly1,lz1)
+!     real viscscr
 !     parameter (lfq=lx1*lz1*2*ldim*lelt)
 !     common /ctmp0/ ftmp1(lfq),ftmp2(lfq)
 !     real ftmp1,ftmp2
@@ -75,14 +75,13 @@
 
       integer e, eq, n, npl, nf, f, i, k, eq2
 
-      nvol = nx1*ny1*nz1*nelt
-
       nxz    = nx1*nz1
       nfaces = 2*ndim
       nf     = nxz*nfaces ! 1 element's face points
       nfq    = nf*nelt ! all points in a pile of faces
       if (ifsip) then
          const=-1.0 ! SIP
+         write(6,*) 'duh ais',const
       else
          const=1.0 ! Baumann-Oden
       endif
@@ -100,7 +99,9 @@
       enddo
 
       call rzero(superhugeh,3*lx1*ly1*lz1*lelt)
-      nxyz=nx1*ny1*nz1
+
+      nxyz  =nx1*ny1*nz1
+      nvol  =nxyz*nelt
       ngradu=nxyz*toteq*3
       do eq=2,toteq ! MASS DIFFUSION GETS ITS OWN BLOCK. somewhere
          call rzero(superhugeh,3*lx1*ly1*lz1*lelt)
@@ -157,8 +158,8 @@
                if (if3d) then
                   call a53kldUldxk(superhugeh(m,3),gradu,e)
                else
-                  call rzero(gradu(1,1,3),nx1*ny1*nz1*toteq)
-                  call rzero(vz(1,1,1,e),nx1*ny1*nz1)
+                  call rzero(gradu(1,1,3),nxyz*toteq)
+                  call rzero(vz(1,1,1,e),nxyz)
                endif
                call a51kldUldxk(superhugeh(m,1),gradu,e)
                call a52kldUldxk(superhugeh(m,2),gradu,e)
@@ -168,12 +169,13 @@
 
          enddo ! element loop
 
+! gradm1_t uses /ctmp1/
          call gradm1_t(gradm1_t_overwrites,superhugeh(1,1),
      >                        superhugeh(1,2),superhugeh(1,3))
          call cmult(gradm1_t_overwrites,const,nvol)
          call add2(res1(1,1,1,1,eq),gradm1_t_overwrites,nvol)
 133      continue
-      enddo
+      enddo ! equation loop
 
 !!! apply flux jacobian to get Ajac (U-{{U}})_i * n_k
 !!! JH110116 DEPRECATED. Always apply A to volume, not surface points.
