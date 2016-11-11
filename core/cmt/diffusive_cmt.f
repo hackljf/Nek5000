@@ -14,12 +14,23 @@
 
       nf = nx1*nz1*2*ndim*nelt
       const=-0.5
+! U-{{U}} on interior faces. first just do it on all faces.
       do ivar=1,toteq
          call add3(ummcu(1,ivar),uminus(1,ivar),uplus(1,ivar),nf)
          call cmult(ummcu(1,ivar),const,nf)        !         -
          call add2(ummcu(1,ivar),uminus(1,ivar),nf)!ummcu = U -{{U}}
       enddo
 
+! v+ undefined on boundary faces, so (I-0.5QQ^T) degenerates to 
+! [[U]] with respect to the Dirichlet boundary state
+      call imqqtu_dirichlet(ummcu,uminus,uplus)
+
+      return
+      end
+
+!-----------------------------------------------------------------------
+
+      subroutine imqqtu_dirichlet(ummcu,uminus,uplus)
       return
       end
 
