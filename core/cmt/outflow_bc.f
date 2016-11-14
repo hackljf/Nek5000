@@ -1,3 +1,33 @@
+      subroutine outflow2(nvar,f,e,faceq,bcq)
+      include 'SIZE'
+      include 'INPUT'
+      include 'CMTDATA'
+      integer nvar,f,e
+      real faceq(nx1,nz1,2*ndim,nelt,nvar)
+      real bcq  (nx1,nz1,2*ndim,nelt,nvar)
+! JH111416 duct-tape-and-chewing-gum mad dash. Assuming, perhaps incorrectly,
+!          that outflow_rflu has filled in bcq correctly. rarefaction or bust!
+
+      nxz=nx1*nz1
+
+! write bcq before
+      do i=1,nxz
+         rl=faceq(i,1,f,e,iu1)
+         rul=faceq(i,1,f,e,iu2)
+         rvl=faceq(i,1,f,e,iu3)
+         rwl=faceq(i,1,f,e,iu4)
+         bcq(i,1,f,e,iu1)=rl
+         bcq(i,1,f,e,iu2)=rul
+         bcq(i,1,f,e,iu3)=rvl
+         bcq(i,1,f,e,iu4)=rwl
+! JH111416 hardcode subsonic for now
+         bcq(i,1,f,e,iu5)=faceq(i,1,f,e,ipr)/(gmaref-1.0)+
+         0.5*(rul**2+rvl**2+rwl**2)/rl
+      enddo
+! write bcq after
+
+      return
+      end
 c--------------------------------------------------------------------
       subroutine outflow(nvar,f,e,faceq,bcq,flux) ! don't really need nvar anymore
       INCLUDE 'SIZE'

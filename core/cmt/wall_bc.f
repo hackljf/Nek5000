@@ -1,3 +1,7 @@
+      subroutine wallbc2(nstate,f,e,faceq,bcq)
+      return
+      end
+
       subroutine wallbc(nstate,f,e,faceq,bcq,flux)
       INCLUDE 'SIZE'
       INCLUDE 'INPUT'
@@ -11,6 +15,7 @@
 ! JH102016
 ! rind state for inviscid fluxes is different from viscous fluxes? not
 ! sure what the right thing to do is.
+! JH111416 read books, stupid. For now EVM SHOCKS OR BUST!!!!
       call slipwall_rflu(nstate,f,e,faceq,bcq,flux) ! calls RindState stuff
 
       return

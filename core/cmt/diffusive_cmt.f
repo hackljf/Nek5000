@@ -21,16 +21,77 @@
          call add2(ummcu(1,ivar),uminus(1,ivar),nf)!ummcu = U -{{U}}
       enddo
 
-! v+ undefined on boundary faces, so (I-0.5QQ^T) degenerates to 
-! [[U]] with respect to the Dirichlet boundary state
-      call imqqtu_dirichlet(ummcu,uminus,uplus)
-
       return
       end
 
 !-----------------------------------------------------------------------
 
-      subroutine imqqtu_dirichlet(ummcu,uminus,uplus)
+      subroutine imqqtu_dirichlet(umubc,qminus,qplus)
+! v+ undefined on boundary faces, so (I-0.5QQ^T) degenerates to 
+! [[U]] with respect to the Dirichlet boundary state
+      include 'SIZE'
+      include 'INPUT' ! do we need this?
+      include 'GEOM' ! for unx
+      include 'CMTDATA'
+      real umubc (nx1*nz1,2*ndim,nelt,toteq) ! intent(out)
+      real qminus(nx1*nz1,2*ndim,nelt,nqq),
+     >     qplus (nx1*nz1,2*ndim,nelt,nqq)
+      real nTol
+      integer e,f
+      character*132 deathmessage
+      character*3 cb
+
+      nTol = 1.0E-14
+
+      nxz = nx1*nz1
+      nface=2*ndim
+      ifield= 1 ! You need to figure out the best way of dealing with
+                ! this variable
+
+      do e=1,nelt
+      do f=1,nface
+
+         cb=cbc(f,e,ifield)
+         if (cb.ne.'E  '.and.cb.ne.'P  ') then ! cbc bndy. this routine
+                                               ! had better not touch any
+                                               ! interior face
+! JH031315 flux added to argument list. BC routines preserve qminus for
+!          obvious reasons and fill qplus with good stuff for everybody:
+!          imposed states for Dirichlet conditions, and important things
+!          for viscous numerical fluxes.
+! JH060215 added SYM bc. Just use it as a slip wall hopefully.
+! JH111416 This may look like lazy duplication, but there is a good chance
+!          that this may replace/consolidate BC calls in InviscidFlus.
+!          basically, nothing in qplus is trustworthy, so we are going to
+!          recompute and overwrite iu1 through iu5 in qplus with stuff we
+!          do trust (UBC, to be exact).
+            if (cb.eq.'v  ' .or. cb .eq. 'V  ') then
+!             call inflow2(nqq,f,e,qminus,qplus)
+              write(deathmessage,*) 'not ready for inflow$'
+              call exitti(deathmessage,f)
+            elseif (cb.eq.'O  ') then
+              call outflow2(nqq,f,e,qminus,qplus)
+!           elseif (cb .eq. 'W  ' .or. cb .eq.'I  '.or.cb .eq.'SYM')then
+!             call wallbc2(nqq,f,e,qminus,qplus)
+            elseif (cb .eq. 'W  ')then
+              write(deathmessage,*) 'not ready for no-slip walls$'
+              call exitti(deathmessage,f)
+            elseif (cb .eq.'I  '.or.cb .eq.'SYM')then
+! Slip walls for TST2016!!!!!!!LOLOLOLOLOLOL
+              call wallbc2(nqq,f,e,qminus,qplus)
+            endif
+
+!  -
+! U - UBC
+            do ivar=1,toteq
+               call sub3(umubc(1,f,e,ivar),qminus(1,f,e,iu1+ivar-1),
+     >                                      qplus(1,f,e,iu1+ivar-1),nxz)
+            enddo
+
+         endif 
+      enddo
+      enddo
+
       return
       end
 

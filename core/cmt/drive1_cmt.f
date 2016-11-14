@@ -184,6 +184,7 @@ c-----------------------------------------------------------------------
       ium=(iu1-1)*nfq+iqm
       iup=(iu1-1)*nfq+iqp
       call   imqqtu(flux(iuj),flux(ium),flux(iup))
+      call   imqqtu_dirichlet(flux(iuj),flux(iqm),flux(iqp))
       call igtu_cmt(flux(iqm),flux(iuj),graduf) ! [[u]].{{gradv}}
 
       do e=1,nelt
