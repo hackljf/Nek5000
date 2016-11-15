@@ -402,7 +402,6 @@
 !-----------------------------------------------------------------------
 
       subroutine igu_cmt(flxscr,gdudxk)
-! gets central-flux contribution to interior penalty numerical flux
 ! Hij^{d*}
       include 'SIZE'
       include 'CMTDATA'
@@ -419,7 +418,7 @@
       nfq =nx1*nz1*nfaces*nelt
       ntot=nfq*toteq
 
-      call copy (flxscr,gdudxk,ntot) ! save gradU.n
+      call copy (flxscr,gdudxk,ntot) ! save AgradU.n
       const = 0.5
       call cmult(gdudxk,const,ntot)
 !-----------------------------------------------------------------------
@@ -432,7 +431,7 @@
       call sub2  (flxscr,gdudxk,ntot) ! overwrite flxscr with a- - {{a}}
 ! I wish it were that easy, but [v] changes character on dirichlet boundaries
       call igu_dirichlet(flxscr,gdudxk)
-      call chsign(flxscr,ntot)
+      call chsign(flxscr,ntot) ! needs to change with sign changes
 
       return
       end
@@ -454,10 +453,18 @@
       do e=1,nelt
          do f=1,nfaces
             cb2=cbc(f, e, ifield)
-            if (cb2 .eq. 'W  ') then
-               do eq=1,toteq
-                  call copy(flux(1,f,e,eq),fminus(1,f,e,eq),nxz)
-               enddo
+            if (cb2.ne.'E  '.and.cb2.ne.'P  ') then ! cbc bndy.
+               if (cb2 .eq. 'I  ') then ! SLIP WALL HARDCODED.
+                  do eq=1,toteq         ! NEUMANN CONDITIONS GO HERE
+                     call rzero(flux(1,f,e,eq),nxz)
+                  enddo
+               else ! all Dirichlet conditions result in IGU being
+                    ! strictly one-sided
+                  do eq=1,toteq
+                     call copy(flux(1,f,e,eq),fminus(1,f,e,eq),nxz)
+                     call cmult(flux(1,f,e,eq),2.0,nxz) ! undo 0.5*QQT
+                  enddo
+               endif
             endif
          enddo
       enddo

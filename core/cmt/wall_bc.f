@@ -1,7 +1,3 @@
-      subroutine wallbc2(nstate,f,e,faceq,bcq)
-      return
-      end
-
       subroutine wallbc(nstate,f,e,faceq,bcq,flux)
       INCLUDE 'SIZE'
       INCLUDE 'INPUT'
@@ -76,17 +72,32 @@ c                                     ! ux,uy,uz
                   ! like RocFlu
          call RFLU_SetRindStateSlipWallPerf(cp,molarmass,nx,ny,nz,
      >                                      rl,ul,vl,wl,fs,plc(l))
-         bcq(l,f,e,irho)=rl ! probably shouldn't be setting these
-         bcq(l,f,e,iux)=ul  ! on the other hand, it ensures [[]]=0
-         bcq(l,f,e,iuy)=vl  ! THINK!!!
-         bcq(l,f,e,iuz)=wl
+         bcq(l,f,e,irho)=rl
+
+!-----------------------------------------------------------------
+! JH111516 INVISCID HARDCODING SLIP WALL. DO THIS SMARTER SOON
+! JH111516 Mirror a la' Dolejsi & Feistauer (2015) section 8.3.1.2
+!-----------------------------------------------------------------
+         udotn=ul*nx+vl*ny+wl*nz
+         ur=ul-2.0*udotn*nx
+         vr=vl-2.0*udotn*ny
+         wr=wl-2.0*udotn*nz
+         bcq(l,f,e,iux)=ur
+         bcq(l,f,e,iuy)=vr
+         bcq(l,f,e,iuz)=wr
+! JH111516 SHOULD BE SET TO WALL SPEED i.e. 0 FOR NO-SLIP WALLS!!!
+!-----------------------------------------------------------------
          bcq(l,f,e,ipr)=plc(l)! from RFLU_SetRindStateSlipWallPerf
          bcq(l,f,e,iph)=phi
          bcq(l,f,e,iu1)=faceq(l,f,e,iu1)
-         bcq(l,f,e,iu2)=faceq(l,f,e,iu2)
-         bcq(l,f,e,iu3)=faceq(l,f,e,iu3)
-         bcq(l,f,e,iu4)=faceq(l,f,e,iu4)
+         bcq(l,f,e,iu2)=bcq(l,f,e,iu1)*ur
+         bcq(l,f,e,iu3)=bcq(l,f,e,iu1)*vr
+         bcq(l,f,e,iu4)=bcq(l,f,e,iu1)*wr
+!-------------------------------------------------------------
+! JH111516 INVISCID HARDCODING ADIABATIC WALL. DO SMARTER SOON
          bcq(l,f,e,iu5)=faceq(l,f,e,iu5)
+! JH111516 INVISCID HARDCODING ADIABATIC WALL. DO SMARTER SOON
+!-------------------------------------------------------------
 ! need a different place to set dirichlet BC for viscous fluxes
 !           bcq(l,f,e,iux)=ux ! better b
 !           bcq(l,f,e,iuy)=uy
@@ -119,6 +130,7 @@ c                                     ! ux,uy,uz
       call rzero(dumminus,toteq*nxzd)
       call map_faced(dumminus(1,1),faceq(1,f,e,iu1),nx1,nxd,fdim,0)
       call rzero(fs2,nxzd)
+! START BY GETTING RID OF THESE TRIVIAL CENTRAL CALLS AND CENTRAL ALTOGETHER
       call CentralInviscid_FluxFunction(nxzd,nxf,nyf,nzf,fs2,dumminus,
      >                                    plf,dumminus,plf,flx)
 

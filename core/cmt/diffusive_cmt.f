@@ -76,9 +76,9 @@
             elseif (cb .eq. 'W  ')then
               write(deathmessage,*) 'not ready for no-slip walls$'
               call exitti(deathmessage,f)
-            elseif (cb .eq.'I  '.or.cb .eq.'SYM')then
+!           elseif (cb .eq.'I  '.or.cb .eq.'SYM')then
 ! Slip walls for TST2016!!!!!!!LOLOLOLOLOLOL
-              call wallbc2(nqq,f,e,qminus,qplus)
+!              actually fixed wallbc I think
             endif
 
 !  -
