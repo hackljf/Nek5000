@@ -117,12 +117,6 @@ c-----------------------------------------------------------------------
          call set_alias_rx(istep)
       endif
 
-      if(stage.eq.1) then
-         call entropy_viscosity(vdiff(1,1,1,1,imu)) ! messy recycling
-                                                    ! from the POV of
-                                                    ! compute_transport_props
-      endif
-
 !     call set_dealias_rx ! done in set_convect_cons,
 ! JH113015                ! now called from compute_primitive_variables
 
