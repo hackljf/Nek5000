@@ -192,63 +192,15 @@
 
 !-----------------------------------------------------------------------
 
-      subroutine agradu_sfc(gijklu,gvar,du,eq)
-! JH110116 DEPRECATED. Always apply A to volume, not surface points.
-!                      igtu_cmt will reflect this change in philosophy.
-!                      Less to debug that way
+      subroutine agradu(gijklu,dut,e,eq)
       include 'SIZE'
       include 'SOLN'
       include 'CMTDATA'
-! subroutine for computing flux of a conserved variable by higher-order
-! differential operators.
-! This one is classic Navier-Stokes, that is, it computes viscous fluxes
-! for everything except gas density.
-! eq         index i; LHS equation
-! jflux      index j; flux direction
-! kdir       index k; direction of derivative or jump in U
-      parameter (lxyz=lx1*lz1*2*ldim)
-      integer  eq,jflux
-      real    du(nx1*nz1*2*ndim*nelt,toteq)
-      real gvar(nx1*nz1*2*ndim*nelt,*)    ! intent(in)
-! variables making up Gjkil terms, viscous stress tensor and total energy
-! equation, compressible Navier-Stokes equations
-! assume the following ordering remains in CMTDATA
-!     gvar(:,1)  rho ! especially here
-!     gvar(:,2)  u   ! especially here
-!     gvar(:,3)  v   ! especially here
-!     gvar(:,4)  w   ! especially here
-!     gvar(:,5)  p
-!     gvar(:,6)  T
-!     gvar(:,7)  a
-!     gvar(:,8)  phi_g
-!     gvar(:,9)  rho*cv
-!     gvar(:,10) rho*cp
-!     gvar(:,11) mu
-!     du(1,:)  rho
-!     du(2,:)  rho u
-!     du(3,:)  rho v
-!     du(4,:)  rho w
-!     du(5,:)  rho E
-
-      real gijklu(nx1*nz1*2*ndim*nelt)
-
-      npt=lxyz*nelt ! lazy
-      call col3(gijklu,du(1,eq),gvar(1,imuf),npt)
-
-      return
-      end
-
-!-----------------------------------------------------------------------
-
-      subroutine agradu(gijklu,dut,e,eq,jflux)
-      include 'SIZE'
-      include 'SOLN'
-      include 'CMTDATA'
-! monolithic viscous flux jacobian
+! monolithic viscous flux jacobian. just use it for mass diffusion in EVM
 ! eq         index i; LHS equation and dut variable
 ! jflux      index j; flux direction
       parameter (lxyz=lx1*ly1*lz1)
-      integer  e,eq,jflux
+      integer  e,eq
       real   dut(lxyz,toteq)
 ! derivatives of conserved variables gradu
 !     dut(:,1) rho
@@ -259,161 +211,7 @@
 
       real gijklu(lxyz)
 
-      call col3(gijklu,dut(1,eq),vdiff(1,1,1,e,imu),lxyz)
-
-      return
-      end
-
-!-----------------------------------------------------------------------
-
-      subroutine agradu_ns_sfc(gijklu,gvar,du,visco,eq,jflux,kdir)
-! JH110116 DEPRECATED. Always apply A to volume, not surface points.
-!                      igtu_cmt will reflect this change in philosophy.
-!                      Less to debug that way
-      include 'SIZE'
-      include 'SOLN'
-      include 'CMTDATA'
-! subroutine for computing flux of a conserved variable by higher-order
-! differential operators.
-! This one is classic Navier-Stokes, that is, it computes viscous fluxes
-! for everything except gas density.
-! eq         index i; LHS equation
-! jflux      index j; flux direction
-! kdir       index k; direction of derivative or jump in U
-      parameter (lxyz=lx1*lz1*2*ldim)
-      integer  eq,jflux,kdir
-      real    du(lxyz*nelt,toteq)
-      real visco(lxyz*nelt) ! you know, you should probably just
-                         ! pass mu+lambda and mu-k/cv when eq=5
-                         ! so you don't have to recompute them
-                         ! so many times
-      real gvar(lxyz*nelt,*)    ! intent(in)
-! variables making up Gjkil terms, viscous stress tensor and total energy
-! equation, compressible Navier-Stokes equations
-! assume the following ordering remains in CMTDATA
-!     gvar(:,1)  rho ! especially here
-!     gvar(:,2)  u   ! especially here
-!     gvar(:,3)  v   ! especially here
-!     gvar(:,4)  w   ! especially here
-!     gvar(:,5)  p
-!     gvar(:,6)  T
-!     gvar(:,7)  a
-!     gvar(:,8)  phi_g
-!     gvar(:,9)  rho*cv
-!     gvar(:,10) rho*cp
-!     gvar(:,11) mu
-!     gvar(:,12) thermal conductivity
-!     gvar(:,13) lambda
-!     gvar(:,18) U5 ! FIX THE DAMN ENERGY COMPUTATION I'M SIGHING ABOUT
-! derivatives or jumps, conserved variables, compressible Navier-Stokes
-! equations
-!     du(1,:)  rho
-!     du(2,:)  rho u
-!     du(3,:)  rho v
-!     du(4,:)  rho w
-!     du(5,:)  rho E
-      real gijklu(lxyz*nelt) !incremented. never give this exclusive intent
-      integer eijk3(3,3,3)
-!     data eijk2 / 0, -1, 1, 0/
-      data eijk3
-     >/0,0,0,0,0,-1,0,1,0,0,0,1,0,0,0,-1,0,0,0,-1,0,1,0,0,0,0,0/
-
-      if (eq .eq. 1) return
-
-      npt=lxyz*nelt ! lazy
-
-      call rzero(visco,npt)
-
-      if (eq .lt. 5) then
-
-         if (jflux .eq. eq-1) then
-            m=kdir
-            call copy(visco,gvar(1,ilamf),npt)
-            if (kdir .eq. jflux) then
-               call add2s2(visco,gvar(1,imuf),2.0,npt)
-            endif
-         else
-            call copy(visco,gvar(1,imuf),npt)
-            if (kdir .eq. jflux) then
-               m=eq-1
-            else
-               m=jflux
-            endif
-         endif
-
-         m=m+1 ! skip density
-
-         call invcol2(visco,gvar(1,irho),npt)
-         call subcol4(gijklu,visco,gvar(1,m),du(1,1),npt)
-         call addcol3(gijklu,visco,du(1,m),npt)
-
-      else ! energy equation is very different. and could use a rewrite
-
-         if (jflux .eq. kdir) then
-            kp1=kdir+1
-
-            l=1 ! sigh
-            call vdot3(visco,gvar(1,iux),gvar(1,iux), ! now twoke
-     >                       gvar(1,iuy),gvar(1,iuy),
-     >                       gvar(1,iuz),gvar(1,iuz),npt)
-            do ipt=1,npt ! someone else can make this loop more clever
-               gdu=(gvar(ipt,imuf)-gvar(ipt,ikndf))*twoke
-               energy=gvar(ipt,icvf)*gvar(ipt,ithm)+0.5*twoke ! sigh. iu5?/phi?
-               gdu=gdu+(gvar(ipt,imuf)+gvar(ipt,ilamf))*gvar(ipt,kp1)**2
-               gijklu(ipt)=gijklu(ipt)-(gvar(ipt,ikndf)*energy-gdu)*
-     >                                  du(ipt,l)/gvar(ipt,irho)
-            enddo
-
-            call sub3(visco,gvar(1,imuf),gvar(1,ikndf),npt) ! form mu-K/cv
-            do ipt=1,npt
-               visco(ipt)=visco(ipt)/gvar(ipt,1)
-               gdu=0.0
-               do l=2,ldim+1 ! both gvar and du are indexed by l
-                  gdu=gdu+gvar(ipt,l)*du(ipt,l)
-               enddo
-               gijklu(ipt)=gijklu(ipt)+gdu*visco(ipt)
-            enddo
-            call add3(visco,gvar(1,imuf),gvar(1,ilamf),npt)
-            l=jflux+1
-            do ipt=1,npt
-               gijklu(ipt)=gijklu(ipt)+visco(ipt)*gvar(ipt,l)*du(ipt,l)/
-     >                                                      gvar(ipt,1)
-            enddo
-
-            l=5
-            call copy(visco,gvar(1,ikndf),npt)
-            call invcol2(visco,gvar(1,1),npt)
-            call add2col2(gijklu,visco,du(1,l),npt)
-
-         else ! dU is off-diagonal
-
-            call add3(visco,gvar(1,imuf),gvar(1,ilamf),npt)
-            jp1=jflux+1
-            kp1=kdir+1
-            call invcol2(visco,gvar(1,1),npt)
-            do ipt=1,npt
-               gijklu(ipt)=gijklu(ipt)-
-     >                  visco(ipt)*gvar(ipt,jp1)*gvar(ipt,kp1)*du(ipt,1)
-            enddo
-
-            do l=2,ldim+1
-               lm1=l-1
-               if (eijk3(jflux,kdir,lm1) .eq. 0) then
-                  if (lm1 .eq. kdir) then
-                     call copy(visco,gvar(1,ilamf),npt)
-                     m=jflux+1
-                  else
-                     call copy(visco,gvar(1,imuf),npt)
-                     m=kdir+1
-                  endif
-                  call invcol2(visco,gvar(1,1),npt)
-                  call addcol4(gijklu,visco,gvar(1,m),du(1,l),npt)
-               endif
-            enddo ! l
-
-         endif ! diagonal?
-
-      endif ! energy equation
+      call col3(gijklu,dut(1,eq),vdiff(1,1,1,e,inus),lxyz)
 
       return
       end
@@ -592,12 +390,14 @@
 !-----------------------------------------------------------------------
 
       subroutine compute_transport_props
-! get vdiff props (viscosity in imu, second viscosity in ilam, and
-! thermal conductivity in iknd; second viscosity is usually -2/3
-! visc, but we refuse to assume Stokes' hypothesis for the user)
-! via nekasn
-! JH082216 Guermond eddy viscosity method (EVM) regularization starts
-!          here
+! get vdiff props
+! viscosity in imu
+! second viscosity in ilam; second viscosity is usually -2/3mu
+! but we refuse to assume Stokes' hypothesis for the user
+! second viscosity=0 in the EVM for Euler gas dynamics
+! thermal conductivity in iknd;
+! mass diffusivity for EVM in inus
+! via nekasgn
       include 'SIZE'
       include 'PARALLEL'
       include 'NEKUSE'
@@ -613,9 +413,10 @@
          do i=1,nx1
             call nekasgn(i,j,k,e)
             call uservp(i,j,k,ieg)
-            vdiff(i,j,k,e,imu) = mu
-            vdiff(i,j,k,e,ilam) = lambda
-            vdiff(i,j,k,e,iknd) = udiff
+            vdiff(i,j,k,e,imu)  = mu   ! NEKUSE
+            vdiff(i,j,k,e,ilam) = lambda!NEKUSE
+            vdiff(i,j,k,e,iknd) = udiff! NEKUSE
+            vdiff(i,j,k,e,inus) = nu_s ! CMTDATA
          enddo
          enddo
          enddo

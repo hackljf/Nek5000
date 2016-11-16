@@ -13,8 +13,8 @@
 
       COMMON /FORCEDATA/   usrf (lx1,ly1,lz1,5)
       common /planned_Additions/ c_sub_e,cmax,meshh(lelt),maxdiff,
-     >        gridh(lx1*ly1*lz1,lelt)
-      real meshh,maxdiff,gridh
+     >        gridh(lx1*ly1*lz1,lelt),nu_s
+      real meshh,maxdiff,gridh,nu_s
 c We assume we will be working with one gas.
 c To begin with we assume calorically perfect gas.
 c In near future we relax the constraint to thermally perfect gas.
@@ -69,6 +69,7 @@ c---------------------------------------------------------------------
       parameter (imu =1) ! viscosity
       parameter (iknd=2) ! thermal conductivity
       parameter (ilam=3) ! lambda, 2nd viscosity
+      parameter (inus=4) ! nu_s, mass diffusion (EVM)
 ! indices for fields in U
       parameter (irg =1)     ! phi_g*rho_g
       parameter (irpu=2)     ! phi_g*rho_g*u

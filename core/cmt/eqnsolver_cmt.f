@@ -25,10 +25,13 @@
       iqp =iqm+nstate*nfq
       iuj =iqp+nstate*nfq
 
+      if (eq .eq. 1) then
+! monolithic regularization for mass
+         call fluxj(diffh,gradu,e,eq)
+      else
 ! apply viscous flux jacobian A.
-      call fluxj_ns(diffh,gradu,e,eq)
-! monolithic regularization never
-!     call fluxj(diffh,gradu,e,eq)
+         call fluxj_ns(diffh,gradu,e,eq)
+      endif
 
       call diffh2graduf(e,eq,graduf) ! on faces for QQ^T and igu_cmt
 

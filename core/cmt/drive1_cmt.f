@@ -72,7 +72,7 @@ c that completely stops working if B become nondiagonal for any reason.
          enddo
       enddo
 
-      call compute_primitive_vars
+      call compute_primitive_vars ! for next time step
       ftime = ftime + dnekclock() - ftime_dum
 
       if (mod(istep,iostep).eq.0.or.istep.eq.1)then
@@ -116,6 +116,13 @@ c-----------------------------------------------------------------------
       else
          call set_alias_rx(istep)
       endif
+
+      if(stage.eq.1) then
+         call entropy_viscosity(vdiff(1,1,1,1,imu)) ! messy recycling
+                                                    ! from the POV of
+                                                    ! compute_transport_props
+      endif
+
 !     call set_dealias_rx ! done in set_convect_cons,
 ! JH113015                ! now called from compute_primitive_variables
 
@@ -125,11 +132,6 @@ c-----------------------------------------------------------------------
 !        primitive vars = rho, u, v, w, p, T, phi_g
       if (istep.eq.1) then
          call compute_primitive_vars
-!-----------------------------------------------------------------------
-! JH082216 Transport properties are for the higher-derivative operators.
-!          Artificial viscosity is now computed in the branches of
-!          compute_transport_props
-!-----------------------------------------------------------------------
          call compute_transport_props
       else
          if(stage.gt.1) then
@@ -137,6 +139,7 @@ c-----------------------------------------------------------------------
             call compute_transport_props
          endif
       endif
+
 !-----------------------------------------------------------------------
 ! JH072914 We can really only proceed with dt once we have current
 !          primitive variables. Only then can we compute CFL and/or dt.
