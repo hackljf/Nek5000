@@ -117,7 +117,6 @@
      >/0,0,0,0,0,-1,0,1,0,0,0,1,0,0,0,-1,0,0,0,-1,0,1,0,0,0,0,0/
 
       n=nx1*ny1*nz1
-      call rzero(flux,n)
 
 ! This is a disaster that I might want to program less cleverly
       if (eq .lt. toteq) then ! TRIAGE. CAN'T GET AGRADU_NS to WORK
