@@ -84,7 +84,6 @@
       nfq    = nf*nelt ! all points in a pile of faces
       if (ifsip) then
          const=-1.0 ! SIP
-         write(6,*) 'duh ais',const
       else
          const=1.0 ! Baumann-Oden
       endif
@@ -146,7 +145,7 @@
                   call agradu(superhugeh(m,1),gradu(1,1,1),e,1)
                   call agradu(superhugeh(m,2),gradu(1,1,2),e,1)
                   call agradu(superhugeh(m,3),gradu(1,1,3),e,1)
-               if (eq.eq.2) then
+               elseif (eq.eq.2) then
                   call A21kldUldxk(superhugeh(m,1),gradu,e)
                   call A22kldUldxk(superhugeh(m,2),gradu,e)
                   call A23kldUldxk(superhugeh(m,3),gradu,e)

@@ -130,15 +130,22 @@ c-----------------------------------------------------------------------
 !     time step
 !     if(IFFLTR)  call filter_cmtvar(IFCNTFILT)
 !        primitive vars = rho, u, v, w, p, T, phi_g
-      if (istep.eq.1) then
-         call compute_primitive_vars
-         call compute_transport_props
-      else
-         if(stage.gt.1) then
-            call compute_primitive_vars
-            call compute_transport_props
-         endif
+!     if (istep.eq.1) then
+!        call compute_primitive_vars
+!        call compute_transport_props
+!     else
+!        if(stage.gt.1) then
+!           call compute_primitive_vars
+!           call compute_transport_props
+!        endif
+!     endif
+      call compute_primitive_vars
+      if(stage.eq.1) then
+         call entropy_viscosity(vdiff(1,1,1,1,imu)) ! messy recycling
+                                                    ! from the POV of
+                                                    ! compute_transport_props
       endif
+      call compute_transport_props
 
 !-----------------------------------------------------------------------
 ! JH072914 We can really only proceed with dt once we have current
