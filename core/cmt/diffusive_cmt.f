@@ -184,7 +184,7 @@
 
       n=nx1*ny1*nz1
       do j=1,ndim
-         call agradu(flux(1,j),gradu(1,1,j),e,eq,j)
+         call agradu(flux(1,j),gradu(1,1,j),e,eq)
       enddo
 
       return

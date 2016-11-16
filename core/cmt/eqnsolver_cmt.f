@@ -106,7 +106,7 @@
       nxyz  =nx1*ny1*nz1
       nvol  =nxyz*nelt
       ngradu=nxyz*toteq*3
-      do eq=2,toteq ! MASS DIFFUSION GETS ITS OWN BLOCK. somewhere
+      do eq=1,toteq
          call rzero(superhugeh,3*lx1*ly1*lz1*lelt)
          if (eq .eq. 4 .and. .not. if3d) goto 133
          l=1
@@ -142,6 +142,10 @@
 !          agradu_ns has failed all verification checks for homentropic vortex
 !          initialization.
 !          start over
+               if (eq.eq.1) then
+                  call agradu(superhugeh(m,1),gradu(1,1,1),e,1)
+                  call agradu(superhugeh(m,2),gradu(1,1,2),e,1)
+                  call agradu(superhugeh(m,3),gradu(1,1,3),e,1)
                if (eq.eq.2) then
                   call A21kldUldxk(superhugeh(m,1),gradu,e)
                   call A22kldUldxk(superhugeh(m,2),gradu,e)
@@ -157,7 +161,7 @@
                endif
 
             else ! Energy equation courtesy of thoroughly-checked maxima
-           ! until I can get agradu_ns working correctly
+                 ! until I can get agradu_ns working correctly
                if (if3d) then
                   call a53kldUldxk(superhugeh(m,3),gradu,e)
                else
@@ -179,23 +183,6 @@
          call add2(res1(1,1,1,1,eq),gradm1_t_overwrites,nvol)
 133      continue
       enddo ! equation loop
-
-!!! apply flux jacobian to get Ajac (U-{{U}})_i * n_k
-!!! JH110116 DEPRECATED. Always apply A to volume, not surface points.
-!!!                      igtu_cmt will reflect this change in philosophy.
-!!!                      Less to debug that way
-!!         do j=1,ndim
-!!            call rzero(ftmp1,nfq)
-!!!           call agradu_sfc(ftmp1,qminus,hface(1,1,j),eq)
-!!! yes I know I should wrap this. Bite me.
-!!            do k=1,ndim
-!!               call agradu_ns_sfc(ftmp1,qminus,hface(1,1,k),
-!!     >                               ftmp2,eq,j,k)
-!!            enddo
-!!            call add_face2full_cmt(nelt,nx1,ny1,nz1,iface_flux,
-!!     >                      superhugeh(1,j),ftmp1)
-!!         enddo
-!
 
       return
       end
