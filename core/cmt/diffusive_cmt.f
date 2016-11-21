@@ -31,7 +31,7 @@
 ! [[U]] with respect to the Dirichlet boundary state
       include 'SIZE'
       include 'INPUT' ! do we need this?
-      include 'GEOM' ! for unx
+      include 'TSTEP' ! for ifield
       include 'CMTDATA'
       real umubc (nx1*nz1,2*ndim,nelt,toteq) ! intent(out)
       real qminus(nx1*nz1,2*ndim,nelt,nqq),
@@ -39,6 +39,7 @@
       real nTol
       integer e,f
       character*132 deathmessage
+      common /nekcb/ cb
       character*3 cb
 
       nTol = 1.0E-14
@@ -71,13 +72,9 @@
               call exitti(deathmessage,f)
             elseif (cb.eq.'O  ') then
               call outflow2(nqq,f,e,qminus,qplus)
-!           elseif (cb .eq. 'W  ' .or. cb .eq.'I  '.or.cb .eq.'SYM')then
-!             call wallbc2(nqq,f,e,qminus,qplus)
-            elseif (cb .eq. 'W  ')then
-              write(deathmessage,*) 'not ready for no-slip walls$'
-              call exitti(deathmessage,f)
+            elseif (cb .eq. 'W  ' .or. cb .eq.'I  ')then
+              call wallbc2(nqq,f,e,qminus,qplus)
 !           elseif (cb .eq.'I  '.or.cb .eq.'SYM')then
-! Slip walls for TST2016!!!!!!!LOLOLOLOLOLOL
 !              actually fixed wallbc I think
             endif
 

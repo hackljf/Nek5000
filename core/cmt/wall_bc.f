@@ -1,3 +1,58 @@
+! FUN FACT: Did you know that bdry.f has a subroutine called
+!           BCNEUSC
+      subroutine wallbc2(nstate,f,e,faceq,bcq)
+! DIRICHLET WALL CONDITIONS BECAUSE I DONT KNOW HOW TO INDEX
+! UNX in userbc with volume indices instead of face indices
+      INCLUDE 'SIZE'
+      INCLUDE 'INPUT'
+      INCLUDE 'TSTEP'
+      include 'NEKUSE'
+      include 'PARALLEL'
+      include 'CMTBCDATA'
+      include 'CMTDATA'
+
+      integer nstate,f,e
+      real    faceq(nx1*nz1,2*ndim,nelt,nstate)
+      real    bcq(nx1*nz1,2*ndim,nelt,nstate) 
+
+! JH112116
+! rind state for inviscid fluxes is different from viscous fluxes? not
+! sure what the right thing to do is.
+! JH111416 read books, stupid. For now EVM SHOCKS OR BUST!!!!
+      call facind(i0,i1,j0,j1,k0,k1,nx1,ny1,nz1,f)    
+      ieg=lglel(e)
+      l=0
+      do iz=k0,k1
+      do iy=j0,j1
+      do ix=i0,i1
+         call nekasgn(ix,iy,iz,e)     ! gives us phi- and rho-
+         call userbc (ix,iy,iz,f,ieg) ! just for molarmass, and
+         l=l+1
+         bcq(l,f,e,iux)=ux
+         bcq(l,f,e,iuy)=uy
+         bcq(l,f,e,iuz)=uz
+!-----------------------------------------------------------------
+! JH112116 I need to check bcq(:,ipr) to make sure it is unchanced
+!          from inviscid computation (assuming that's the right
+!          answer for general viscous BC).
+!-----------------------------------------------------------------
+         bcq(l,f,e,iph)=phi
+         bcq(l,f,e,iu1)=faceq(l,f,e,iu1)
+         bcq(l,f,e,iu2)=bcq(l,f,e,iu1)*ux
+         bcq(l,f,e,iu3)=bcq(l,f,e,iu1)*uy
+         bcq(l,f,e,iu4)=bcq(l,f,e,iu1)*uz
+!-------------------------------------------------------------
+! JH111516 INVISCID HARDCODING ADIABATIC WALL. DO SMARTER SOON
+         bcq(l,f,e,iu5)=faceq(l,f,e,iu5)
+! JH111516 INVISCID HARDCODING ADIABATIC WALL. DO SMARTER SOON
+!-------------------------------------------------------------
+      enddo
+      enddo
+      enddo
+
+      return
+      end
+
       subroutine wallbc(nstate,f,e,faceq,bcq,flux)
       INCLUDE 'SIZE'
       INCLUDE 'INPUT'
@@ -29,6 +84,7 @@
       include 'PARALLEL'
       include 'DG'
       include 'MASS'
+      include 'TSTEP'
       integer  f,e
 ! JH091614 faceq now has intent(inout)...
 ! JH031315 not anymore. nobody changes qminus here. that's dumb
@@ -48,6 +104,7 @@
       nxzd=nxd*nzd
       fdim=ndim-1
       ieg=lglel(e)
+      ifield=1
 
 ! I know this says slipwall, but to the inviscid terms all walls are
 ! slip. or something.
@@ -58,7 +115,7 @@
       do ix=i0,i1
          call nekasgn(ix,iy,iz,e)
          call userbc (ix,iy,iz,f,ieg) ! get molarmass, phi
-c                                     ! ux,uy,uz
+c                                     ! ux,uy,uz someday
          l=l+1
          nx = unx(l,1,f,e)
          ny = uny(l,1,f,e)
@@ -102,7 +159,7 @@ c                                     ! ux,uy,uz
 !           bcq(l,f,e,iux)=ux ! better b
 !           bcq(l,f,e,iuy)=uy
 !           bcq(l,f,e,iuz)=uz
-!        if (cbc(f,e,2) .eq. 'W  ') bcq(l,f,e,ithm)=temp
+!        if (cbc(f,e,ifield) .eq. 'W  ') bcq(l,f,e,ithm)=temp
          plc(l)=plc(l)*phi
       enddo
       enddo
@@ -142,13 +199,13 @@ c                                     ! ux,uy,uz
          do j=1,toteq-1
             call map_faced(fluxw(1,f,e,j),flx(1,j),nx1,nxd,fdim,1)
          enddo
-         if (cbc(f,e,2).ne.'I  ') call map_faced(fluxw(1,f,e,toteq),
+         if(cbc(f,e,ifield).ne.'I  ') call map_faced(fluxw(1,f,e,toteq),
      >                              flx(1,toteq),nx1,nxd,fdim,1)
       else
          do j=1,toteq-1
             call copy(fluxw(1,f,e,j),flx(1,j),nxz)
          enddo
-         if (cbc(f,e,2).ne.'I  ') call copy(fluxw(1,f,e,toteq),
+         if (cbc(f,e,ifield).ne.'I  ') call copy(fluxw(1,f,e,toteq),
      >                              flx(1,toteq),nxz)
       endif
 

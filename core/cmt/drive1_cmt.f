@@ -22,20 +22,6 @@ c     Solve the Euler equations
       nfldpart = ndim*npart
 
       if(istep.eq.1) then 
-!        do i=1,nxyz1*nelt
-!           write(400,'(10e17.8)') xm1(i,1,1,1),ym1(i,1,1,1),
-!    >      vx(i,1,1,1),vy(i,1,1,1),pr(i,1,1,1),t(i,1,1,1,1),
-!    >      phig(i,1,1,1),vtrans(i,1,1,1,icv),vtrans(i,1,1,1,icp),
-!    >      vtrans(i,1,1,1,irho)
-!        enddo
-         do e=1,nelt
-            do i=1,nxyz1
-               write(401,'(7e17.8)')  xm1(i,1,1,1),ym1(i,1,1,1),
-     >      u(i,1,1,1,e),u(i,1,1,2,e),u(i,1,1,3,e),u(i,1,1,4,e),
-     >      u(i,1,1,5,e)
-            enddo
-         enddo
-         call exitt
          call set_tstep_coef
          call cmt_flow_ics(ifrestart)
          call init_cmt_timers
@@ -186,6 +172,8 @@ c-----------------------------------------------------------------------
          ieq=(eq-1)*ndg_face+iflx
          call surface_integral_full(res1(1,1,1,1,eq),flux(ieq))
       enddo
+      dumchars='after_inviscid'
+!     call dumpresidue(dumchars,999)
 
                !                   -
       iuj=iflx ! overwritten with U -{{U}}
@@ -204,6 +192,8 @@ c-----------------------------------------------------------------------
       call   imqqtu(flux(iuj),flux(ium),flux(iup))
       call   imqqtu_dirichlet(flux(iuj),flux(iqm),flux(iqp))
       call igtu_cmt(flux(iqm),flux(iuj),graduf) ! [[u]].{{gradv}}
+      dumchars='after_igtu'
+!     call dumpresidue(dumchars,999)
 
       do e=1,nelt
 !-----------------------------------------------------------------------
@@ -230,6 +220,8 @@ c-----------------------------------------------------------------------
             call compute_forcing(e,eq)
          enddo
       enddo
+      dumchars='after_elm'
+!     call dumpresidue(dumchars,999)
 
 ! get the rest of Hij^{d*}
       call igu_cmt(flux(iqm),graduf)
@@ -238,6 +230,9 @@ c-----------------------------------------------------------------------
 !Finally add viscous surface flux functions of derivatives to res1.
          call surface_integral_full(res1(1,1,1,1,eq),flux(ieq))
       enddo
+      dumchars='end_of_rhs'
+!     call dumpresidue(dumchars,999)
+!     call exitt
 
       return
       end

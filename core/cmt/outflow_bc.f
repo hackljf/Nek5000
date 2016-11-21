@@ -81,7 +81,8 @@ c--------------------------------------------------------------------
       do iy=j0,j1
       do ix=i0,i1
          call nekasgn(ix,iy,iz,e)     ! gives us phi- and rho-
-         call userbc (ix,iy,iz,f,ieg) ! just for molarmass
+         call userbc (ix,iy,iz,f,ieg) ! just for molarmass, and
+                                      ! pres
          l=l+1
          sxn = unx(l,1,f,e)
          syn = uny(l,1,f,e)
@@ -92,7 +93,7 @@ c--------------------------------------------------------------------
          rhov= faceq(l,f,e,iu3)/phi
          rhow= faceq(l,f,e,iu4)/phi
          rhoe= faceq(l,f,e,iu5)/phi
-         plc(l)= faceq(l,f,e,ipr)
+         plc(l)= pres ! P- here
          cpglc(l)=faceq(l,f,e,icpf)/rho
          cvglc(l)=faceq(l,f,e,icvf)/rho
 c        fs = 0.0

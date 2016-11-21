@@ -158,6 +158,7 @@
       include 'INPUT' ! do we need this?
       include 'GEOM' ! for unx
       include 'CMTDATA' ! do we need this without outflsub?
+!     include 'TSTEP' ! for ifield?
       include 'DG'
 
 ! ==============================================================================
@@ -207,6 +208,7 @@
 !     REAL vf(3)
       real nTol
       character*132 deathmessage
+      common /nekcb/ cb
       character*3 cb
 
       nTol = 1.0E-14
