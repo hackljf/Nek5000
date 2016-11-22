@@ -424,15 +424,19 @@
       const = 0.5
       call cmult(gdudxk,const,ntot)
 !-----------------------------------------------------------------------
-! supa huge gs_op to get {{gdu}}
+! supa huge gs_op to get {{AgradU}}
 ! operation flag is second-to-last arg, an integer
 !                                                   1 ==> +
       call gs_op_fields(dg_hndl,gdudxk,nfq,toteq,1,1,0)
 !-----------------------------------------------------------------------
-      call bcflux(gdudxk)
-      call sub2  (flxscr,gdudxk,ntot) ! overwrite flxscr with a- - {{a}}
-! I wish it were that easy, but [v] changes character on dirichlet boundaries
+      call sub2  (flxscr,gdudxk,ntot) ! overwrite flxscr with
+                                      !           -
+                                      ! (AgradU.n)  - {{AgradU.n}}
+! [v] changes character on boundaries, so we actually need
+! 1. (AgradU.n)- on Dirichlet boundaries
       call igu_dirichlet(flxscr,gdudxk)
+! 2. (Fbc.n)- on Neumann boundaries
+      call bcflux(gdudxk)
       call chsign(flxscr,ntot) ! needs to change with sign changes
 
       return
@@ -440,12 +444,12 @@
 
 !-----------------------------------------------------------------------
 
-      subroutine igu_dirichlet(flux,fminus)
+      subroutine igu_dirichlet(flux,agradu)
       include 'SIZE'
       include 'TOTAL'
       integer e,eq,f
       real flux(nx1*nz1,2*ndim,nelt,toteq)
-      real fminus(nx1*nz1,2*ndim,nelt,toteq)
+      real agradu(nx1*nz1,2*ndim,nelt,toteq)
       character*3 cb2
 
       nxz=nx1*nz1
@@ -460,11 +464,18 @@
                   do eq=1,toteq         ! NEUMANN CONDITIONS GO HERE
                      call rzero(flux(1,f,e,eq),nxz)
                   enddo
-               else ! all Dirichlet conditions result in IGU being
-                    ! strictly one-sided
+               else
+! all Dirichlet conditions result in IGU being
+! strictly one-sided, so we undo 0.5*QQT
+! UNDER THE ASSUMPTIONS THAT
+! 1. agradu's actual argument is really gdudxk AND
+! 2. IT HAS ALREADY BEEN MULTIPLIED BY 0.5
+! 3. gs_op has not changed it at all.
+! overwriting flux with it and and multiplying it 2.0 should do the trick
                   do eq=1,toteq
-                     call copy(flux(1,f,e,eq),fminus(1,f,e,eq),nxz)
-                     call cmult(flux(1,f,e,eq),2.0,nxz) ! undo 0.5*QQT
+                     call copy(flux(1,f,e,eq),agradu(1,f,e,eq),nxz)
+! in fact, that copy should not be necessary at all. TEST WITHOUT IT
+                     call cmult(flux(1,f,e,eq),2.0,nxz)
                   enddo
                endif
             endif
