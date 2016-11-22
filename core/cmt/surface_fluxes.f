@@ -436,7 +436,7 @@
 ! 1. (AgradU.n)- on Dirichlet boundaries
       call igu_dirichlet(flxscr,gdudxk)
 ! 2. (Fbc.n)- on Neumann boundaries
-      call bcflux(gdudxk)
+      call bcflux(flxscr,gdudxk)
       call chsign(flxscr,ntot) ! needs to change with sign changes
 
       return
@@ -445,6 +445,8 @@
 !-----------------------------------------------------------------------
 
       subroutine igu_dirichlet(flux,agradu)
+! Acts on ALL boundary faces because I'm lazy. SET NEUMANN BC AFTER THIS
+! CALL. BCFLUX IS PICKIER ABOUT THE BOUNDARY FACES IT ACTS ON.
       include 'SIZE'
       include 'TOTAL'
       integer e,eq,f
@@ -460,11 +462,6 @@
          do f=1,nfaces
             cb2=cbc(f, e, ifield)
             if (cb2.ne.'E  '.and.cb2.ne.'P  ') then ! cbc bndy.
-               if (cb2 .eq. 'I  ') then ! SLIP WALL HARDCODED.
-                  do eq=1,toteq         ! NEUMANN CONDITIONS GO HERE
-                     call rzero(flux(1,f,e,eq),nxz)
-                  enddo
-               else
 ! all Dirichlet conditions result in IGU being
 ! strictly one-sided, so we undo 0.5*QQT
 ! UNDER THE ASSUMPTIONS THAT
@@ -472,12 +469,15 @@
 ! 2. IT HAS ALREADY BEEN MULTIPLIED BY 0.5
 ! 3. gs_op has not changed it at all.
 ! overwriting flux with it and and multiplying it 2.0 should do the trick
-                  do eq=1,toteq
-                     call copy(flux(1,f,e,eq),agradu(1,f,e,eq),nxz)
-! in fact, that copy should not be necessary at all. TEST WITHOUT IT
-                     call cmult(flux(1,f,e,eq),2.0,nxz)
-                  enddo
-               endif
+               do eq=1,toteq
+!                  call copy(flux(1,f,e,eq),agradu(1,f,e,eq),nxz)
+!! in fact, that copy should not be necessary at all. TEST WITHOUT IT
+!                  call cmult(flux(1,f,e,eq),2.0,nxz)
+! JH112216 This may be better because agradu (without the factor of 1/2) is
+!          needed for some Neumann conditions (like adiabatic walls)
+                   call cmult(agradu(1,f,e,eq),2.0,nxz)
+                   call copy(flux(1,f,e,eq),agradu(1,f,e,eq),nxz)
+               enddo
             endif
          enddo
       enddo

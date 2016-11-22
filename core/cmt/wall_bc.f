@@ -14,6 +14,8 @@
       integer nstate,f,e
       real    faceq(nx1*nz1,2*ndim,nelt,nstate)
       real    bcq(nx1*nz1,2*ndim,nelt,nstate) 
+      common /nekcb/ cb
+      character*3 cb
 
 ! JH112116
 ! rind state for inviscid fluxes is different from viscous fluxes? not
@@ -36,14 +38,24 @@
 !          from inviscid computation (assuming that's the right
 !          answer for general viscous BC).
 !-----------------------------------------------------------------
-         bcq(l,f,e,iph)=phi
-         bcq(l,f,e,iu1)=faceq(l,f,e,iu1)
-         bcq(l,f,e,iu2)=bcq(l,f,e,iu1)*ux
-         bcq(l,f,e,iu3)=bcq(l,f,e,iu1)*uy
-         bcq(l,f,e,iu4)=bcq(l,f,e,iu1)*uz
+         bcq(l,f,e,iph) =phi
+         bcq(l,f,e,ithm)=temp
+         bcq(l,f,e,iu1) =faceq(l,f,e,iu1)
+         bcq(l,f,e,iu2) =bcq(l,f,e,iu1)*ux
+         bcq(l,f,e,iu3) =bcq(l,f,e,iu1)*uy
+         bcq(l,f,e,iu4) =bcq(l,f,e,iu1)*uz
+         if (cb .eq. 'W  ') then ! consider taking properties from userbc too
+!           bcq(l,f,e,iu5)=bcq(l,f,e,iu1)*faceq(l,f,e,icvf)
+            bcq(l,f,e,iu5)=phi*faceq(l,f,e,icvf)*temp+
+     >      0.5/bcq(l,f,e,iu1)*(bcq(l,f,e,iu2)**2+bcq(l,f,e,iu3)**2+
+     >                          bcq(l,f,e,iu4)**2)
+         else ! BETTA JUST BE 'I  '
 !-------------------------------------------------------------
-! JH111516 INVISCID HARDCODING ADIABATIC WALL. DO SMARTER SOON
-         bcq(l,f,e,iu5)=faceq(l,f,e,iu5)
+! JH111516 HARDCODING ADIABATIC WALL. DO SMARTER SOON
+!          METHOD "B"
+            bcq(l,f,e,iu5)=faceq(l,f,e,iu5)-0.5/faceq(l,f,e,iu1)*
+     >     (faceq(l,f,e,iu2)**2+faceq(l,f,e,iu3)**2+faceq(l,f,e,iu4)**2)
+         endif
 ! JH111516 INVISCID HARDCODING ADIABATIC WALL. DO SMARTER SOON
 !-------------------------------------------------------------
       enddo

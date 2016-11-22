@@ -83,6 +83,11 @@
             do ivar=1,toteq
                call sub3(umubc(1,f,e,ivar),qminus(1,f,e,iu1+ivar-1),
      >                                      qplus(1,f,e,iu1+ivar-1),nxz)
+               do i=1,nxz
+                  write(300,*) umubc(i,f,e,1),umubc(i,f,e,2),
+     ?                         umubc(i,f,e,3),umubc(i,f,e,4),
+     .                         umubc(i,f,e,5)
+               enddo
             enddo
 
          endif 
