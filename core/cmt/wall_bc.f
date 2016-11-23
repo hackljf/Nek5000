@@ -53,8 +53,10 @@
 !-------------------------------------------------------------
 ! JH111516 HARDCODING ADIABATIC WALL. DO SMARTER SOON
 !          METHOD "B"
-            bcq(l,f,e,iu5)=faceq(l,f,e,iu5)-0.5/faceq(l,f,e,iu1)*
-     >     (faceq(l,f,e,iu2)**2+faceq(l,f,e,iu3)**2+faceq(l,f,e,iu4)**2)
+!           bcq(l,f,e,iu5)=faceq(l,f,e,iu5)-0.5/faceq(l,f,e,iu1)*
+!    >     (faceq(l,f,e,iu2)**2+faceq(l,f,e,iu3)**2+faceq(l,f,e,iu4)**2)
+!          METHOD "A"
+            bcq(l,f,e,iu5)=faceq(l,f,e,iu5)
          endif
 ! JH111516 INVISCID HARDCODING ADIABATIC WALL. DO SMARTER SOON
 !-------------------------------------------------------------

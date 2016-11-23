@@ -403,14 +403,15 @@
 
 !-----------------------------------------------------------------------
 
-      subroutine igu_cmt(flxscr,gdudxk)
+      subroutine igu_cmt(flxscr,gdudxk,qminus)
 ! Hij^{d*}
       include 'SIZE'
       include 'CMTDATA'
       include 'DG'
 
-      real gdudxk(nx1*nz1*2*ndim,nelt,toteq)
       real flxscr(nx1*nz1*2*ndim*nelt,toteq)
+      real gdudxk(nx1*nz1*2*ndim,nelt,toteq)
+      real qminus(nx1*nz1,2*ndim,nelt,nqq)
       real const
       integer e,eq,f
 
@@ -436,7 +437,7 @@
 ! 1. (AgradU.n)- on Dirichlet boundaries
       call igu_dirichlet(flxscr,gdudxk)
 ! 2. (Fbc.n)- on Neumann boundaries
-      call bcflux(flxscr,gdudxk)
+      call bcflux(flxscr,gdudxk,qminus)
       call chsign(flxscr,ntot) ! needs to change with sign changes
 
       return

@@ -224,9 +224,9 @@ c-----------------------------------------------------------------------
 !     call dumpresidue(dumchars,999)
 
 ! get the rest of Hij^{d*}
-      call igu_cmt(flux(iqm),graduf)
+      call igu_cmt(flux(iqp),graduf,flux(iqm))
       do eq=1,toteq
-         ieq=(eq-1)*ndg_face+iqm
+         ieq=(eq-1)*ndg_face+iqp
 !Finally add viscous surface flux functions of derivatives to res1.
          call surface_integral_full(res1(1,1,1,1,eq),flux(ieq))
       enddo
