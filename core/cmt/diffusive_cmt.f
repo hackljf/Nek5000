@@ -14,11 +14,15 @@
 
       nf = nx1*nz1*2*ndim*nelt
       const=-0.5
+
 ! U-{{U}} on interior faces. first just do it on all faces.
       do ivar=1,toteq
          call add3(ummcu(1,ivar),uminus(1,ivar),uplus(1,ivar),nf)
          call cmult(ummcu(1,ivar),const,nf)        !         -
          call add2(ummcu(1,ivar),uminus(1,ivar),nf)!ummcu = U -{{U}}
+      enddo
+      do i=1,nf
+         write(222,*) ummcu(i,5), uminus(i,5),uplus(i,5)
       enddo
 
       return
@@ -67,9 +71,7 @@
 !          recompute and overwrite iu1 through iu5 in qplus with stuff we
 !          do trust (UBC, to be exact).
             if (cb.eq.'v  ' .or. cb .eq. 'V  ') then
-!             call inflow2(nqq,f,e,qminus,qplus)
-              write(deathmessage,*) 'not ready for inflow$'
-              call exitti(deathmessage,f)
+              call inflow2(nqq,f,e,qminus,qplus)
             elseif (cb.eq.'O  ') then
               call outflow2(nqq,f,e,qminus,qplus)
             elseif (cb .eq. 'W  ' .or. cb .eq.'I  ')then

@@ -49,7 +49,8 @@
 
 ! diffusion number based on viscosity.
 
-      call mindr(mdr,diffno2)
+!     call mindr(mdr,diffno2)
+      diffno2=0.0
       if (nio.eq.0) WRITE(6,100)ISTEP,TIME,DT,COURNO,diffno2
  100  FORMAT('CMT ',I7,', t=',1pE14.7,', DT=',1pE14.7
      $,', C=',0pF7.3,', D=',1pE14.7)

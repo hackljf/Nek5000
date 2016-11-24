@@ -1,3 +1,55 @@
+      subroutine inflow2(nvar,f,e,faceq,bcq)
+      include 'SIZE'
+      include 'INPUT'
+      include 'CMTDATA'
+      integer nvar,f,e
+      real faceq(nx1,nz1,2*ndim,nelt,nvar)
+      real bcq  (nx1,nz1,2*ndim,nelt,nvar)
+! JH111416 duct-tape-and-chewing-gum mad dash. Assuming, perhaps incorrectly,
+!          that inflow_rflu has filled in bcq correctly for inviscid fluxes, but
+!          not viscous ones.
+
+      nxz=nx1*nz1
+
+! write bcq before HEY WERE IS PRESSURE ON BC!!!?!?!?!?!?!?
+! write bcq before HEY WERE IS dENSITY ON BC!!!?!?!?!?!?!?
+! write bcq before HEY WERE IS dENSITY ON BC!!!?!?!?!?!?!?
+! write bcq before HEY WERE IS dENSITY ON BC!!!?!?!?!?!?!?
+! write bcq before HEY WERE IS dENSITY ON BC!!!?!?!?!?!?!?
+! write bcq before HEY WERE IS dENSITY ON BC!!!?!?!?!?!?!?
+! write bcq before HEY WERE IS dENSITY ON BC!!!?!?!?!?!?!?
+! write bcq before HEY WERE IS dENSITY ON BC!!!?!?!?!?!?!?
+! write bcq before HEY WERE IS dENSITY ON BC!!!?!?!?!?!?!?
+! write bcq before HEY WERE IS dENSITY ON BC!!!?!?!?!?!?!?
+! write bcq before HEY WERE IS dENSITY ON BC!!!?!?!?!?!?!?
+! write bcq before HEY WERE IS dENSITY ON BC!!!?!?!?!?!?!?
+      do i=1,nxz
+         rl=bcq(i,1,f,e,iu1)
+         rul=bcq(i,1,f,e,iu2)
+         rvl=bcq(i,1,f,e,iu3)
+         rwl=bcq(i,1,f,e,iu4)
+! JH111416 hardcode subsonic for now
+         write(333,*) i,f,e,faceq(i,1,f,e,ipr),rl! ==0, stupid!!!!
+         bcq(i,1,f,e,iu5)=faceq(i,1,f,e,ipr)/(gmaref-1.0)+
+     >   0.5*(rul**2+rvl**2+rwl**2)/rl
+      enddo
+! write bcq after
+! write bcq before HEY WERE IS dENSITY ON BC!!!?!?!?!?!?!?
+! write bcq before HEY WERE IS dENSITY ON BC!!!?!?!?!?!?!?
+! write bcq before HEY WERE IS dENSITY ON BC!!!?!?!?!?!?!?
+! write bcq before HEY WERE IS dENSITY ON BC!!!?!?!?!?!?!?
+! write bcq before HEY WERE IS dENSITY ON BC!!!?!?!?!?!?!?
+! write bcq before HEY WERE IS dENSITY ON BC!!!?!?!?!?!?!?
+! write bcq before HEY WERE IS dENSITY ON BC!!!?!?!?!?!?!?
+! write bcq before HEY WERE IS dENSITY ON BC!!!?!?!?!?!?!?
+! write bcq before HEY WERE IS dENSITY ON BC!!!?!?!?!?!?!?
+! write bcq before HEY WERE IS dENSITY ON BC!!!?!?!?!?!?!?
+! write bcq before HEY WERE IS dENSITY ON BC!!!?!?!?!?!?!?
+! write bcq before HEY WERE IS dENSITY ON BC!!!?!?!?!?!?!?
+! write bcq before HEY WERE IS dENSITY ON BC!!!?!?!?!?!?!?
+
+      return
+      end
 c--------------------------------------------------------------------
       subroutine inflow(nvar,f,e,faceq,bcq,flux)
       INCLUDE 'SIZE'
@@ -68,6 +120,8 @@ c                                     !     ux,uy,uz
          bcq(l,f,e,iuy)  = uy
          bcq(l,f,e,iuz)  = uz
          bcq(l,f,e,isnd) = asnd
+! NEED RFLU CALL FOR RIND STATE FOR U1 through U4 HERE!!!!
+! IMQQTU_DIRICHLET NeEDS THEM!!!!!
 
       enddo
       enddo
