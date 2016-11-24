@@ -188,7 +188,7 @@ c-----------------------------------------------------------------------
 ! CMTDATA BETTA REFLECT THIS!!!
 !***********************************************************************
 ! inflow is still a mess skip for inviscid testing
-      goto 111
+!     goto 111
       ium=(iu1-1)*nfq+iqm
       iup=(iu1-1)*nfq+iqp
       call   imqqtu(flux(iuj),flux(ium),flux(iup))
