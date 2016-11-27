@@ -3,6 +3,7 @@
       include  'CMTDATA'
       include  'DG'
       include  'INPUT'
+      include 'GEOM' ! diagnostic
 
       integer lfq,heresize,hdsize
       parameter (lfq=lx1*lz1*2*ldim*lelcmt,
@@ -12,6 +13,9 @@
       real fatface,graduf
 
       integer e,eq
+! diagnostic
+      character*15 fname
+! diagnostic
 
       if (eq .lt. toteq) then ! not energy
          if (eq .gt. ndim+1) return ! not if3d
@@ -36,7 +40,15 @@
       call diffh2graduf(e,eq,graduf) ! on faces for QQ^T and igu_cmt
 
 ! volume integral involving "DG-ish" stiffness operator K
+!     write(fname,'(a14,i1)') 'beforegradT_eq',eq
+!     open(unit=300,access="append",form="formatted",
+!    >file=fname)
+!     write(fname,'(a14,i1)') 'after_gradT_eq',eq
+!     open(unit=400,access="append",form="formatted",
+!    >file=fname)
       call half_iku_cmt(res1(1,1,1,e,eq),diffh,e)
+!     close(300)
+!     close(400)
 
       return
       end
@@ -89,22 +101,14 @@
       endif
 
 ! compute (U-{{U}})_i * n_k
-! OK FOLKS GIANT BUG UMMCU IS BAD IN 3D
+! OK FOLKS GIANT BUG UMMCU IS BAD AT INFLOW
       l=1
       do e=1,nelt
-         do i=1,nf
-         write(110,'(a18,i5,1e18.7)') 'sanitycheck,ummcu,',e,
-     >   ummcu(i,1,5)
-         enddo
          do eq=1,toteq
             call col3(hface(l,eq,3),ummcu(1,e,eq),area(1,1,1,e),nf)
             call col3(hface(l,eq,1),hface(l,eq,3),unx(1,1,1,e), nf)
             call col3(hface(l,eq,2),hface(l,eq,3),uny(1,1,1,e), nf)
             if(if3d) call col2(hface(l,eq,3),unz(1,1,1,e),nf)
-         enddo
-         do i=1,nf
-         write(111,'(a18,i5,3e18.7)') 'sanitycheck,hface,',e,
-     >   hface(l+i-1,5,1),hface(l+i-1,5,2),hface(l+i-1,5,3)
          enddo
          l=l+nf
       enddo
@@ -120,25 +124,11 @@
          l=1
          m=1
          do e=1,nelt
-         do i=1,nf
-         write(113,'(a19,i5,3e18.7)') 'beforegradu0,hface,',e,
-     >   hface(l+i-1,5,1),hface(l+i-1,5,2),hface(l+i-1,5,3)
-         enddo
             call rzero(gradu,ngradu) ! this too goes away when gradu is global
             do j=1,ndim
                do eq2=1,toteq ! sigh
-         do i=1,nf
-         write(114,'(a19,2(i1,1x),i5,1e18.7)')'beforeAddF2F,hface,',eq2,
-     >   j,e,
-     >   hface(l+i-1,5,j)
-         enddo
                   call add_face2full_cmt(1,nx1,ny1,nz1,iface_flux(1,e),
      >                                gradu(1,eq2,j),hface(l,eq2,j))
-         do i=1,nf
-         write(115,'(a18,2(i1,1x),i5,1e18.7)') 'afterAddF2F,hface,',eq2,
-     >   j,e,
-     >   hface(l+i-1,5,j)
-         enddo
                enddo
             enddo
 
@@ -186,19 +176,12 @@
                  ! until I can get agradu_ns working correctly
                if (if3d) then
                   call a53kldUldxk(superhugeh(m,3),gradu,e)
-               do i=1,nxyz
-                  write(1003,*)  superhugeh(m+i-1,3)
-               enddo
                else
                   call rzero(gradu(1,1,3),nxyz*toteq)
                   call rzero(vz(1,1,1,e),nxyz)
                endif
                call a51kldUldxk(superhugeh(m,1),gradu,e)
                call a52kldUldxk(superhugeh(m,2),gradu,e)
-!              do i=1,nxyz
-!                 write(1000+eq,*) superhugeh(m+i-1,1),
-!    > superhugeh(m+i-1,2),superhugeh(m+i-1,3)
-!              enddo
             endif
 
             m=m+nxyz
@@ -212,7 +195,6 @@
          call add2(res1(1,1,1,1,eq),gradm1_t_overwrites,nvol)
 133      continue
       enddo ! equation loop
-      call exitt
 
       return
       end

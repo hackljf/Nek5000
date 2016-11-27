@@ -21,9 +21,6 @@
          call cmult(ummcu(1,ivar),const,nf)        !         -
          call add2(ummcu(1,ivar),uminus(1,ivar),nf)!ummcu = U -{{U}}
       enddo
-      do i=1,nf
-         write(222,*) ummcu(i,5), uminus(i,5),uplus(i,5)
-      enddo
 
       return
       end
@@ -373,6 +370,7 @@
       subroutine half_iku_cmt(res,diffh,e)
       include 'SIZE'
       include 'MASS'
+!     include 'GEOM' ! diagnostic
 ! diffh has D AgradU. half_iku_cmt applies D^T BM1 to it and increments
 ! the residual res with the result
       integer e ! lopsided. routine for one element must reference bm1
@@ -381,6 +379,15 @@
       n=nx1*ny1*nz1
 
       do j=1,ndim
+! diagnostic
+!        if (j.eq.2) then
+!           do i=1,n
+!              if (abs(xm1(i,1,1,e)).lt.1.0e-5) then
+!              write(300,*) e,ym1(i,1,1,e),diffh(i,j)
+!              endif
+!           enddo
+!        endif
+! diagnostic
          call col2(diffh(1,j),bm1(1,1,1,e),n)
       enddo
 

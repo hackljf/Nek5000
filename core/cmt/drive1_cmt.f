@@ -235,7 +235,7 @@ c-----------------------------------------------------------------------
       enddo
       dumchars='end_of_rhs'
 !     call dumpresidue(dumchars,999)
-!     call exitt
+      call exitt
 
       return
       end
