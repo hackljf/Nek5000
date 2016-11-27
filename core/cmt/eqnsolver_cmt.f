@@ -40,15 +40,21 @@
       call diffh2graduf(e,eq,graduf) ! on faces for QQ^T and igu_cmt
 
 ! volume integral involving "DG-ish" stiffness operator K
-!     write(fname,'(a14,i1)') 'beforegradT_eq',eq
-!     open(unit=300,access="append",form="formatted",
-!    >file=fname)
-!     write(fname,'(a14,i1)') 'after_gradT_eq',eq
-!     open(unit=400,access="append",form="formatted",
-!    >file=fname)
+      write(fname,'(a14,i1)') 'beforegradT_eq',eq
+      open(unit=300,access="append",form="formatted",
+     >file=fname)
+      write(fname,'(a14,i1)') 'after_gradT_eq',eq
+      open(unit=400,access="append",form="formatted",
+     >file=fname)
+      if (eq.eq.3)then
+      fname='diffh_fullfield'
+      open(unit=500,access="append",form="formatted",
+     >file=fname)
+      endif
       call half_iku_cmt(res1(1,1,1,e,eq),diffh,e)
-!     close(300)
-!     close(400)
+      close(300)
+      close(400)
+      if (eq.eq.3)close(500)
 
       return
       end

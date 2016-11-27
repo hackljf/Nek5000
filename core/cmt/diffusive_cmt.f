@@ -82,12 +82,6 @@
             do ivar=1,toteq
                call sub3(umubc(1,f,e,ivar),qminus(1,f,e,iu1+ivar-1),
      >                                      qplus(1,f,e,iu1+ivar-1),nxz)
-! Test against couette flow once you have repaired your properties.
-!              do i=1,nxz
-!                 write(300,*) umubc(i,f,e,1),umubc(i,f,e,2),
-!    ?                         umubc(i,f,e,3),umubc(i,f,e,4),
-!    .                         umubc(i,f,e,5)
-!              enddo
             enddo
 
          endif 
@@ -370,7 +364,7 @@
       subroutine half_iku_cmt(res,diffh,e)
       include 'SIZE'
       include 'MASS'
-!     include 'GEOM' ! diagnostic
+      include 'GEOM' ! diagnostic
 ! diffh has D AgradU. half_iku_cmt applies D^T BM1 to it and increments
 ! the residual res with the result
       integer e ! lopsided. routine for one element must reference bm1
@@ -378,16 +372,15 @@
 
       n=nx1*ny1*nz1
 
+! diagnostic
+      do i=1,n
+         if (abs(xm1(i,1,1,e)).lt.1.0e-5) then
+         write(300,'(i3,3e17.8)') e,ym1(i,1,1,e),diffh(i,1),diffh(i,2)
+         endif
+         write(500,*) xm1(i,1,1,e),ym1(i,1,1,e),diffh(i,1)
+      enddo
+! diagnostic
       do j=1,ndim
-! diagnostic
-!        if (j.eq.2) then
-!           do i=1,n
-!              if (abs(xm1(i,1,1,e)).lt.1.0e-5) then
-!              write(300,*) e,ym1(i,1,1,e),diffh(i,j)
-!              endif
-!           enddo
-!        endif
-! diagnostic
          call col2(diffh(1,j),bm1(1,1,1,e),n)
       enddo
 
