@@ -29,9 +29,9 @@
          rvl=bcq(i,1,f,e,iu3)
          rwl=bcq(i,1,f,e,iu4)
 ! JH111416 hardcode subsonic for now
-         write(333,*) i,f,e,faceq(i,1,f,e,ipr),rl! ==0, stupid!!!!
-         bcq(i,1,f,e,iu5)=faceq(i,1,f,e,ipr)/(gmaref-1.0)+
-     >   0.5*(rul**2+rvl**2+rwl**2)/rl
+!        write(333,*) i,f,e,faceq(i,1,f,e,ipr),rl! ==0, stupid!!!!
+!        bcq(i,1,f,e,iu5)=faceq(i,1,f,e,ipr)/(gmaref-1.0)+
+!    >   0.5*(rul**2+rvl**2+rwl**2)/rl
       enddo
 ! write bcq after
 ! write bcq before HEY WERE IS dENSITY ON BC!!!?!?!?!?!?!?

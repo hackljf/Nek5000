@@ -111,6 +111,8 @@ c-----------------------------------------------------------------------
       real wkj(lx1+lxd)
       character*32  dumchars
 
+      call compute_h(gridh,xm1,ym1,zm1)
+
       if (nxd.gt.nx1) then
          call set_dealias_face
       else
@@ -124,6 +126,8 @@ c-----------------------------------------------------------------------
 !     time step
 !     if(IFFLTR)  call filter_cmtvar(IFCNTFILT)
 !        primitive vars = rho, u, v, w, p, T, phi_g
+
+! Uncomment this code as a last resort. there is no way it is necessary
 !     if (istep.eq.1) then
 !        call compute_primitive_vars
 !        call compute_transport_props
@@ -133,12 +137,14 @@ c-----------------------------------------------------------------------
 !           call compute_transport_props
 !        endif
 !     endif
+! Uncomment that code as a last resort. there is no way it is necessary
+
       call compute_primitive_vars
-!     if(stage.eq.1) then
-!        call entropy_viscosity(vdiff(1,1,1,1,imu)) ! messy recycling
+      if(stage.eq.1) then
+         call entropy_viscosity(vdiff(1,1,1,1,imu)) ! messy recycling
                                                     ! from the POV of
                                                     ! compute_transport_props
-!     endif
+      endif
       call compute_transport_props
 
 !-----------------------------------------------------------------------
@@ -193,7 +199,7 @@ c-----------------------------------------------------------------------
       iup=(iu1-1)*nfq+iqp
       call   imqqtu(flux(iuj),flux(ium),flux(iup))
       call   imqqtu_dirichlet(flux(iuj),flux(iqm),flux(iqp))
-      call igtu_cmt(flux(iqm),flux(iuj),graduf) ! [[u]].{{gradv}}
+!     call igtu_cmt(flux(iqm),flux(iuj),graduf) ! [[u]].{{gradv}}
       dumchars='after_igtu'
 !     call dumpresidue(dumchars,999)
 111   continue
@@ -216,7 +222,7 @@ c-----------------------------------------------------------------------
          call compute_gradients(e) ! gradU
          do eq=1,toteq
             call convective_cmt(e,eq)        ! convh & totalh -> res1
-            call    viscous_cmt(e,eq) ! diffh -> half_iku_cmt -> res1
+!           call    viscous_cmt(e,eq) ! diffh -> half_iku_cmt -> res1
                                              !       |
                                              !       -> diffh2graduf
 ! Compute the forcing term in each of the 5 eqs
@@ -227,15 +233,15 @@ c-----------------------------------------------------------------------
 !     call dumpresidue(dumchars,999)
 
 ! get the rest of Hij^{d*}
-      call igu_cmt(flux(iqp),graduf,flux(iqm))
+!     call igu_cmt(flux(iqp),graduf,flux(iqm))
       do eq=1,toteq
          ieq=(eq-1)*ndg_face+iqp
 !Finally add viscous surface flux functions of derivatives to res1.
-         call surface_integral_full(res1(1,1,1,1,eq),flux(ieq))
+!        call surface_integral_full(res1(1,1,1,1,eq),flux(ieq))
       enddo
       dumchars='end_of_rhs'
 !     call dumpresidue(dumchars,999)
-      call exitt
+!     call exitt
 
       return
       end
