@@ -220,8 +220,6 @@ c
                   else
                      h(ix,iy,iz,e)=sqrt(0.25*abs(a(1)*b(2)-a(2)*b(1)))
                   endif
-                  write(200,'(4e17.8)') xm1(ix,iy,iz,e),ym1(ix,iy,iz,e),
-     >            h(ix,iy,iz,e),a(1)
                enddo
             enddo
          enddo
