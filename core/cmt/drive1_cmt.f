@@ -199,7 +199,7 @@ c-----------------------------------------------------------------------
       iup=(iu1-1)*nfq+iqp
       call   imqqtu(flux(iuj),flux(ium),flux(iup))
       call   imqqtu_dirichlet(flux(iuj),flux(iqm),flux(iqp))
-!     call igtu_cmt(flux(iqm),flux(iuj),graduf) ! [[u]].{{gradv}}
+      call igtu_cmt(flux(iqm),flux(iuj),graduf) ! [[u]].{{gradv}}
       dumchars='after_igtu'
 !     call dumpresidue(dumchars,999)
 111   continue
@@ -222,7 +222,7 @@ c-----------------------------------------------------------------------
          call compute_gradients(e) ! gradU
          do eq=1,toteq
             call convective_cmt(e,eq)        ! convh & totalh -> res1
-!           call    viscous_cmt(e,eq) ! diffh -> half_iku_cmt -> res1
+            call    viscous_cmt(e,eq) ! diffh -> half_iku_cmt -> res1
                                              !       |
                                              !       -> diffh2graduf
 ! Compute the forcing term in each of the 5 eqs
@@ -233,15 +233,15 @@ c-----------------------------------------------------------------------
 !     call dumpresidue(dumchars,999)
 
 ! get the rest of Hij^{d*}
-!     call igu_cmt(flux(iqp),graduf,flux(iqm))
+      call igu_cmt(flux(iqp),graduf,flux(iqm))
       do eq=1,toteq
          ieq=(eq-1)*ndg_face+iqp
 !Finally add viscous surface flux functions of derivatives to res1.
-!        call surface_integral_full(res1(1,1,1,1,eq),flux(ieq))
+         call surface_integral_full(res1(1,1,1,1,eq),flux(ieq))
       enddo
       dumchars='end_of_rhs'
 !     call dumpresidue(dumchars,999)
-!     call exitt
+      call exitt
 
       return
       end

@@ -373,11 +373,13 @@
       n=nx1*ny1*nz1
 
 ! diagnostic
+      if (e .eq. 1) then
+         write(300,*) 'e,y,H1,H2'
+         write(500,*) 'x,y,H1,H2'
+      endif
       do i=1,n
-         if (abs(xm1(i,1,1,e)).lt.1.0e-5) then
-         write(300,'(i3,3e17.8)') e,ym1(i,1,1,e),diffh(i,1),diffh(i,2)
-         endif
-         write(500,*) xm1(i,1,1,e),ym1(i,1,1,e),diffh(i,1)
+         write(500,'(4e17.8)') xm1(i,1,1,e),ym1(i,1,1,e),
+     >                         diffh(i,1),diffh(i,2)
       enddo
 ! diagnostic
       do j=1,ndim

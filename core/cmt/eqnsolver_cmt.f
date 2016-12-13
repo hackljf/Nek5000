@@ -14,7 +14,7 @@
 
       integer e,eq
 ! diagnostic
-      character*15 fname
+      character*16 fname
 ! diagnostic
 
       if (eq .lt. toteq) then ! not energy
@@ -46,15 +46,13 @@
       write(fname,'(a14,i1)') 'after_gradT_eq',eq
       open(unit=400,access="append",form="formatted",
      >file=fname)
-      if (eq.eq.3)then
-      fname='diffh_fullfield'
+      write(fname,'(a15,i1)') 'diffh_fullfield',eq
       open(unit=500,access="append",form="formatted",
      >file=fname)
-      endif
       call half_iku_cmt(res1(1,1,1,e,eq),diffh,e)
       close(300)
       close(400)
-      if (eq.eq.3)close(500)
+      close(500)
 
       return
       end
