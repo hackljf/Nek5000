@@ -67,9 +67,9 @@
 !          basically, nothing in qplus is trustworthy, so we are going to
 !          recompute and overwrite iu1 through iu5 in qplus with stuff we
 !          do trust (UBC, to be exact).
-            if (cb.eq.'v  ' .or. cb .eq. 'V  ') then
-              call inflow2(nqq,f,e,qminus,qplus)
-            elseif (cb.eq.'O  ') then
+!           if (cb.eq.'v  ' .or. cb .eq. 'V  ') then
+!             call inflow2(nqq,f,e,qminus,qplus)
+            if (cb.eq.'O  ') then
               call outflow2(nqq,f,e,qminus,qplus)
             elseif (cb .eq. 'W  ' .or. cb .eq.'I  ')then
               call wallbc2(nqq,f,e,qminus,qplus)
@@ -219,7 +219,6 @@
       include 'SOLN'
       include 'INPUT'
       include 'CMTDATA'
-      include 'GEOM' ! diagnostic
 ! classic Navier-Stokes flux jacobian that computes viscous fluxes
 ! for everything except gas density.
 ! eq         index i; LHS equation
@@ -364,7 +363,6 @@
       subroutine half_iku_cmt(res,diffh,e)
       include 'SIZE'
       include 'MASS'
-      include 'GEOM' ! diagnostic
 ! diffh has D AgradU. half_iku_cmt applies D^T BM1 to it and increments
 ! the residual res with the result
       integer e ! lopsided. routine for one element must reference bm1
@@ -372,16 +370,6 @@
 
       n=nx1*ny1*nz1
 
-! diagnostic
-      if (e .eq. 1) then
-         write(300,*) 'e,y,H1,H2'
-         write(500,*) 'x,y,H1,H2'
-      endif
-      do i=1,n
-         write(500,'(4e17.8)') xm1(i,1,1,e),ym1(i,1,1,e),
-     >                         diffh(i,1),diffh(i,2)
-      enddo
-! diagnostic
       do j=1,ndim
          call col2(diffh(1,j),bm1(1,1,1,e),n)
       enddo

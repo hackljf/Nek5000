@@ -193,8 +193,6 @@ c-----------------------------------------------------------------------
 ! SEQUENTIALLY IN /CMTSURFLX/ i.e. that iu2=iu1+1, etc.
 ! CMTDATA BETTA REFLECT THIS!!!
 !***********************************************************************
-! inflow is still a mess skip for inviscid testing
-!     goto 111
       ium=(iu1-1)*nfq+iqm
       iup=(iu1-1)*nfq+iqp
       call   imqqtu(flux(iuj),flux(ium),flux(iup))
@@ -202,7 +200,6 @@ c-----------------------------------------------------------------------
       call igtu_cmt(flux(iqm),flux(iuj),graduf) ! [[u]].{{gradv}}
       dumchars='after_igtu'
 !     call dumpresidue(dumchars,999)
-111   continue
 
       do e=1,nelt
 !-----------------------------------------------------------------------
@@ -241,7 +238,7 @@ c-----------------------------------------------------------------------
       enddo
       dumchars='end_of_rhs'
 !     call dumpresidue(dumchars,999)
-      call exitt
+!     call exitt
 
       return
       end

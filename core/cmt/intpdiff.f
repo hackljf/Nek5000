@@ -235,13 +235,6 @@ c     Compute divergence^T of ux,uy,uz -- mesh 1 to mesh 1 (vel. to vel.)
          call local_grad2_t(ud,ur,us,N,1,dxm1,dxtm1,tmp)
       endif
       call cmult(ud,csgn,nxyz)
-!!!! diagnostic
-!!!      do i=1,lxyz
-!!!         if (abs(xm1(i,1,1,e)).lt.1.0e-5) then
-!!!            write(400,*) e,ym1(i,1,1,e),ud(i)
-!!!         endif
-!!!      enddo
-!!!! diagnostic
       call add2(grad,ud,nxyz)
 
       return

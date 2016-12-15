@@ -3,7 +3,6 @@
       include  'CMTDATA'
       include  'DG'
       include  'INPUT'
-      include 'GEOM' ! diagnostic
 
       integer lfq,heresize,hdsize
       parameter (lfq=lx1*lz1*2*ldim*lelcmt,
@@ -13,9 +12,6 @@
       real fatface,graduf
 
       integer e,eq
-! diagnostic
-      character*16 fname
-! diagnostic
 
       if (eq .lt. toteq) then ! not energy
          if (eq .gt. ndim+1) return ! not if3d
@@ -40,19 +36,7 @@
       call diffh2graduf(e,eq,graduf) ! on faces for QQ^T and igu_cmt
 
 ! volume integral involving "DG-ish" stiffness operator K
-      write(fname,'(a14,i1)') 'beforegradT_eq',eq
-      open(unit=300,access="append",form="formatted",
-     >file=fname)
-      write(fname,'(a14,i1)') 'after_gradT_eq',eq
-      open(unit=400,access="append",form="formatted",
-     >file=fname)
-      write(fname,'(a15,i1)') 'diffh_fullfield',eq
-      open(unit=500,access="append",form="formatted",
-     >file=fname)
       call half_iku_cmt(res1(1,1,1,e,eq),diffh,e)
-      close(300)
-      close(400)
-      close(500)
 
       return
       end

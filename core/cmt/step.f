@@ -54,7 +54,8 @@
       call glinvcol2max(diffno2,vdiff(1,1,1,1,iknd),gridh,ntot,dt)
       call glinvcol2max(diffno3,vdiff(1,1,1,1,inus),gridh,ntot,dt)
 !     diffno=max(diffno1,diffno2,diffno3)
-      if (nio.eq.0) WRITE(6,100)ISTEP,TIME,DT,COURNO,diffno
+      if (nio.eq.0) WRITE(6,100)ISTEP,TIME,DT,COURNO,diffno1,diffno2,
+     >   diffno3
  100  FORMAT('CMT ',I7,', t=',1pE14.7,', DT=',1pE14.7
      $,', C=',0pF7.3,', Dmu,knd,art=',3(1pE12.5))
 !     Zero DT
@@ -233,6 +234,7 @@ c
       real col2m
       real s
       real a(*),b(*)
+      tmp=0.0
       do i=1,n
          tmp=max(tmp,abs(s*a(i)/b(i)/b(i)))
       enddo

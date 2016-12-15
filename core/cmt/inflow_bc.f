@@ -1,52 +1,22 @@
       subroutine inflow2(nvar,f,e,faceq,bcq)
+! JH121416 I think bcq is now set up correctly, even for viscous fluxes, in inflow
+!          THIS ROUTINE SHOULO NOT BE NECESSARY FOR INFLOW AND APPEARS TO HAVE NO
+!          EFFECT
+!          Method, sadly, blows up at inflow-wall corner. However,
+!          igtu does not mangle results of InviscidFLux. not sure what's going on
+!          or how to debug
       include 'SIZE'
       include 'INPUT'
       include 'CMTDATA'
       integer nvar,f,e
       real faceq(nx1,nz1,2*ndim,nelt,nvar)
       real bcq  (nx1,nz1,2*ndim,nelt,nvar)
+      common /ctmp1/ flxdum(lx1*lz1*2*ldim*lelt*toteq)
 ! JH111416 duct-tape-and-chewing-gum mad dash. Assuming, perhaps incorrectly,
 !          that inflow_rflu has filled in bcq correctly for inviscid fluxes, but
 !          not viscous ones.
-
-      nxz=nx1*nz1
-
-! write bcq before HEY WERE IS PRESSURE ON BC!!!?!?!?!?!?!?
-! write bcq before HEY WERE IS dENSITY ON BC!!!?!?!?!?!?!?
-! write bcq before HEY WERE IS dENSITY ON BC!!!?!?!?!?!?!?
-! write bcq before HEY WERE IS dENSITY ON BC!!!?!?!?!?!?!?
-! write bcq before HEY WERE IS dENSITY ON BC!!!?!?!?!?!?!?
-! write bcq before HEY WERE IS dENSITY ON BC!!!?!?!?!?!?!?
-! write bcq before HEY WERE IS dENSITY ON BC!!!?!?!?!?!?!?
-! write bcq before HEY WERE IS dENSITY ON BC!!!?!?!?!?!?!?
-! write bcq before HEY WERE IS dENSITY ON BC!!!?!?!?!?!?!?
-! write bcq before HEY WERE IS dENSITY ON BC!!!?!?!?!?!?!?
-! write bcq before HEY WERE IS dENSITY ON BC!!!?!?!?!?!?!?
-! write bcq before HEY WERE IS dENSITY ON BC!!!?!?!?!?!?!?
-      do i=1,nxz
-         rl=bcq(i,1,f,e,iu1)
-         rul=bcq(i,1,f,e,iu2)
-         rvl=bcq(i,1,f,e,iu3)
-         rwl=bcq(i,1,f,e,iu4)
-! JH111416 hardcode subsonic for now
-!        write(333,*) i,f,e,faceq(i,1,f,e,ipr),rl! ==0, stupid!!!!
-!        bcq(i,1,f,e,iu5)=faceq(i,1,f,e,ipr)/(gmaref-1.0)+
-!    >   0.5*(rul**2+rvl**2+rwl**2)/rl
-      enddo
-! write bcq after
-! write bcq before HEY WERE IS dENSITY ON BC!!!?!?!?!?!?!?
-! write bcq before HEY WERE IS dENSITY ON BC!!!?!?!?!?!?!?
-! write bcq before HEY WERE IS dENSITY ON BC!!!?!?!?!?!?!?
-! write bcq before HEY WERE IS dENSITY ON BC!!!?!?!?!?!?!?
-! write bcq before HEY WERE IS dENSITY ON BC!!!?!?!?!?!?!?
-! write bcq before HEY WERE IS dENSITY ON BC!!!?!?!?!?!?!?
-! write bcq before HEY WERE IS dENSITY ON BC!!!?!?!?!?!?!?
-! write bcq before HEY WERE IS dENSITY ON BC!!!?!?!?!?!?!?
-! write bcq before HEY WERE IS dENSITY ON BC!!!?!?!?!?!?!?
-! write bcq before HEY WERE IS dENSITY ON BC!!!?!?!?!?!?!?
-! write bcq before HEY WERE IS dENSITY ON BC!!!?!?!?!?!?!?
-! write bcq before HEY WERE IS dENSITY ON BC!!!?!?!?!?!?!?
-! write bcq before HEY WERE IS dENSITY ON BC!!!?!?!?!?!?!?
+      call inflow_rflu(nvar,f,e,faceq,bcq,flxdum)
+      call rzero(flxdum,lx1*lz1*2*ldim*lelt*toteq)
 
       return
       end
@@ -101,6 +71,19 @@ c--------------------------------------------------------------------
       fdim=ndim-1
       ieg=lglel(e)
 
+      call copy(nxf,unx(1,1,f,e),nxz)
+      call copy(nyf,uny(1,1,f,e),nxz)
+      call copy(nzf,unz(1,1,f,e),nxz)
+
+      call copy(ufacel(1,1),faceq(1,f,e,iu1),nxz)
+      call copy(ufacel(1,2),faceq(1,f,e,iu2),nxz)
+      call copy(ufacel(1,3),faceq(1,f,e,iu3),nxz)
+      call copy(ufacel(1,4),faceq(1,f,e,iu4),nxz)
+      call copy(ufacel(1,5),faceq(1,f,e,iu5),nxz)
+      call copy(csndrf,faceq(1,f,e,isnd), nxz)
+
+      call copy(philf,faceq(1,f,e,iph),nxz)
+
       call facind(i0,i1,j0,j1,k0,k1,nx1,ny1,nz1,f)    
       l=0
       do iz=k0,k1
@@ -116,13 +99,46 @@ c                                     !     ux,uy,uz
          cvgrc(l)=cv
          p0inrc(l) = p0in
          t0inrc(l) = t0in
+! do it twice. once for inflow2, once for dealiased nonsense here
+! pick one, and clean this up
+
+         bcOptType=0
+         snx  = nxf(l)
+         sny  = nyf(l)
+         snz  = nzf(l)
+
+         rho  = ufacel(l,1)/philf(l) 
+         rhou = ufacel(l,2)/philf(l)
+         rhov = ufacel(l,3)/philf(l)
+         rhow = ufacel(l,4)/philf(l)
+         rhoe = ufacel(l,5)/philf(l)
+
+         asnd = csndrf(l)
+         mach = sqrt(ux**2+uy**2+uz**2)/asnd
+         if (mach.lt.1.0) bcOptType=1
+         betah = atan2(uy,ux)
+         if (ldim.eq.3) betav = atan2(uz,ux)
+         if (ldim.eq.2) betav = atan2(0.0,ux)
+
+         call BcondInflowPerf(bcOptType,0,p0inrc(l),t0inrc(l)
+     >                       ,betah,betav,mach,snx,sny,snz,cpgrc(l)
+     >                       ,molmrc(l),rho,rhou,rhov,rhow,rhob,rhoub
+     >                       ,rhovb,rhowb,rhoeb,pres)
+         
          bcq(l,f,e,iux)  = ux
          bcq(l,f,e,iuy)  = uy
          bcq(l,f,e,iuz)  = uz
-         bcq(l,f,e,isnd) = asnd
-! NEED RFLU CALL FOR RIND STATE FOR U1 through U4 HERE!!!!
-! IMQQTU_DIRICHLET NeEDS THEM!!!!!
-
+         bcq(l,f,e,isnd) = asnd ! wrong?
+         bcq(l,f,e,irho) = rhob
+         bcq(l,f,e,iu1)  = rhob*phirc(l)
+         bcq(l,f,e,iu2)  = rhoub*phirc(l)
+         bcq(l,f,e,iu3)  = rhovb*phirc(l)
+         bcq(l,f,e,iu4)  = rhowb*phirc(l)
+                         !  interior v
+         bcq(l,f,e,iu5)  = faceq(l,f,e,ipr)/(gmaref-1.0) + 0.5*
+     >   (bcq(l,f,e,iu2)**2+bcq(l,f,e,iu3)**2+bcq(l,f,e,iu4)**2)/
+     >    bcq(l,f,e,iu1)
+                         !  dirichlet ^
       enddo
       enddo
       enddo
