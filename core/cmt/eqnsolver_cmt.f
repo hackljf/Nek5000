@@ -101,8 +101,6 @@
          l=l+nf
       enddo
 
-      call rzero(superhugeh,3*lx1*ly1*lz1*lelt)
-
       nxyz  =nx1*ny1*nz1
       nvol  =nxyz*nelt
       ngradu=nxyz*toteq*3
@@ -137,6 +135,7 @@
 !!            enddo
 ! JH110716 but not today. for now, here's a bloody chunk from agradu_ns
 ! This is a disaster that I might want to program less cleverly
+
             if (eq .lt. toteq) then
 ! JH110716 Maxima routines added for every viscous flux.
 !          agradu_ns has failed all verification checks for homentropic vortex
