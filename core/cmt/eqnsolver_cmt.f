@@ -25,9 +25,11 @@
       iqp =iqm+nstate*nfq
       iuj =iqp+nstate*nfq
 
+      call rzero(diffh,3*nxyz)
+
       if (eq .eq. 1) then
 ! monolithic regularization for mass
-         call fluxj(diffh,gradu,e,eq)
+!        call fluxj(diffh,gradu,e,eq)
       else
 ! apply viscous flux jacobian A.
          call fluxj_ns(diffh,gradu,e,eq)
@@ -77,6 +79,8 @@
      >/0,0,0,0,0,-1,0,1,0,0,0,1,0,0,0,-1,0,0,0,-1,0,1,0,0,0,0,0/
 
       integer e, eq, n, npl, nf, f, i, k, eq2
+      common /evmflag/ ifevm
+      logical ifevm
 
       nxz    = nx1*nz1
       nfaces = 2*ndim
@@ -105,6 +109,7 @@
       nvol  =nxyz*nelt
       ngradu=nxyz*toteq*3
       do eq=1,toteq
+         call rzero(diffh,3*nxyz)
          call rzero(superhugeh,3*lx1*ly1*lz1*lelt)
          if (eq .eq. 4 .and. .not. if3d) goto 133
          l=1
@@ -136,40 +141,12 @@
 ! JH110716 but not today. for now, here's a bloody chunk from agradu_ns
 ! This is a disaster that I might want to program less cleverly
 
-            if (eq .lt. toteq) then
-! JH110716 Maxima routines added for every viscous flux.
-!          agradu_ns has failed all verification checks for homentropic vortex
-!          initialization.
-!          start over
-               if (eq.eq.1) then
-                  call agradu(superhugeh(m,1),gradu(1,1,1),e,1)
-                  call agradu(superhugeh(m,2),gradu(1,1,2),e,1)
-                  call agradu(superhugeh(m,3),gradu(1,1,3),e,1)
-               elseif (eq.eq.2) then
-                  call A21kldUldxk(superhugeh(m,1),gradu,e)
-                  call A22kldUldxk(superhugeh(m,2),gradu,e)
-                  call A23kldUldxk(superhugeh(m,3),gradu,e)
-               elseif (eq.eq.3) then
-                  call A31kldUldxk(superhugeh(m,1),gradu,e)
-                  call A32kldUldxk(superhugeh(m,2),gradu,e)
-                  call A33kldUldxk(superhugeh(m,3),gradu,e)
-               elseif (eq.eq.4) then
-                  call A41kldUldxk(superhugeh(m,1),gradu,e)
-                  call A42kldUldxk(superhugeh(m,2),gradu,e)
-                  call A43kldUldxk(superhugeh(m,3),gradu,e)
-               endif
+! \tau_{ij} and u_j \tau_{ij}. lambda=0 for EVM
+            call fluxj_ns(diffh,gradu,e,eq)
 
-            else ! Energy equation courtesy of thoroughly-checked maxima
-                 ! until I can get agradu_ns working correctly
-               if (if3d) then
-                  call a53kldUldxk(superhugeh(m,3),gradu,e)
-               else
-                  call rzero(gradu(1,1,3),nxyz*toteq)
-                  call rzero(vz(1,1,1,e),nxyz)
-               endif
-               call a51kldUldxk(superhugeh(m,1),gradu,e)
-               call a52kldUldxk(superhugeh(m,2),gradu,e)
-            endif
+            do j=1,ndim
+               call copy(superhugeh(m,j),diffh(1,j),nxyz)
+            enddo
 
             m=m+nxyz
 

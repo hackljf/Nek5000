@@ -165,54 +165,6 @@
 
 !-----------------------------------------------------------------------
 
-      subroutine fluxj(flux,gradu,e,eq)
-! JH110216 
-! I might end up using this, but just for \nabla (log rho) stuff due to
-! entropy viscosity. Equations (5.13-14) from Guermond & Popov (2014)
-! SIAM J. Appl. Math. 74 imply, however, that his preferred regularization
-! has extra off-diagonal terms in the momentum and energy equations.
-! Not sure where to put those yet.
-      include 'SIZE'
-
-      integer e,eq
-      real flux(nx1*ny1*nz1,ndim),gradu(nx1*ny1*nz1,toteq,ndim)
-
-      n=nx1*ny1*nz1
-      do j=1,ndim
-         call agradu(flux(1,j),gradu(1,1,j),e,eq)
-      enddo
-
-      return
-      end
-
-!-----------------------------------------------------------------------
-
-      subroutine agradu(gijklu,dut,e,eq)
-      include 'SIZE'
-      include 'SOLN'
-      include 'CMTDATA'
-! monolithic viscous flux jacobian. just use it for mass diffusion in EVM
-! eq         index i; LHS equation and dut variable
-! jflux      index j; flux direction
-      parameter (lxyz=lx1*ly1*lz1)
-      integer  e,eq
-      real   dut(lxyz,toteq)
-! derivatives of conserved variables gradu
-!     dut(:,1) rho
-!     dut(:,2) rho u
-!     dut(:,3) rho v
-!     dut(:,4) rho w
-!     dut(:,5) rho E
-
-      real gijklu(lxyz)
-
-      call col3(gijklu,dut(1,eq),vdiff(1,1,1,e,inus),lxyz)
-
-      return
-      end
-
-!-----------------------------------------------------------------------
-
       subroutine agradu_ns(gijklu,dut,visco,e,eq,jflux,kdir)
 ! JH110716. Declaring defeat. Discard and start over
       include 'SIZE'
