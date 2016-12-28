@@ -140,12 +140,15 @@ c-----------------------------------------------------------------------
 ! Uncomment that code as a last resort. there is no way it is necessary
 
       call compute_primitive_vars
-!     if(stage.eq.1) then
-!        call entropy_viscosity(vdiff(1,1,1,1,imu)) ! messy recycling
-!                                                   ! from the POV of
-!                                                   ! compute_transport_props
-!     endif
+      if(stage.eq.1) then
+         call entropy_viscosity(vdiff(1,1,1,1,imu)) ! messy recycling
+                                                    ! from the POV of
+                                                    ! compute_transport_props
+      endif
       call compute_transport_props
+      call smoothing(vdiff(1,1,1,1,imu))
+      call cmult(vdiff(1,1,1,1,imu),0.5,nx1*ny1*nz1*nelt) ! A factor of
+           ! 2 lurks in agradu's evaluation of strain rate, even in EVM
 
 !-----------------------------------------------------------------------
 ! JH072914 We can really only proceed with dt once we have current
