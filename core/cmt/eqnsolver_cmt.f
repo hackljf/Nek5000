@@ -27,13 +27,7 @@
 
       call rzero(diffh,3*nxyz)
 
-      if (eq .eq. 1) then
-! monolithic regularization for mass
-!        call fluxj(diffh,gradu,e,eq)
-      else
-! apply viscous flux jacobian A.
-         call fluxj_ns(diffh,gradu,e,eq)
-      endif
+      call agradu(diffh,gradu,e,eq)
 
       call diffh2graduf(e,eq,graduf) ! on faces for QQ^T and igu_cmt
 
@@ -79,8 +73,6 @@
      >/0,0,0,0,0,-1,0,1,0,0,0,1,0,0,0,-1,0,0,0,-1,0,1,0,0,0,0,0/
 
       integer e, eq, n, npl, nf, f, i, k, eq2
-      common /evmflag/ ifevm
-      logical ifevm
 
       nxz    = nx1*nz1
       nfaces = 2*ndim
@@ -138,11 +130,9 @@
 !!                  endif
 !!               enddo
 !!            enddo
-! JH110716 but not today. for now, here's a bloody chunk from agradu_ns
-! This is a disaster that I might want to program less cleverly
+! JH110716 but not today. for now, let maxima do my thinking in the fluxj* routines
 
-! \tau_{ij} and u_j \tau_{ij}. lambda=0 for EVM
-            call fluxj_ns(diffh,gradu,e,eq)
+            call agradu(diffh,gradu,e,eq)
 
             do j=1,ndim
                call copy(superhugeh(m,j),diffh(1,j),nxyz)

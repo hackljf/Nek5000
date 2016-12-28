@@ -93,6 +93,51 @@
 
 !-----------------------------------------------------------------------
 
+      subroutine agradu(flux,du,e,eq)
+      include 'SIZE'
+      include 'CMTDATA'
+!JH122716 Apply viscous flux jacobian \mathscr{A} to a notional gradient
+!         of the unknowns U (gradU in viscous_cmt and iku, U-{{U}} and
+!         U-U_D in igtu_cmt, [U] in ihu (CHECK LI'S NOTES AGAIN))
+! Yes, I know theoretically that EVM and NSE have different diffusive
+! fluxes for different physical reasons. But I am combining them because
+! 1. s_{ij} is shared by both and cuts down on code redundancy
+! 2. we may wish to run EVM AND NSE together (I know this is frowned upon)
+
+! but let's consider the normal use case of either NSE OR EVM
+! Compressible Navier-Stokes      |
+! mu=mu(T)                        |
+! lambda=-2/3mu                   |
+! nu_s=0                          |
+! kappa=kappa(T)                  |  All of this 
+!                                 |  should be done in
+! Entropy visosity method (EVM)   |  uservp. very error-prone
+! mu=mu_s(R_s,|u|+c,h)            |  requires deliberate user attention
+! lambda=0 for EVM                |
+! nu_s=nu_s(mu_s)                 |
+! kappa=0                         |
+! I need a flag, ifevm, for controlling calls (entropy_residual
+! and longitudinal viscous fluxes, mostly due to grad rho) SOMEDAY
+!-----------------------------------------------------------------------
+! constructive feedback is always welcome
+! flux is zero on entry
+!-----------------------------------------------------------------------
+      integer e, eq
+      real flux(nx1*ny1*nz1,ndim),du(nx1*ny1*nz1,toteq,ndim)
+
+! \tau_{ij} and u_j \tau_{ij}.  lambda=0 and kappa=0 for EVM
+      call fluxj_ns(flux,du,e,eq)
+
+      call fluxj_evm(flux,du,e,eq)
+
+! no idea where phi goes
+      if (eq .lt. toteq) call col2(flux,phig(1,1,1,e),nx1*ny1*nz1)
+
+      return
+      end
+
+!-----------------------------------------------------------------------
+
       subroutine fluxj_ns(flux,gradu,e,eq)
 ! viscous flux jacobian for compressible Navier-Stokes equations (NS)
 ! SOLN and CMTDATA are indexed, assuming vdiff has been filled by uservp
@@ -164,148 +209,73 @@
       end
 
 !-----------------------------------------------------------------------
+!     subroutine agradu_ns(gijklu,dut,visco,e,eq,jflux,kdir) ! in junkyard...
+!-----------------------------------------------------------------------
 
-      subroutine agradu_ns(gijklu,dut,visco,e,eq,jflux,kdir)
-! JH110716. Declaring defeat. Discard and start over
+      subroutine fluxj_evm(flux,du,e,eq)
+! viscous flux jacobian for compressible Navier-Stokes equations (NS)
+! SOLN and CMTDATA are indexed, assuming vdiff has been filled by uservp
+! somehow. In serious need of debugging and replacement.
       include 'SIZE'
-      include 'SOLN'
-      include 'INPUT'
+      include 'PARALLEL'
+      include 'INPUT'! TRIAGE?
+      include 'SOLN' ! TRIAGE?
       include 'CMTDATA'
-! classic Navier-Stokes flux jacobian that computes viscous fluxes
-! for everything except gas density.
-! eq         index i; LHS equation
-! jflux      index j; flux direction
-! kdir       index k; direction of derivative or jump in U
-      parameter (lxyz=lx1*ly1*lz1)
-      integer  e,eq,jflux,kdir
-      real   dut(lxyz,toteq)
-      real visco(lxyz) ! you know, you should probably just
-                         ! pass mu+lambda and mu-k/cv when eq=5
-                         ! so you don't have to recompute them
-                         ! so many times
-! derivatives or jumps, conserved variables, compressible Navier-Stokes
-! equations
-!     du(1,:) or dut(:,1) rho
-!     du(2,:) or dut(:,2) rho u
-!     du(3,:) or dut(:,3) rho v
-!     du(4,:) or dut(:,4) rho w
-!     du(5,:) or dut(:,5) rho E
-      real gijklu(lxyz) !incremented. never give this exclusive intent
-      integer eijk3(3,3,3)
-!     data eijk2 / 0, -1, 1, 0/
-      data eijk3
-     >/0,0,0,0,0,-1,0,1,0,0,0,1,0,0,0,-1,0,0,0,-1,0,1,0,0,0,0,0/
-      real mu,lambda,kond,cv,uiui(lxyz)
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-! /CTMP0/ and /CTMP1/ IN USE BY CALLING SUBROUTINE; NO TOUCHY!!!
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-      if (eq .eq. 1) return ! do this in plain old agradu
+      parameter (ldd=lx1*ly1*lz1)
+      common /ctmp1/ viscscr(lx1,ly1,lz1) ! I'ma keep this
+      real viscscr
 
-      npt=lxyz !%s/npt/lxyz/g is hard
+      integer e,eq,eq2
+      real flux(nx1*ny1*nz1,ndim),du(nx1*ny1*nz1,toteq,ndim)
 
-      call rzero(visco,npt)
-      call rzero(uiui,npt)
+      n=nx1*ny1*nz1
 
-      if (eq .lt. 5) then ! momentum fluxes via factorized viscous
-                          ! stress tensor
-
-         if (jflux .eq. eq-1) then
-            m=kdir
-            call copy(visco,vdiff(1,1,1,e,ilam),npt)
-            if (kdir .eq. jflux) then
-               call add2s2(visco,vdiff(1,1,1,e,imu),2.0,npt)
+! diffusion due to grad rho
+      if (eq.lt.toteq) then
+         if (eq .eq. 1) call rone(viscscr,n)
+         if (eq .eq. 2) call copy(viscscr,vx(1,1,1,e),n)
+         if (eq .eq. 3) call copy(viscscr,vy(1,1,1,e),n)
+         if (eq .eq. 4) then
+            if (if3d) then
+               call copy(viscscr,vz(1,1,1,e),n)
+            else
+               if (nio.eq.0) write(6,*) 'eq==4 in 2D call to fluxj_evm'
+               call exitt
             endif
+         endif
+         call col2(viscscr,vdiff(1,1,1,e,inus),n)
+!        call col2(viscscr,u(1,1,1,e,1),n) ! some get mult by rho?
+         do j=1,ndim ! flux+= viscscr*nu_s*grad (phig*rho)
+            call addcol3(flux(1,j),viscscr,du(1,1,j),n)
+         enddo
+
+      else ! energy equation
+
+         if(if3d) then ! mass diffusion term
+            call vdot3(viscscr,vx(1,1,1,e),vy(1,1,1,e),vz(1,1,1,e),
+     >                         vx(1,1,1,e),vy(1,1,1,e),vz(1,1,1,e),n)
          else
-            call copy(visco,vdiff(1,1,1,e,imu),npt)
-            if (kdir .eq. jflux) then
-               m=eq-1
-            else
-               m=jflux
-            endif
+            call vdot2(viscscr,vx(1,1,1,e),vy(1,1,1,e),
+     >                         vx(1,1,1,e),vy(1,1,1,e),n)
          endif
+         call col2(viscscr,phig(1,1,1,e),n)
+         call col2(viscscr,vdiff(1,1,1,e,inus),n)
+         do j=1,ndim
+            call addcol3(flux(1,j),du(1,1,j),viscscr,n)
+         enddo
 
-         m=m+1
+         do j=1,ndim
+         do eq2=2,ndim+1
+            call col4(viscscr,du(1,eq2,j),u(1,1,1,eq2,e),
+     >                        vdiff(1,1,1,e,inus),n)
+            call invcol2(viscscr,vtrans(1,1,1,e,irho),n) ! scr=nu_s*U/rho
+            call sub2(flux(1,j),viscscr,n)
+         enddo
+         call addcol3(flux(1,j),du(1,toteq,j),vdiff(1,1,1,e,inus),n)
+         enddo
 
-         call invcol2(visco,vtrans(1,1,1,e,irho),npt)
-         call addcol3(gijklu,visco,dut(1,m),npt)
-! sigh. times like this I hate fortran. AdU-= drho/dx_k contrib
-         if (m .eq. 2) call subcol4(gijklu,visco,dut,vx(1,1,1,e),npt)
-         if (m .eq. 3) call subcol4(gijklu,visco,dut,vy(1,1,1,e),npt)
-         if (m .eq. 4) call subcol4(gijklu,visco,dut,vz(1,1,1,e),npt)
-
-      else ! energy equation is very different. and could use a rewrite
-
-         if (jflux .eq. kdir) then
-! first dU1 flux, then dU2-dU3 for work term, then dU5
-            if (if3d) then ! uiui= 2KE/rho=u_i u_i
-               call vdot3(uiui,vx(1,1,1,e),vy(1,1,1,e),vz(1,1,1,e),
-     >                         vx(1,1,1,e),vy(1,1,1,e),vz(1,1,1,e),npt)
-            else
-               call vdot2(uiui,vx(1,1,1,e),vy(1,1,1,e),
-     >                         vx(1,1,1,e),vy(1,1,1,e),npt)
-            endif
-            call invcol3(visco,vdiff(1,1,1,e,imu),
-     >                        vtrans(1,1,1,e,irho),npt)
-            call chsign(visco,npt)
-            do i=1,npt
-               visco(i)=visco(i)+0.5*vdiff(i,1,1,e,iknd)/
-     >                              vtrans(i,1,1,e,icv) !rho*cv
-            enddo
-
-            call addcol3(gijklu,visco,dut,npt) !*dU1, but one more to go
-
-            call add3(visco,vdiff(1,1,1,e,imu),vdiff(1,1,1,e,ilam),npt)
-            call invcol2(visco,vtrans(1,1,1,e,irho),npt)
-            if(jflux .eq. 1) call col3(uiui,vx(1,1,1,e),vx(1,1,1,e),npt)
-            if(jflux .eq. 2) call col3(uiui,vy(1,1,1,e),vy(1,1,1,e),npt)
-            if(jflux .eq. 3) call col3(uiui,vz(1,1,1,e),vz(1,1,1,e),npt)
-            do i=1,npt ! someone else can vectorize this better
-               temp=t(i,1,1,e,1)
-               rho=vtrans(i,1,1,e,irho)
-               kond=vdiff(i,1,1,e,iknd)
-               gijklu(i)=gijklu(i)-(kond*temp/rho+visco(i)*uiui(i))*
-     >                   dut(i,1)
-            enddo ! done with *dU1 flux
-
-            call invcol3(visco,vdiff(1,1,1,e,imu), ! visco=mu/rho
-     >                       vtrans(1,1,1,e,irho),npt)
-            call invcol3(uiui,vdiff(1,1,1,e,iknd), ! uiui=krcv
-     >                        vtrans(1,1,1,e,icv),npt) ! rho*cv
-            call sub2(visco,uiui,npt) ! visco=1/rho(mu-k/cv)
-            call addcol4(gijklu,visco,dut(1,2),vx(1,1,1,e),npt)
-            call addcol4(gijklu,visco,dut(1,3),vy(1,1,1,e),npt)
-            if (if3d)call addcol4(gijklu,visco,dut(1,4),vz(1,1,1,e),npt)
-
-            call add3(visco,vdiff(1,1,1,e,imu),vdiff(1,1,1,e,ilam),npt)
-            m=jflux+1
-           if(m.eq.2)call addcol4(gijklu,visco,dut(1,m),vx(1,1,1,e),npt)
-           if(m.eq.3)call addcol4(gijklu,visco,dut(1,m),vy(1,1,1,e),npt)
-           if(m.eq.4)call addcol4(gijklu,visco,dut(1,m),vz(1,1,1,e),npt)
-
-            call addcol3(gijklu,uiui,dut(1,toteq),npt) !krcv*dU5
-
-         else ! dUeverythingelse
-! NOTATION ABUSE!!!!! uiui=u_{jflux}, visco=u_{kdir} !!!!!!!!!!
-! math.f not to be used for actual functions of transport coefs
-            if (jflux.eq.1) call copy(uiui, vx(1,1,1,e),npt)
-            if (jflux.eq.2) call copy(uiui, vy(1,1,1,e),npt)
-            if (jflux.eq.3) call copy(uiui, vz(1,1,1,e),npt)
-            if (kdir .eq.1) call copy(visco,vx(1,1,1,e),npt) 
-            if (kdir .eq.2) call copy(visco,vy(1,1,1,e),npt) 
-            if (kdir .eq.3) call copy(visco,vz(1,1,1,e),npt) 
-            do i=1,npt ! again, someone else can vectorize this
-               mu    =vdiff (i,1,1,e,imu)
-               lambda=vdiff (i,1,1,e,ilam)
-               rrho  =vtrans(i,1,1,e,irho)
-               gijklu(i)=gijklu(i)-(mu+lambda)*rrho*dut(i,1)*
-     >                                         uiui(i)*visco(i) ! ujuk
-               gijklu(i)=gijklu(i)+mu*visco(i)*rrho*dut(i,jflux+1)
-               gijklu(i)=gijklu(i)+lambda*uiui(i)*rrho*dut(i,kdir+1)
-            enddo
-         endif
-
-      endif ! energy equation
+      endif ! eq<toteq?
 
       return
       end
