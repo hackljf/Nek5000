@@ -146,7 +146,7 @@ c-----------------------------------------------------------------------
                                                     ! compute_transport_props
       endif
       call compute_transport_props
-      call smoothing(vdiff(1,1,1,1,imu))
+!     call smoothing(vdiff(1,1,1,1,imu))
       call cmult(vdiff(1,1,1,1,imu),0.5,nx1*ny1*nz1*nelt) ! A factor of
            ! 2 lurks in agradu's evaluation of strain rate, even in EVM
 
