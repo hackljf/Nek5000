@@ -141,9 +141,7 @@ c-----------------------------------------------------------------------
 
       call compute_primitive_vars
       if(stage.eq.1) then
-         call entropy_viscosity(vdiff(1,1,1,1,imu)) ! messy recycling
-                                                    ! from the POV of
-                                                    ! compute_transport_props
+         call entropy_viscosity ! accessed through uservp
       endif
       call compute_transport_props
 !     call smoothing(vdiff(1,1,1,1,imu))
