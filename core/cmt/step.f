@@ -214,11 +214,18 @@ c
                   c(2)=y6-y5
                   c(3)=z6-z5
                   if (if3d) then
+                     fact=0.125 ! h doesn't reach into corners of neighboring elements
+                     if (ixp.eq.ix.or.ixm.eq.ix) fact=2.0*fact
+                     if (iym.eq.iy.or.iyp.eq.iy) fact=2.0*fact
+                     if (izm.eq.iz.or.izp.eq.iz) fact=2.0*fact
                      call cross(d,a,b)
-                     h(ix,iy,iz,e)=0.125*dot(c,d,3)
+                     h(ix,iy,iz,e)=fact*dot(c,d,3)
                      h(ix,iy,iz,e)=abs(h(ix,iy,iz,e))**(1.0/3.0)
                   else
-                     h(ix,iy,iz,e)=sqrt(0.25*abs(a(1)*b(2)-a(2)*b(1)))
+                     fact=0.25
+                     if (ixp.eq.ix.or.ixm.eq.ix) fact=2.0*fact
+                     if (iym.eq.iy.or.iyp.eq.iy) fact=2.0*fact
+                     h(ix,iy,iz,e)=sqrt(fact*abs(a(1)*b(2)-a(2)*b(1)))
                   endif
                enddo
             enddo
