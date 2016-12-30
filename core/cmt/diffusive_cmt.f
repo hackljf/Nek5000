@@ -333,6 +333,7 @@
             vdiff(i,j,k,e,ilam) = lambda!NEKUSE
             vdiff(i,j,k,e,iknd) = udiff! NEKUSE
             vdiff(i,j,k,e,inus) = nu_s ! CMTDATA
+!           vdiff(i,j,k,e,inus) = nu_s/rho ! CMTDATA
          enddo
          enddo
          enddo

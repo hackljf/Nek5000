@@ -141,12 +141,19 @@ c-----------------------------------------------------------------------
 
       call compute_primitive_vars
       if(stage.eq.1) then
-         call entropy_viscosity ! accessed through uservp
+         call entropy_viscosity ! accessed through uservp. computes
+                                ! entropy residual and max wave speed
       endif
-      call compute_transport_props
+      call compute_transport_props ! inside rk stage or not?
 !     call smoothing(vdiff(1,1,1,1,imu))
       call cmult(vdiff(1,1,1,1,imu),0.5,nx1*ny1*nz1*nelt) ! A factor of
            ! 2 lurks in agradu's evaluation of strain rate, even in EVM
+! you have GOT to figure out where phig goes!!!!
+!     do e=1,nelt ! THIS DOESN'T WORK BUT IT SHOULD!!!!
+!        call col2(vdiff(1,1,1,e,imu),u(1,1,1,1,e),nx1*ny1*nz1) ! stress dims
+!     enddo
+!        call col2(vdiff(1,1,1,1,imu),vtrans(1,1,1,1,irho),
+!    >             nx1*ny1*nz1*nelt)
 
 !-----------------------------------------------------------------------
 ! JH072914 We can really only proceed with dt once we have current
