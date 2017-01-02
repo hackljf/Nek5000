@@ -140,10 +140,10 @@ c-----------------------------------------------------------------------
 ! Uncomment that code as a last resort. there is no way it is necessary
 
       call compute_primitive_vars
-      if(stage.eq.1) then
-         call entropy_viscosity ! accessed through uservp. computes
-                                ! entropy residual and max wave speed
-      endif
+!     if(stage.eq.1) then
+!        call entropy_viscosity ! accessed through uservp. computes
+!                               ! entropy residual and max wave speed
+!     endif
       call compute_transport_props ! inside rk stage or not?
 !     call smoothing(vdiff(1,1,1,1,imu))
       call cmult(vdiff(1,1,1,1,imu),0.5,nx1*ny1*nz1*nelt) ! A factor of
@@ -205,7 +205,7 @@ c-----------------------------------------------------------------------
       iup=(iu1-1)*nfq+iqp
       call   imqqtu(flux(iuj),flux(ium),flux(iup))
       call   imqqtu_dirichlet(flux(iuj),flux(iqm),flux(iqp))
-      call igtu_cmt(flux(iqm),flux(iuj),graduf) ! [[u]].{{gradv}}
+!     call igtu_cmt(flux(iqm),flux(iuj),graduf) ! [[u]].{{gradv}}
       dumchars='after_igtu'
 !     call dumpresidue(dumchars,999)
 
@@ -246,7 +246,7 @@ c-----------------------------------------------------------------------
       enddo
       dumchars='end_of_rhs'
 !     call dumpresidue(dumchars,999)
-!     call exitt
+      call exitt
 
       return
       end
