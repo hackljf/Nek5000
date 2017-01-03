@@ -96,10 +96,6 @@
       subroutine agradu(flux,du,e,eq)
       include 'SIZE'
       include 'CMTDATA'
-! diagnostic
-      include 'SOLN'
-      include 'GEOM'
-! diagnostic
 !JH122716 Apply viscous flux jacobian \mathscr{A} to a notional gradient
 !         of the unknowns U (gradU in viscous_cmt and iku, U-{{U}} and
 !         U-U_D in igtu_cmt, [U] in ihu (CHECK LI'S NOTES AGAIN))
@@ -132,33 +128,6 @@
 ! \tau_{ij} and u_j \tau_{ij}.  lambda=0 and kappa=0 for EVM
       call fluxj_ns (flux,du,e,eq)
       call fluxj_evm(flux,du,e,eq)
-
-! diagnostic
-      pi=4.0*atan(1.0)
-      uxinf=1.0
-      do i=1,nx1*ny1*nz1
-         x=xm1(i,1,1,e)-5.0
-         y=ym1(i,1,1,e)
-         r2=x**2+y**2
-         beta=5.0
-         rho=vtrans(i,1,1,e,1)
-         temp=t(i,1,1,e,1)
-         drhodx=(0.5*beta/pi)**2*x/gmaref*rho/temp*exp(2.0*(1.0-r2))
-         drhody=(0.5*beta/pi)**2*y/gmaref*rho/temp*exp(2.0*(1.0-r2))
-         ux=uxinf-beta*exp(1.0-r2)*y/(2.0*pi)
-         uy=beta*exp(1.0-r2)*x/(2.0*pi)
-         if (eq.eq.1) write(300+eq,'(6e17.8)')
-     >   x,y,flux(i,1)-vdiff(i,1,1,e,inus)*drhodx,
-     >       flux(i,2)-vdiff(i,1,1,e,inus)*drhody
-!    >   x,y,(flux(i,j),j=1,ndim),vdiff(i,1,1,e,inus)*drhodx,
-!    >                            vdiff(i,1,1,e,inus)*drhody
-         if (eq.eq.2) write(300+eq,'(6e17.8)')
-     >   x,y,flux(i,1)-(tau11+vdiff(i,1,1,e,inus)*drhodx*ux),
-     >       flux(i,2)-(tau12+vdiff(i,1,1,e,inus)*drhodx*uy)
-         if (eq.eq.3) write(300+eq,'(6e17.8)')
-     >   x,y,flux(i,1)-(tau12+vdiff(i,1,1,e,inus)*drhody*ux),
-     >       flux(i,2)-(tau22+vdiff(i,1,1,e,inus)*drhody*uy)
-      enddo
 
 ! no idea where phi goes
       if (eq .lt. toteq) call col2(flux,phig(1,1,1,e),nx1*ny1*nz1)
