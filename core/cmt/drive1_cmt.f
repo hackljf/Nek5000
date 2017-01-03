@@ -111,7 +111,8 @@ c-----------------------------------------------------------------------
       real wkj(lx1+lxd)
       character*32  dumchars
 
-      call compute_h(gridh,xm1,ym1,zm1)
+      call compute_grid_h(gridh,xm1,ym1,zm1)
+      call compute_mesh_h(meshh,xm1,ym1,zm1)
 
       if (nxd.gt.nx1) then
          call set_dealias_face
