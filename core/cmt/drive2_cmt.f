@@ -41,12 +41,13 @@ c     call setup_cmt_param
       parameter (lxyz=lx1*ly1*lz1)
       common /scrns/ scr(lxyz),avstate(toteq)
       real scr,avstate
-      integer e,eg
+      integer e,eg,deathflag,df0
       real kemax
 
       nxyz=lx1*ly1*lz1
       ntot=nxyz*nelt
 
+      deathflag=0
       epslon=1.0e-9
 
 !     rgam=rgasref/(gmaref-1.0)
@@ -84,44 +85,70 @@ c     call setup_cmt_param
                u(i,1,1,1,e)=rho+abs(theta)*(uold-rho)
             enddo
          endif
-         call cfill(t(1,1,1,e,6),theta,nxyz)
+         theta0=glmin(theta,1)
+         if (nio .eq. 0) write(6,*) 'min limiter, density=',theta0
+!        call cfill(t(1,1,1,e,6),theta,nxyz) ! diagnostic?
 
-! if "!!3" exists it was there to remove limiter of internal energy
-!        rho=vlsc2(bm1(1,1,1,e),u(1,1,1,1,e),nxyz)/volel(e)
-
-! now for rhoe(avstate)
+! now for pressure-positivity-preserving limiter of Wang et al (2012) JCP 231:653-665
          do m=1,toteq
             avstate(m)=vlsc2(bm1(1,1,1,e),u(1,1,1,m,e),nxyz)/volel(e)
          enddo
 
          rho=avstate(1)
+         e_internal=avstate(5)-
+     >              0.5*(avstate(2)**2+avstate(3)**2+avstate(4)**2)/
+     >                   rho
+         if (e_internal .le. 0.0) then
+            write(6,*) 'can''t get <e_internal> > 0',e,nid
+            write(6,*) (avstate(m),m=1,toteq)
+            deathflag=1
+         endif
+         df0=iglmax(deathflag,1)
+         if (df0.ne.0) call exitt
+
+         e_internal=e_internal/rho
+         eg=gllel(e)
+         call cmt_userEOS(1,1,1,eg) ! computes p(\bar{U})
+         theta=1.0
+         do i=1,nxyz
+            if (pr(i,1,1,e).ge.0.0) then
+               theta2=1.0
+            else
+               theta2=pres/(pres-pr(i,1,1,e))
+            endif
+            theta=min(theta,theta2)
+         enddo
+         do m=1,toteq
+            do i=1,nxyz
+               uold=u(i,1,1,m,e)
+               u(i,1,1,m,e)=avstate(m)+theta*(uold-avstate(m))
+            enddo
+         enddo
+         theta0=glmin(theta,1)
+         if (nio .eq. 0) write(6,*) 'min limiter, pressure=',theta0
+!        call cfill(t(1,1,1,e,7),theta,nxyz) ! diagnostic?
 ! Entropy-bounded limiter of Lv and Ihme
 !-----------------------------------------------------------------------
 ! JH091118 This isn't ready for non-ideal state equations or volume fraction
 !-----------------------------------------------------------------------
-         e_internal=avstate(5)-
-     >              0.5*(avstate(2)**2+avstate(3)**2+avstate(4)**2)/
-     >                   rho
-         e_internal=e_internal/rho
-         eg=gllel(e)
-         call cmt_userEOS(1,1,1,eg) ! assigns elm avg to  pres and temp
-         do i=1,nxyz
-            scr(i)=pr(i,1,1,e)-exp(se0const)*
-     >                         (u(i,1,1,1,e)**gmaref)
-         enddo
-         tau=vlmin(scr,nxyz)
-         tau=min(tau,0.0)
-         epsebdg(e)=tau/
-     >          (tau-(pres-exp(se0const)*rho**gmaref))
-         epsebdg(e)=min(epsebdg(e),1.0)
-         epsebdg(e)=max(epsebdg(e),0.0)
-
-         do m=1,toteq
-            do i=1,nxyz
-               uold=u(i,1,1,m,e)
-               u(i,1,1,m,e)=uold+epsebdg(e)*(avstate(m)-uold)
-            enddo
-         enddo
+!         do i=1,nxyz
+!            scr(i)=pr(i,1,1,e)-exp(se0const)*
+!     >                         (u(i,1,1,1,e)**gmaref)
+!         enddo
+!         tau=vlmin(scr,nxyz)
+!         tau=min(tau,0.0)
+!         epsebdg(e)=tau/
+!     >          (tau-(pres-exp(se0const)*rho**gmaref))
+!         epsebdg(e)=min(epsebdg(e),1.0)
+!         epsebdg(e)=max(epsebdg(e),0.0)
+!
+!         do m=1,toteq
+!            do i=1,nxyz
+!               uold=u(i,1,1,m,e)
+!               u(i,1,1,m,e)=uold+epsebdg(e)*(avstate(m)-uold)
+!            enddo
+!         enddo
+!-----------------------------------------------------------------------
 
       enddo
       
