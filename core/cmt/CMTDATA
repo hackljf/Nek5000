@@ -65,7 +65,7 @@ c---------------------------------------------------------------------
      $    MWref,CWref,MCref,CCref,
      $    AAref,
      $    BBref,R1ref,R2ref,OMref,
-     $    AA,BB,OM,CC,CW,se0const
+     $    AA,BB,OM,CC,CW,thetamin
 
       common /cmtgasref/cpgref,cvgref,cvjref,gmaref,rgasref,molmass,
      $    MAref,MBref,CAref,CBref,   ! NTN for mixed model
@@ -73,7 +73,7 @@ c---------------------------------------------------------------------
      $    MWref,CWref,MCref,CCref,
      $    AAref,
      $    BBref,R1ref,R2ref,OMref,
-     $    AA,BB,OM,CC,CW,se0const
+     $    AA,BB,OM,CC,CW,thetamin
 
       integer              stage,nstage
       common /tstepstage/ stage,nstage

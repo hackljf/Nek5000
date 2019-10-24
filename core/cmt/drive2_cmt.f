@@ -86,7 +86,7 @@ c     call setup_cmt_param
             enddo
          endif
          theta0=glmin(theta,1)
-         if (nio .eq. 0) write(6,*) 'min limiter, density=',theta0
+         thetamin=theta0
 !        call cfill(t(1,1,1,e,6),theta,nxyz) ! diagnostic?
 
 ! now for pressure-positivity-preserving limiter of Wang et al (2012) JCP 231:653-665
@@ -125,7 +125,7 @@ c     call setup_cmt_param
             enddo
          enddo
          theta0=glmin(theta,1)
-         if (nio .eq. 0) write(6,*) 'min limiter, pressure=',theta0
+         maxdiff=theta0
 !        call cfill(t(1,1,1,e,7),theta,nxyz) ! diagnostic?
 ! Entropy-bounded limiter of Lv and Ihme
 !-----------------------------------------------------------------------
