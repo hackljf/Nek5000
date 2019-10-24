@@ -131,6 +131,9 @@ c     call setup_cmt_param
 !-----------------------------------------------------------------------
 ! JH091118 This isn't ready for non-ideal state equations or volume fraction
 !-----------------------------------------------------------------------
+!         do m=1,toteq
+!            avstate(m)=vlsc2(bm1(1,1,1,e),u(1,1,1,m,e),nxyz)/volel(e)
+!         enddo
 !         do i=1,nxyz
 !            scr(i)=pr(i,1,1,e)-exp(se0const)*
 !     >                         (u(i,1,1,1,e)**gmaref)
