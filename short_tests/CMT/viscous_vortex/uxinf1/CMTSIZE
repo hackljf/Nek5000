@@ -1,5 +1,7 @@
-      integer toteq
+      integer toteq, ngeomax, ngrefmax
       parameter (toteq=5)              ! number of conserved variables. used to be in SIZE
+      parameter (ngeomax=2)
+      parameter (ngrefmax=3*(ngeomax-1)+1)
 
 ! indices for fields vectorized (quantity-outermost) parameter vectors
       integer jux, juy, juz, jpr, jthm, jsnd, jph, ju5, nqq

@@ -181,13 +181,14 @@ C> by nek5000
       include 'MASS'
       include 'CMTDATA'
 
-      parameter (ldg=lx1**3,lwkd=4*lx1*lx1)
+      parameter (ldgmax=max(ngrefmax,lx1))
+      parameter (ldg=ldgmax**3,lwkd=4*ldgmax*ldgmax)
       common /dgradl/d(ldg),dt(ldg),dg(ldg),dgt(ldg),jgl(ldg),jgt(ldg)
      > ,wkd(lwkd)
       real jgl,jgt
       common /ctmp1/ ur(ldg),us(ldg),ut(ldg),ud(ldg)
       parameter (ngeo=2,ngeoref=3*(ngeo-1)+1)
-      parameter (ld=2*lxd,ldw=2*(ld**ldim)) ! sigh
+      parameter (ld=2*ldgmax,ldw=2*(ldgmax**ldim)) ! sigh
       common /igrad/ pd    (0:ld*ld) ! reap 
      $             , pdg   (0:ld*ld) ! where you
      $             , pjgl  (0:ld*ld) ! do not sow
@@ -298,8 +299,8 @@ C> by nek5000
 ! project back
             call specmpn(jacm1(1,1,1,e),lx1,jref,ngeoref,jgl(jref2n),
      >                jgt(jref2n),if3d,w,ldw)
-            call chkjac(jacm1(1,1,1,e),nxyz,e,xm1(i,1,1,e),ym1(i,1,1,e),
-     >               zm1(i,1,1,e),ldim,ierr)
+            call chkjac(jacm1(1,1,1,e),nxyz,e,xm1(1,1,1,e),ym1(1,1,1,e),
+     >               zm1(1,1,1,e),ldim,ierr)
             if (ierr .ne. 0) then
                call exitti('failed jacobian check in element $',e)
             endif
@@ -383,12 +384,21 @@ C> by nek5000
      >                   jgl(jgeo2ref),jgt(jgeo2ref),if3d,w,ldw)
                call specmpn(xrref(1,i,2),ngeoref,us,ngeo,
      >                   jgl(jgeo2ref),jgt(jgeo2ref),if3d,w,ldw)
+! failing on Cartesian meshes with lx1=3
+!              do j=1,n
+!              write(18,*) i,xrref(j,i,1),xrref(j,i,2)
+!              enddo
             enddo
+!           call exitt
             call rzero(jref,n) 
             call addcol3(jref,xrref(1,1,1),xrref(1,2,2),n)
             call subcol3(jref,xrref(1,1,2),xrref(1,2,1),n)
 ! project back
             call copy(screlm,jacm1(1,1,1,e),nxyz)
+!           do i=1,n
+!              write(18,*) jref(i)
+!           enddo
+!           call exitt
             call specmpn(jacm1(1,1,1,e),lx1,jref,ngeoref,jgl(jref2n),
      >                jgt(jref2n),if3d,w,ldw)
             call chkjac(jacm1(1,1,1,e),nxyz,e,xm1(1,1,1,e),ym1(1,1,1,e),
@@ -537,13 +547,15 @@ c     Map R-S-T space into physical X-Y-Z space.
 c     Get pointer to jgl() for interpolation pair (mx,md)
 
       include 'SIZE'
+      include 'CMTSIZE'
 
-      parameter (ldg=lxd**3,lwkd=4*lxd*lxd)
+      parameter (ldgmax=max(ngrefmax,lx1))
+      parameter (ldg=ldgmax**3,lwkd=4*ldgmax*ldgmax)
       common /dgradl/ d(ldg),dt(ldg),dg(ldg),dgt(ldg),jgl(ldg),jgt(ldg)
      $             , wkd(lwkd)
       real jgl,jgt
 c
-      parameter (ld=2*lxd)
+      parameter (ld=2*ldgmax)
       common /igrad/ pd    (0:ld*ld) ! reap 
      $             , pdg   (0:ld*ld) ! where you
      $             , pjgl  (0:ld*ld) ! do not sow
