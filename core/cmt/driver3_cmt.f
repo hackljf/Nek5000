@@ -2,7 +2,7 @@
 ! Now with some code introduced by Jacob's work on Tait-equation water
 ! mixture modeling. Commented out until shocks are working in essplit
 C> @file driver3_cmt.f routines for primitive variables, usr-file interfaces
-C> and properties
+C> and properties. Also initializes flow field.
 
 C> Compute primitive variables (velocity, thermodynamic state) from 
 C> conserved unknowns U
@@ -163,6 +163,14 @@ c-----------------------------------------------------------------------
 
 !-----------------------------------------------------------------------
 
+C> \ingroup initialconds
+C> @{
+C> over-engineered duplicate of setics in core nek5000.
+C> Calls cmtuic for a fresh start or my_full_restart for restart.
+C> cmtuic actually initializes the flow field through cmt-nek's
+C> own dedicated calls to useric.
+C> logs min and max of primitive variables as a sanity check in
+C> diagnostic I/O labeled "Cuvwpt," etc.
       subroutine cmt_ics
 ! overlaps with setics. -DCMT will require IFDG as well
       include 'SIZE'
@@ -240,11 +248,18 @@ c     ! save velocity on fine mesh for dealiasing
         write(6,*) 'done :: set initial conditions, CMT-nek'
         write(6,*) ' '
       endif
+C> @}
       return
       end
 
 !-----------------------------------------------------------------------
 
+C> \ingroup initialconds
+C> @{
+C> Fresh initialization of conserved variables. Calls cmtasgn
+C> to interface with userbc, forms conserved variables from
+C> scalar primitive variables one grid point at a time, and fills
+C> U completely.
       subroutine cmtuic
 ! overlaps with setics. -DCMT will require IFDG as well
 ! need to make sure setics has no effect.
@@ -281,6 +296,7 @@ c     ! save velocity on fine mesh for dealiasing
          enddo
          enddo
       enddo
+C> @}
       return
       end
 
