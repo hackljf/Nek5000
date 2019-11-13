@@ -4,8 +4,10 @@
 C> @file driver3_cmt.f routines for primitive variables, usr-file interfaces
 C> and properties. Also initializes flow field.
 
-C> Compute primitive variables (velocity, thermodynamic state) from 
-C> conserved unknowns U
+C> \ingroup state
+C> @{
+C> \brief Compute primitive variables (velocity, thermodynamic state) from 
+C>        conserved unknowns U and store them in SOLN and CMTDATA
       subroutine compute_primitive_vars(ilim)
       include 'SIZE'
       include 'INPUT'
@@ -20,27 +22,33 @@ C> conserved unknowns U
       integer e, eq
       common /posflags/ ifailr,ifaile,ifailt,ilimflag
       integer ifailr,ifaile,ifailt,ilimflag
+C> ilim is a flag for positivity checks. ilim==0 means ``do not
+C> perform positivity checks.'' ilim !=0 means ``perform positivity
+C> checks and exit with a diagnostic dump if density, energy or
+C> temperature fall to zero or below at any GLL node.''
       integer ilim
 
       nxyz= lx1*ly1*lz1
       ntot=nxyz*nelt
-      ifailr=-1
-      ifaile=-1
-      ifailt=-1
+C> Flags for density, energy and temperature positivity
+      ifailr=-1 ! density
+      ifaile=-1 ! energy
+      ifailt=-1 ! temperature
       ilimflag=ilim
 
       do e=1,nelt
-! JH020918 long-overdue sanity checks
+C> Density positivity check.
          dmin=vlmin(u(1,1,1,irg,e),nxyz)
          if (dmin .lt. 0.0 .and. ilim .ne. 0) then
             ifailr=lglel(e)
             write(6,*) nid,'***NEGATIVE DENSITY***',dmin,lglel(e)
          endif
+C> Divide momentum by density to get velocity
          call invcol3(vx(1,1,1,e),u(1,1,1,irpu,e),u(1,1,1,irg,e),nxyz)
          call invcol3(vy(1,1,1,e),u(1,1,1,irpv,e),u(1,1,1,irg,e),nxyz)
 !        if (if3d)
          call invcol3(vz(1,1,1,e),u(1,1,1,irpw,e),u(1,1,1,irg,e),nxyz)
-! first kinetic energy
+C> Compute kinetic energy using vdot2/3
          if (if3d) then
             call vdot3(scr,
      >             u(1,1,1,irpu,e),u(1,1,1,irpv,e),u(1,1,1,irpw,e),
@@ -51,14 +59,15 @@ C> conserved unknowns U
          endif
          call invcol2(scr,u(1,1,1,irg,e),nxyz)
          call cmult(scr,0.5,nxyz)
-! then to internal energy
+C> Compute internal energy. First, subtract volume-fraction-weighted kinetic energy from total
+C> energy.
          call sub3(energy,u(1,1,1,iret,e),scr,nxyz)
-! now mass-specific
+C> Then, divide internal energy by density.
          call invcol2(energy,u(1,1,1,irg,e),nxyz)
-! don't forget to get density where it belongs
+C> Compute density by dividing U1 by gas volume fraction. store in vtrans(:,jrho)
          call invcol3(vtrans(1,1,1,e,jrho),u(1,1,1,irg,e),phig(1,1,1,e),
      >                nxyz)
-! JH020718 long-overdue sanity checks
+C> Check positivity of internal energy.
          emin=vlmin(energy,nxyz)
          if (emin .lt. 0.0 .and. ilim .ne. 0) then
             ifaile=lglel(e)
@@ -74,26 +83,32 @@ C> conserved unknowns U
 !c    >                u(1,1,1,irg,e),
 !c    >                nxyz)
 !c        enddo
-         call tdstate(e,energy) ! compute state, fill ifailt
+C> Compute thermodynamic state variables cv, T and p. Check temperature
+C> positivity using ifailt in /posflags/
+         call tdstate(e,energy)
       enddo
 
 ! Avoid during EBDG testing
 ! JH070219 Tait mixture model: man up and test T(:,2) for positivity
 !          someday.
+C> call poscheck for each of the posflags and exit if ilim!=0 and
+C> any posflag>0. Nonzero posflags are set to the global element
+C> number where the first positivity failure on each MPI task was
+C> encountered.
       call poscheck(ifailr,'density    ')
       call poscheck(ifaile,'energy     ')
       call poscheck(ifailt,'temperature')
-
+C> @}
       return
       end
 
 !-----------------------------------------------------------------------
 
-C> Compute thermodynamic state for element e from internal energy.
-C> usr file.
+C> \ingroup state
+C> @{
+C> \brief calls cmt_userEOS in the usr file.
+C> Compute thermodynamic state for element e from internal energy and density.
       subroutine tdstate(e,energy)!,energy)
-c compute the gas properties. We will have option to add real gas models
-c We have perfect gas law. Cvg is stored full field
       include 'SIZE'
       include 'CMTDATA'
       include 'SOLN'
@@ -109,16 +124,23 @@ c We have perfect gas law. Cvg is stored full field
       do k=1,lz1
       do j=1,ly1
       do i=1,lx1
+C> loop over GLL nodes in element e. Fill /NEKUSE/ and /nekuscmt/
+C> by nekasgn and cmtasgn calls, respectively.
          call nekasgn(i,j,k,e)
          call cmtasgn(i,j,k,e)
          e_internal=energy(i,j,k) !cmtasgn should do this, but can't
+C> Compute thermodynamic state from scalars declared in /NEKUSE/ and /nekuscmt/
+C> store state variables in temp,cv,cp,pres and asnd
          call cmt_userEOS(i,j,k,eg)
 ! JH020718 long-overdue sanity checks
+C> Check temperature positivity
          if (temp .lt. 0.0 .and. ilimflag .ne. 0) then
             ifailt=eg
             write(6,'(i6,a26,e12.4,3i2,i8,3e15.6)') ! might want to be less verbose
      >      nid,' HAS NEGATIVE TEMPERATURE ', x,i,j,k,eg,temp,rho,pres
          endif
+C> Fill SOLN and CMTDATA arrays one GLL node at a time from scalars
+C> in /NEKUSE/ and /nekuscmt/
          vtrans(i,j,k,e,jen)= e_internal
          vtrans(i,j,k,e,jcv)= cv*rho
          vtrans(i,j,k,e,jcp)= cp*rho
@@ -128,12 +150,16 @@ c We have perfect gas law. Cvg is stored full field
       enddo
       enddo
       enddo
-
+C> @}
       return
       end
 
 c-----------------------------------------------------------------------
 
+C> \ingroup state bcond initialconds
+C> @{
+C> \brief Fill /NEKUSE/ and /NEKUSCMT/ common blocks from a single GLL node
+C>        extends nekasgn to CMT-nek without affecting core routines
       subroutine cmtasgn (ix,iy,iz,e)
       include 'SIZE'
       include 'SOLN'
@@ -157,7 +183,7 @@ c-----------------------------------------------------------------------
       udiff  = vdiff(ix,iy,iz,e,jknd)
 ! MAKE SURE WE''RE NOT USING UTRANS FOR ANYTHING IN pre-v16 code!!
       lambda = vdiff(ix,iy,iz,e,jlam)
-
+C> @}
       return
       end
 
@@ -165,7 +191,9 @@ c-----------------------------------------------------------------------
 
 C> \ingroup initialconds
 C> @{
-C> over-engineered duplicate of setics in core nek5000.
+C> \brief set initial values of conserved variables in U for CMT-nek
+C>
+C> Over-engineered duplicate of setics in core nek5000.
 C> Calls cmtuic for a fresh start or my_full_restart for restart.
 C> cmtuic actually initializes the flow field through cmt-nek's
 C> own dedicated calls to useric.
@@ -256,7 +284,9 @@ C> @}
 
 C> \ingroup initialconds
 C> @{
-C> Fresh initialization of conserved variables. Calls cmtasgn
+C> \brief Fresh initialization of conserved variables from useric. 
+C>
+C> Calls cmtasgn
 C> to interface with userbc, forms conserved variables from
 C> scalar primitive variables one grid point at a time, and fills
 C> U completely.
@@ -302,6 +332,9 @@ C> @}
 
 !-----------------------------------------------------------------------
 
+C> \ingroup state
+C> @{
+C> \brief if positive posflags, write failure message and exit
       subroutine poscheck(ifail,what)
       include 'SIZE'
       include 'SOLN'
@@ -322,6 +355,6 @@ C> @}
          call outpost2(vx,vy,vz,pr,t,ldimt,'EBL')
          call exitt
       endif
-
+C> @}
       return
       end

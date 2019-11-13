@@ -8,6 +8,7 @@ C> \defgroup vsurf Viscous surface terms
 C> \defgroup faceops utility functions for manipulating face data
 C> \defgroup twopoint structure for symmetric flux functions in split forms
 C> \defgroup initialconds flow field initialization routines 
+C> \defgroup state converting conserved variables to primitive. Includes thermodynamic state and positivity checks.
 C> Branch from subroutine nek_advance in core/drive1.f
 C> Advance CMT-nek one time step within nek5000 time loop
       subroutine cmt_nek_advance
