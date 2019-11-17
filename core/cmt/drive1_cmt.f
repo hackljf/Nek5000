@@ -8,7 +8,8 @@ C> \defgroup vsurf Viscous surface terms
 C> \defgroup faceops utility functions for manipulating face data
 C> \defgroup twopoint structure for symmetric flux functions in split forms
 C> \defgroup initialconds flow field initialization routines 
-C> \defgroup state converting conserved variables to primitive. Includes thermodynamic state and positivity checks.
+C> \defgroup state Thermodynamic state variables from conserved variables
+
 C> Branch from subroutine nek_advance in core/drive1.f
 C> Advance CMT-nek one time step within nek5000 time loop
       subroutine cmt_nek_advance
@@ -33,6 +34,7 @@ c     Solve the Euler equations
       nfldpart = ldim*npart
 
       if(istep.eq.1) then
+C> Initialization calls 
          call cmt_ics
          if (ifrestart) then
             time_cmt=time
@@ -53,6 +55,7 @@ c     Solve the Euler equations
 
       nstage = 3
       do stage=1,nstage
+C> Runge-Kutta loop
          if (stage.eq.1) call copy(res3(1,1,1,1,1),U(1,1,1,1,1),n)
 
          rhst_dum = dnekclock()

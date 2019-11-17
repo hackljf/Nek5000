@@ -1,5 +1,6 @@
 C> @file intpdiff.f interpolation and differentiation routines not already provided
 C> by nek5000
+
 !--------------------------------------------------------------------
 ! JH061914 propose name change to intpdiff since that is what is in
 !          here.
@@ -11,6 +12,11 @@ C> by nek5000
 !          not in /giso1/. Hence compute_gradients_contra
 !--------------------------------------------------------------------
 
+C> @{
+C> Compute gradients of conserved variables (WITHOUT volume fraction
+C> weighting) for a single element. Store them in gradu in /CMTGRADU/.
+C> Uses legacy chain-rule metrics in DXYZ (rxm1, etc.) and NOT
+C> freestream-preserving metrics.
       subroutine compute_gradients(e)
       include 'SIZE'
       include 'INPUT'
@@ -21,6 +27,8 @@ C> by nek5000
       parameter (ldd=lxd*lyd*lzd)
       common /ctmp1/ ur(ldd),us(ldd),ut(ldd),ud(ldd),tu(ldd)
 
+C> e is intent(in). It is the index for the current element in the 
+C> element loop in compute_rhs_and_dt
       integer eq,e
 
 !     !  Compute d/dx, d/dy and d/dz of all the cons vars
@@ -31,10 +39,14 @@ C> by nek5000
       m0 = lx1-1
 
       do eq=1,toteq
+C> Divide conserved variables by volume fraction
          call invcol3(ud,u(1,1,1,eq,e),phig(1,1,1,e),nxyz1)
 
          if (if3d) then
+C> Differentiate in the reference element. local_grad routines are
+C> in core/navier5.f
             call local_grad3(ur,us,ut,ud,m0,1,dxm1,dxtm1)
+C> Convert d/dr to d/dx via chain-rule metrics.
             do i=1,nxyz1
                gradu(i,1,eq) = jacmi(i,e)*(rxm1(i,1,1,e)*ur(i)+
      >                                     sxm1(i,1,1,e)*us(i)+
@@ -66,7 +78,7 @@ C> by nek5000
          endif
 
       enddo ! equation loop
-
+C> @}
       return
       end
 
@@ -76,6 +88,12 @@ C> by nek5000
 !          FIGURE OUT IF GRADU*=JACMI or NOT!!!
 ! JH092319 I vote to put *=jacmi here
 !--------------------------------------------------------------------
+
+C> @{
+C> Compute gradients of conserved variables (WITHOUT volume fraction
+C> weighting) for a single element. Store them in gradu in /CMTGRADU/.
+C> Uses freestream-preserving metrics that cmt_metrics computes and
+C> stores in rx.
       subroutine compute_gradients_contra(e)
       include 'SIZE'
       include 'INPUT'
@@ -86,6 +104,8 @@ C> by nek5000
       parameter (ldd=lxd*lyd*lzd)
       common /ctmp1/ ur(ldd),us(ldd),ut(ldd),ud(ldd),tu(ldd)
 
+C> e is intent(in). It is the index for the current element in the 
+C> element loop in compute_rhs_and_dt
       integer eq,e
 
 !     !  Compute d/dx, d/dy and d/dz of all the cons vars
@@ -94,9 +114,12 @@ C> by nek5000
       m0 = lx1-1
 
       do eq=1,toteq
+C> Divide conserved variables by volume fraction
          call invcol3(ud,u(1,1,1,eq,e),phig(1,1,1,e),nxyz1)
 
          if (if3d) then
+C> Differentiate conserved variables in the reference element.
+C> local_grad routines are in core/navier5.f
             call local_grad3(ur,us,ut,ud,m0,1,dxm1,dxtm1)
             do j=1,ldim !xyz
                j0=j+0 ! r_xyz
@@ -126,6 +149,9 @@ C> by nek5000
 
 !-----------------------------------------------------------------------
 
+C> @{
+C> Fills arrays in /FACEWZ/ with Gauss-Legendre quadrature weights
+C> on the fine grid for dealiasing surface integrals.
       subroutine set_dealias_face
 
 !-----------------------------------------------------------------------
@@ -147,8 +173,10 @@ C> by nek5000
       if (ifgeom.and.ilstep.eq.istep)  return  ! already computed
       ilstep = istep
 
+C> Gauss-Legendre quadrature weights. ZWGL lives in core/speclib.f
       call zwgl(zptf,wgtf,lxd)
 
+C> Tensor product in two dimensions for a face of a 3D element.
       if (if3d) then
          k=0
          do j=1,lyd
@@ -158,19 +186,25 @@ C> by nek5000
          enddo
          enddo
       else
+C> faces are just edges in 1D. No tensor product
          call copy(wghtf,wgtf,lxd)
       endif
+C> @}
 
       return
       end
 !-----------------------------------------------------------------------
 
+C> @{
+C> compute freestream-preserving metrics \f$Ja^i\f$ for transforming fluxes
+C> \f$F\f$ to \f$\tilde{F}\f$ in a contravariant frame according to
+C> Kopriva (2006)
+C> Follows methodology in FLUXO (github.com/project-fluxo/fluxo.git)
+C> Basically, isoparametric mappings are not freestream preserving.
+C> DGSEM needs metrics computed from low-order geometry interpolated
+C> up to polynomial order (when lx1>ngeo) OR ``dealiased'' metrics
+C> (when ngeo>lx1)
       subroutine cmt_metrics(istp)
-! compute freestream-preserving metrics $Ja^i$ for transforming fluxes
-! F to F~ in a contravariant frame according to
-! Kopriva (2006)
-! Follows methodology in FLUXO (github.com/project-fluxo/fluxx.git)
-
 ! I REALLY want to duplicate get_dgll_ptr, make my own version of
 ! /dgradl/, set lxd=1, and replace rx with ja(lx1*ly1*lz1,ldim*ldim,lelv) 
       include 'SIZE'
@@ -469,6 +503,7 @@ C> by nek5000
 
       call invers2(jacmi,jacm1,nxyz*nelt)
 
+C> @}
       return
       end
 
