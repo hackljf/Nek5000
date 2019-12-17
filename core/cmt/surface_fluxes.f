@@ -71,10 +71,10 @@ C> \f$\oint \mathbf{H}^{c\ast}\cdot\mathbf{n}dA\f$ on face points
       include 'CMTDATA'
       include 'INPUT'
 
-! JH070219 "heresize" and "hdsize" come from a failed attempt at managing
-!          memory in CMTSURFLX by redeclaration that was abandoned before
-!          the two-point split form. They need to be taken care of in
-!          CMTSIZE and consistent with the desired subroutine
+C> "heresize" and "hdsize" come from a failed attempt at managing
+C>         memory in CMTSURFLX by redeclaration that was abandoned before
+C>         the two-point split form. They need to be taken care of in
+C>         CMTSIZE and consistent with the desired subroutine
       common /CMTSURFLX/ fatface(heresize),notyet(hdsize)
       real fatface,notyet
       integer eq
@@ -84,8 +84,10 @@ C> \f$\oint \mathbf{H}^{c\ast}\cdot\mathbf{n}dA\f$ on face points
       nstate = nqq
 ! where different things live
       iwm =1
-      iwp =iwm+nstate*nfq  ! duplicate one conserved variable at a time for jumps in LLF
-                               ! tuck it before jph=nqq
+C> duplicate one conserved variable (from neighboring elements) at a time
+C> for jumps in LLF
+      iwp =iwm+nstate*nfq
+C> store it before phi, which lives at jph=nqq
       iflx=iwp+nstate*nfq
 
       call rzero(fatface(iflx),nfq*toteq)
@@ -94,8 +96,8 @@ C> \f$\oint \mathbf{H}^{c\ast}\cdot\mathbf{n}dA\f$ on face points
 ! until we can verify correct multiphase two-point fluxes
 !     call faceu(1,fatface(iwm+nfq*(jrhof-1)))
 
-! stabilization first
-! LLF for equations 1 through 4 (mass & momentum)
+C> stabilization first
+C> LLF for equations 1 through 4 (mass & momentum)
       call fillq(jux, vx,    fatface(iwm),fatface(iwp))
       call fillq(juy, vy,    fatface(iwm),fatface(iwp))
       call fillq(juz, vz,    fatface(iwm),fatface(iwp))
@@ -105,21 +107,21 @@ C> \f$\oint \mathbf{H}^{c\ast}\cdot\mathbf{n}dA\f$ on face points
       call llf_euler_vec(fatface(iwm),fatface(iwp),fatface(iflx),nstate)
 
       call fillq(jpr, pr,    fatface(iwm),fatface(iwp))
-! ONLY needed by Kennedy-Gruber (2008) as written. This is done in fstab
-! for Chandrashekar (2013), but overwrites jsnd for KG and friends.
+C> ONLY needed by Kennedy-Gruber (2008) as written. This is done in fstab
+C> for Chandrashekar (2013), but overwrites jsnd for KG and friends.
       call fillq(jrhof,vtrans,fatface(iwm),fatface(iwp))
-! q- -> z-. Kennedy-Gruber, Pirozzoli, and most energy-
-!           conserving fluxes have z=q, so I just divide total energy by
-!           U1 here since Kennedy-Gruber needs E
+C> q- -> z-. Kennedy-Gruber, Pirozzoli, and most energy-
+C>           conserving fluxes have z=q, so I just divide total energy by
+C>           U1 here since Kennedy-Gruber needs E
 
       call rhoe_to_e(fatface(iwm),nfq,nstate)
 
-! z- -> z^, which is {{z}} for Kennedy-Gruber, Pirozzoli, and some parts
-!           of other energy-conserving fluxes.
+C> z- -> z^, which is {{z}} for Kennedy-Gruber, Pirozzoli, and some parts
+C>           of other energy-conserving fluxes.
       call dg_face_avg(fatface(iwm),nfq,nstate,dg_hndl)
 
-! z^ -> F#. Some parameter-vector stuff can go here too as long as it's all
-!           local to a given element.
+C> z^ -> F#. Some parameter-vector stuff can go here too as long as it's all
+C>           local to a given element.
       call kennedygruber_vec(fatface(iwm),fatface(iflx),nstate,toteq)
 
 !     i_cvars=iwm!(ju1-1)*nfq+1
@@ -128,9 +130,9 @@ C> \f$\oint \mathbf{H}^{c\ast}\cdot\mathbf{n}dA\f$ on face points
 !        i_cvars=i_cvars+nfq
 !     enddo
 
-C> @}
-! Now do all fluxes for all boundaries, both F# and stabilized
+C> Now do all fluxes for all boundaries, both F# and stabilized
       call InviscidBC(fatface(iflx))
+C> @}
 
       return
       end
@@ -138,6 +140,12 @@ C> @}
 !-----------------------------------------------------------------------
 
 
+C> \ingroup isurf
+C> @{
+C> Restrict and copy face data for conserved variables
+C> \f$U_{\mbox{ivar}}\f$. Wraps full2face_cmt for each element; a single
+C> call to full2face with \f$U\f$ will not work because element varies
+C> with the outermost index of the u array.
       subroutine faceu(ivar,yourface)
 ! get faces of conserved variables stored contiguously
       include 'SIZE'
@@ -150,12 +158,16 @@ C> @}
          call full2face_cmt(1,lx1,ly1,lz1,iface_flux(1,e),
      >                      yourface(1,1,1,e),u(1,1,1,ivar,e))
       enddo
-
+C> @}
       return
       end
 
 !-----------------------------------------------------------------------
 
+C> \ingroup isurf
+C> @{
+C> Restrict and copy face data for one full field and store it in index
+C> jvar in wminus
       subroutine fillq(jvar,field,wminus,yourface)
       include 'SIZE'
       include 'DG'
@@ -172,12 +184,17 @@ C> @}
       do i=1,ndg_face ! need to make sure ndg_face=lx1*lz1*2*ldim*nelt
          wminus(i,jvar)=yourface(i)
       enddo
-
+C> @}
       return
       end
 
 !-----------------------------------------------------------------------
 
+C> \ingroup isurf
+C> @{
+C> Overwrite values stored at points on faces with the average with its
+C> values in the neighboring face without duplication.
+C> Replaces \f$mine\f$ with \f$\{\{mine\}\}\f$.
       subroutine dg_face_avg(mine,nf,nstate,handle)
 
 ! JH110818 A lot of entropy-stable fluxes have a product of averages.
@@ -193,11 +210,19 @@ C> @}
 ! operation flag is second-to-last arg, an integer
 !                                                1 ==> +
       call fgslib_gs_op_fields(handle,mine,nf,nstate,1,1,0)
+C> @}
       return
       end
 
 !-----------------------------------------------------------------------
 
+C> \ingroup isurf
+C> @{
+C> Sends face values \f$v^-\f$ stored in ``mine'' to the neighbor that
+C> shares that face and copies the neighbor's values \f$v^+\f$ at each
+C> face into ``yours.''
+! This routine abuses gs_op ``+''. Needs testing for floating point
+! errors
       subroutine face_state_commo(mine,yours,nf,nstate,handle)
 
 ! JH060414 if we ever want to be more intelligent about who gets what,
@@ -220,6 +245,7 @@ C> @}
 !                                                1 ==> +
       call fgslib_gs_op_fields(handle,yours,nf,nstate,1,1,0)
       call sub2 (yours,mine,ntot)
+C> @}
       return
       end
 
