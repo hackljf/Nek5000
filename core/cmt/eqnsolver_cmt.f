@@ -47,10 +47,10 @@ C> @}
 
 C> \ingroup vsurf
 C> @{
-C> \f$G^T U\f$
+C> Computes \f$G^T U\f$, the volume integral of \f$[[u]]\cdot\{\{\nabla v\}\}\f$,
+C> and increments res1 with it.
       subroutine igtu_cmt(qminus,ummcu,hface)
-
-!     Vol integral [[u]].{{gradv}}. adapted from Lu's dgf3.f;
+! adapted from Lu's dgf3.f;
 ! interior penalty stuff could go
 ! here too. Debug subroutine ihu in heat.usr and try to fold it in here.
 
@@ -61,7 +61,8 @@ C> \f$G^T U\f$
       include 'CMTDATA'
       include 'SOLN' ! for vz. goes away when agradu_ns works
 
-! arguments
+C> qminus contains values of state variables indexed by j* at each element's own face points 
+C> ummcu contains \f$U-\{\{U\}\}\f$
       real qminus(lx1*lz1,2*ldim,nelt,*)    ! intent(in)
       real ummcu(lx1*lz1*2*ldim,nelt,toteq) ! intent(in)
       real hface(lx1*lz1*2*ldim*nelt,toteq,3) ! intent(out) scratch
@@ -87,6 +88,8 @@ C> \f$G^T U\f$
       nfaces = 2*ldim
       nf     = nxz*nfaces ! 1 element's face points
       nfq    = nf*nelt ! all points in a pile of faces
+C> Symmetric interior penalty method (SIP) and Baumann-Oden have
+C> opposite signs for this term. The sign is HARDCODED here.
 !     if (ifsip) then
 !        const=-1.0 ! SIP
 !     else
@@ -151,7 +154,7 @@ C> \f$G^T U\f$
 
          enddo ! element loop
 
-! gradm1_t uses /ctmp1/
+C> gradm1_t uses /ctmp1/
          call gradm1_t(gradm1_t_overwrites,superhugeh(1,1),
      >                        superhugeh(1,2),superhugeh(1,3))
          call cmult(gradm1_t_overwrites,const,nvol)
@@ -178,6 +181,7 @@ C> Convective volume terms formed and differentiated^T here
       include 'SIZE'
       include 'CMTDATA'
       include 'GEOM'
+C> element e
       integer e,eq
 
       n=3*lx1*ly1*lz1*toteq

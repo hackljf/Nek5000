@@ -106,16 +106,18 @@ c                                     !     ux,uy,uz
 
 C> \ingroup isurf
 C> @{
-      subroutine inflow_df(f,e,wm,wp,um,up,nvar)
 C> more conventional Dolejsi & Feistauer (2015) Section 8.3.2.2
 C> ``physical'' boundary conditions. Also encountered in
 C> Hartmann & Houston (2006). A poor default.
+      subroutine inflow_df(f,e,wm,wp,um,up,nvar)
       include 'SIZE'
       include 'TOTAL'
       include 'NEKUSE'
       include 'CMTDATA'
 
+C> face f, element e, nvar primitive variables
       integer f,e,nvar ! intent(in)
+C> primitive variables from flow solution in wm, external dirichlet state in wp.
       real wm(nvar,lx1*lz1),wp(nvar,lx1*lz1),
      >     um(toteq,lx1*lz1),up(toteq,lx1*lz1)
       real mach

@@ -5,7 +5,10 @@ C> wrapper for other BC routines. Just one for now. More to come.
       INCLUDE 'CMTSIZE'
       INCLUDE 'INPUT'
       INCLUDE 'CMTBCDATA'
+
+C> face f, element e, nvar primitive variables
       integer nvar,f,e
+C> primitive variables from flow solution in wminus, external dirichlet state in wplus.
       real wminus(nvar,lx1*lz1),wplus(nvar,lx1*lz1),
      >     uminus(toteq,lx1*lz1),uplus(toteq,lx1*lz1)
 
@@ -18,16 +21,18 @@ C> wrapper for other BC routines. Just one for now. More to come.
 
 C> \ingroup isurf
 C> @{
-      subroutine outflow_df(f,e,wm,wp,um,up,nvar)
-C> more conventional Dolejsi & Feistauer (2015) Section 8.3.2.2
+C> Dolejsi & Feistauer (2015) Section 8.3.2.2. Very rudimentary
 C> ``physical'' boundary conditions. Also encountered in
 C> Hartmann & Houston (2006). A poor default.
+      subroutine outflow_df(f,e,wm,wp,um,up,nvar)
       include 'SIZE'
       include 'TOTAL'
       include 'NEKUSE'
       include 'CMTDATA'
 
+C> face f, element e, nvar primitive variables
       integer f,e,nvar ! intent(in)
+C> primitive variables from flow solution in wm, external dirichlet state in wp.
       real wm(nvar,lx1*lz1),wp(nvar,lx1*lz1),
      >     um(toteq,lx1*lz1),up(toteq,lx1*lz1)
       real mach
