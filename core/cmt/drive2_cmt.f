@@ -1,5 +1,9 @@
 C> @file drive2_cmt.f mid-level initialization drivers. Not long for this world.
 c-----------------------------------------------------------------------
+C> This routine was intended to integrate more carefully with nek5000's gs_op
+C> ifheat was supposed to trigger initialization of Paul Fischer's
+C> implementations of DG operators K, G and G^T, but we never finished keeping
+C> up with their work. Right now it's just a wrapper for setup_cmt_commo. 
       subroutine nek_cmt_init
       include 'SIZE'
       include 'TOTAL'
@@ -16,12 +20,12 @@ c-----------------------------------------------------------------------
       endif
       call setup_cmt_commo
       
-c     call setup_cmt_param
       return
       end
 
 !-----------------------------------------------------------------------
 
+C> vector routine to zero out kind=8 integers.
       subroutine izero8(a,n)
       integer*8 a(1)
       do i=1,n
@@ -32,6 +36,11 @@ c     call setup_cmt_param
 
 !-----------------------------------------------------------------------
 
+C> positivity-preserving limiters. Adjusts conserved variables in U for
+C> to ensure that density, pressure and internal energy are positive. Follows
+C> Zhang & Shu (2010) JCP 229. We did get Lv & Ihme's (2015) entropy-bounded
+C> discontinuous Galerkin (EBDG) limiter working, but this is only for
+C> perfect gases.
       subroutine limiter
 ! EBDG Stuff. WHERE'S PHI????
       include 'SIZE'
@@ -158,38 +167,10 @@ c     call setup_cmt_param
       return
       end
 
-!-----------------------------------------------------------------------
-      subroutine setup_cmt_param
-      INCLUDE 'SIZE'
-      INCLUDE 'INPUT'
-      INCLUDE 'CMTDATA'
-      INCLUDE 'CMTBCDATA'
-
-      real  MixtPerf_R_CpG, MixtPerf_T_DPR, MixtPerf_C_GRT
-     >                 ,MixtPerf_Ho_CpTUVW,MixtPerf_Cp_CvR,MixtPerf_R_M
-     >                 ,MixtPerf_G_CpR      
-      external MixtPerf_R_CpG, MixtPerf_T_DPR, MixtPerf_C_GRT
-     >                 ,MixtPerf_Ho_CpTUVW,MixtPerf_Cp_CvR,MixtPerf_R_M
-     >                 ,MixtPerf_G_CpR      
-
-      cip_adhoc=10.0
-      cvgref     = param(104)
-c     gmaref     = param(105)
-      molmass    = param(106)
-      muref      = param(107)
-      coeflambda = param(108)
-      suthcoef   = param(109)
-      reftemp    = param(110)
-      prlam      = param(111)
-      pinfty     = param(112)
-      rgasref    = MixtPerf_R_M(molmass,dum)
-      cpgref     = MixtPerf_Cp_CvR(cvgref,rgasref)
-      gmaref     = MixtPerf_G_CpR(cpgref,rgasref) 
-! Get rid of these asap
-      return
-      end
 c------------------------------------------------------------------------
 
+C> Ismail & Roe's (2009) version of the logarithmic mean for all possible
+C> pairs of values, including equal values.
       function logmean(l,r)
 ! computes (l-r)/(log(l)-log(r)) cleanly when l -> r
 ! Appendix B, Ismail & Roe (2009)

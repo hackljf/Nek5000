@@ -300,6 +300,13 @@ C> Compute coefficients for Runge-Kutta stages \cite{TVDRK}
       end
 !-----------------------------------------------------------------------
 
+C> This subroutine must only be called after a restart. It copies arrays
+C> that nek5000 reads from SLN files into their corresponding slots in
+C> CMTDATA. vx stores U(:,2,:), x-momentum.
+C> vy stores U(:,3,:), y-momentum.
+C> vz stores U(:,4,:), z-momentum.
+C> pr stores U(:,1,:), fluid density
+C> The T array stores U(:,5,:), fluid total energy
       subroutine cmt_flow_ics
       include 'SIZE'
       include 'CMTDATA'
