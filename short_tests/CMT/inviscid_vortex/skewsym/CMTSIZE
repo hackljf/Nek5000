@@ -34,3 +34,9 @@
       parameter (lfq=lx1*lz1*2*ldim*lelt,
      >                   heresize=(nqq+1+toteq)*lfq,
      >                   hdsize=toteq*15*lfq)
+
+! Highest polynomial order of geometry. Freestream-preserving metrics
+! in cmt_metrics will interpolate up to this order or project to it
+! for dealiasing purposes.
+      integer ngrefmax
+      parameter (ngrefmax=0) ! deformed elements don't work yet
