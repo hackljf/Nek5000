@@ -196,6 +196,56 @@ C> @}
 !-----------------------------------------------------------------------
 
 C> @{
+C> Keep chain-rule metrics as a stop-gap until cmt_metrics works on deformed
+C> elements.
+      subroutine chainrule_metrics(istp)
+      include 'SIZE'
+      include 'CMTDATA'
+      include 'DG'
+      include 'TOTAL'
+      integer f,e
+      integer ilstep
+      save    ilstep
+      data    ilstep /-1/
+
+      if (.not.ifgeom.and.ilstep.gt.1) return  ! already computed
+      if (ifgeom.and.ilstep.eq.istp)  return  ! already computed
+      ilstep = istp
+      write(6,*) 'welcome to chainrule'
+      nxz=lx1*lz1
+      nxyz=lx1*ly1*lz1
+      do j=1,lz1
+         do i=1,lx1
+            w2m1(i,j)=wxm1(i)*wzm1(j)
+         enddo
+      enddo
+      do e=1,nelt
+         if (if3d) then
+            call copy(rx(1,1,e),rxm1(1,1,1,e),nxyz)
+            call copy(rx(1,2,e),rym1(1,1,1,e),nxyz)
+            call copy(rx(1,3,e),rzm1(1,1,1,e),nxyz)
+            call copy(rx(1,4,e),sxm1(1,1,1,e),nxyz)
+            call copy(rx(1,5,e),sym1(1,1,1,e),nxyz)
+            call copy(rx(1,6,e),szm1(1,1,1,e),nxyz)
+            call copy(rx(1,7,e),txm1(1,1,1,e),nxyz)
+            call copy(rx(1,8,e),tym1(1,1,1,e),nxyz)
+            call copy(rx(1,9,e),tzm1(1,1,1,e),nxyz)
+         else
+            call copy(rx(1,1,e),rxm1(1,1,1,e),nxyz) 
+            call copy(rx(1,2,e),rym1(1,1,1,e),nxyz) 
+            call copy(rx(1,3,e),sxm1(1,1,1,e),nxyz) 
+            call copy(rx(1,4,e),sym1(1,1,1,e),nxyz) 
+         endif ! if3d
+         do f=1,2*ldim
+            call invcol3(jface(1,1,f,e),area(1,1,f,e),w2m1,nxz)
+         enddo
+      enddo
+
+      return
+      end
+C> @}
+
+C> @{
 C> compute freestream-preserving metrics \f$Ja^i\f$ for transforming fluxes
 C> \f$F\f$ to \f$\tilde{F}\f$ in a contravariant frame according to
 C> Kopriva (2006)
