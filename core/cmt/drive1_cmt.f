@@ -129,7 +129,8 @@ C> Store it in res1
       call compute_mesh_h(meshh,xm1,ym1,zm1)
       call compute_grid_h(gridh,xm1,ym1,zm1)
 
-      call cmt_metrics(istep)
+!     call cmt_metrics(istep)
+      call chainrule_metrics(istep)
 
 !     filter the conservative variables before start of each
 !     time step

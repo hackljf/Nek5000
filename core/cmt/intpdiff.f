@@ -197,12 +197,22 @@ C> @}
 
 C> @{
 C> Keep chain-rule metrics as a stop-gap until cmt_metrics works on deformed
-C> elements.
+C> elements. Also fills jface with jacobian of mesh on mesh faces, w2m1
+C> with quadrature weights, and dstrong with derivative matrix and
+C> appropriate weights for strong-form surface integrals
       subroutine chainrule_metrics(istp)
       include 'SIZE'
       include 'CMTDATA'
       include 'DG'
-      include 'TOTAL'
+      include 'WZ'
+      include 'INPUT'
+      include 'DXYZ'
+      include 'GEOM'
+      parameter (ldgmax=max(ngrefmax,lx1)) ! ngrefmax from CMTSIZE
+      parameter (ldg=ldgmax**3,lwkd=4*ldgmax*ldgmax)
+      common /dgradl/d(ldg),dt(ldg),dg(ldg),dgt(ldg),jgl(ldg),jgt(ldg)
+     > ,wkd(lwkd)
+      real jgl,jgt
       integer f,e
       integer ilstep
       save    ilstep
@@ -211,7 +221,7 @@ C> elements.
       if (.not.ifgeom.and.ilstep.gt.1) return  ! already computed
       if (ifgeom.and.ilstep.eq.istp)  return  ! already computed
       ilstep = istp
-      write(6,*) 'welcome to chainrule'
+      if (nio .eq. 0) write(6,*) 'welcome to chainrule'
       nxz=lx1*lz1
       nxyz=lx1*ly1*lz1
       do j=1,lz1
@@ -219,6 +229,18 @@ C> elements.
             w2m1(i,j)=wxm1(i)*wzm1(j)
          enddo
       enddo
+
+      wght=1.0/wxm1(1) ! MAKE SURE wxm1(lx1)=wxm1(1)!!!!
+
+      call get_dgll_ptr(ilx1,lx1,lx1)
+
+! JH060418 strong-form derivative matrix for 2-point fluxes + surface
+      call copy (dstrong,d(ilx1),lx1**2)
+      call cmult(dstrong,2.0,    lx1**2)
+      dstrong(1,1)     = 2.0*d(ilx1)         +1.0/wxm1(1)
+      dstrong(lx1,lx1) = 2.0*d(ilx1+lx1**2-1)-1.0/wxm1(lx1)
+      call transpose(dstrongt,lx1,dstrong,lx1)
+
       do e=1,nelt
          if (if3d) then
             call copy(rx(1,1,e),rxm1(1,1,1,e),nxyz)
@@ -238,6 +260,7 @@ C> elements.
          endif ! if3d
          do f=1,2*ldim
             call invcol3(jface(1,1,f,e),area(1,1,f,e),w2m1,nxz)
+            call cmult(jface(1,1,f,e),wght,nxz)
          enddo
       enddo
 
@@ -265,7 +288,7 @@ C> (when ngeo>lx1)
       include 'MASS'
       include 'CMTDATA'
 
-      parameter (ldgmax=max(ngrefmax,lx1))
+      parameter (ldgmax=max(ngrefmax,lx1)) ! ngrefmax from CMTSIZE
       parameter (ldg=ldgmax**3,lwkd=4*ldgmax*ldgmax)
       common /dgradl/d(ldg),dt(ldg),dg(ldg),dgt(ldg),jgl(ldg),jgt(ldg)
      > ,wkd(lwkd)
