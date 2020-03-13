@@ -3,7 +3,10 @@ C> @file eqnsolver_cmt.f Routines for entire terms on RHS. Mostly volume integra
 C> \ingroup diffhvol
 C> @{
 C> Volume integral for diffusive terms. Compute \f$\mathbf{H}^d\f$
-C> and store it for one element. Store faces of \f$\mathbf{H}^d\f$ for IGU. 
+C> and store it for one element, then compute the integrand
+C> \f$\mathbf{D}^{T}\mathbf{H}^d\f$ of the weak-form volume
+C> integral and store it in res1. Store faces of \f$\mathbf{H}^d\f$ 
+C> in /CMTSURFLX/ for IGU.
       subroutine viscous_cmt(e,eq)
       include  'SIZE'
       include  'CMTDATA'
@@ -171,7 +174,11 @@ C> @}
 
 C> \ingroup convhvol
 C> @{
-C> Convective volume terms formed and differentiated^T here
+C> Evaluates inviscid volume terms in two-point split form in an efficient
+C> way. Consistent (i.e. \f$F^{#}(U_{i,j,k},U_{l,j,k}),i=l\f$)
+C> flux is stored in convh for a single element, and the full flux
+C> divergence is computed in totalh and added to res1(:,:,:,e,:)
+C> for all toteq equations.
       subroutine convective_cmt(e)
 ! JH081916 convective flux divergence integrated in weak form and
 !          placed in res1.
@@ -196,10 +203,10 @@ C> element e
 !     call fluxdiv_2point_noscr(res1,totalh,e,rx(1,1,e))
 ! two-point, KEP/EC
       call fluxdiv_2point_noscr(res1,totalh,e,rx(1,1,e))
+C> @}
 
       return
       end
-C> @}
 
       subroutine fluxdiv_2point_slow(res,e,ja)
       include 'SIZE'
@@ -423,6 +430,18 @@ C> @}
 
 !-----------------------------------------------------------------------
 
+C> \ingroup convhvol
+C> @{
+C> Evaluates the two-point split form of the volume integral
+C> \f$\int v \nabla\cdot\mathbf{H}^c dV\f$ and the discontinuous surface
+C> flux \f$\oint v \mathbf{H}^c\cdot\mathbf{n} dA\f$ for the inviscid
+C> flux function in a single element. Both of these terms are added
+C> to res1 for the element \f$e\f$. The volume integrand is approximated
+C> by \f$\sum D_{il} F^{#}(z_{i,j,k},z_{l,j,k})\f$ in each of the
+C> three directions of the reference element. The two-point flux function
+C> \f$F^{#}(z_1,z_2)\f$ is taken from fluxfn.f and specified in the usr file
+C> in cmt_usr2pt. The parameter vector \f$z\f$ is stored one element at a
+C> time in /scrns/ zaux according to cmt_usrz.
       subroutine fluxdiv_2point_noscr(res,fcons,e,ja)
       include 'SIZE'
       include 'DG'
@@ -515,10 +534,15 @@ C> @}
       enddo ! ix
       enddo ! iy
       enddo ! iz
+C> @}
 
       return
       end
 
+C> \ingroup convhvol
+C> @{
+C> Computes \f$\int v \nabla\cdot\mathbf{H}^c dV\f$ in aliased strong form
+C> for element \f$e\f$, and increments res1 with it.
       subroutine fluxdiv_strong_contra(e)
 ! JH052818. Evaluate flux divergence of totalh (in contravariant basis)
 !           in strong/ultraweak form
@@ -560,6 +584,7 @@ C> @}
       call invcol2(ud,jacm1(1,1,1,e),nxyz) ! have quadrature weights
       call add2(res1(1,1,1,e,eq),ud,nxyz)
       enddo
+C> @}
 
       return
       end
