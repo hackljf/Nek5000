@@ -175,7 +175,7 @@ C> @}
 C> \ingroup convhvol
 C> @{
 C> Evaluates inviscid volume terms in two-point split form in an efficient
-C> way. Consistent (i.e. \f$F^{#}(U_{i,j,k},U_{l,j,k}),i=l\f$)
+C> way. Consistent (i.e. \f$F^{\#}(U_{i,j,k},U_{l,j,k}),i=l\f$)
 C> flux is stored in convh for a single element, and the full flux
 C> divergence is computed in totalh and added to res1(:,:,:,e,:)
 C> for all toteq equations.
@@ -437,9 +437,9 @@ C> \f$\int v \nabla\cdot\mathbf{H}^c dV\f$ and the discontinuous surface
 C> flux \f$\oint v \mathbf{H}^c\cdot\mathbf{n} dA\f$ for the inviscid
 C> flux function in a single element. Both of these terms are added
 C> to res1 for the element \f$e\f$. The volume integrand is approximated
-C> by \f$\sum D_{il} F^{#}(z_{i,j,k},z_{l,j,k})\f$ in each of the
+C> by \f$\sum D_{il} F^{\#}(z_{i,j,k},z_{l,j,k})\f$ in each of the
 C> three directions of the reference element. The two-point flux function
-C> \f$F^{#}(z_1,z_2)\f$ is taken from fluxfn.f and specified in the usr file
+C> \f$F^{\#}(z_1,z_2)\f$ is taken from fluxfn.f and specified in the usr file
 C> in cmt_usr2pt. The parameter vector \f$z\f$ is stored one element at a
 C> time in /scrns/ zaux according to cmt_usrz.
       subroutine fluxdiv_2point_noscr(res,fcons,e,ja)
