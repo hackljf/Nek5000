@@ -129,6 +129,7 @@ C> conserved variables from flow solution (dimension(toteq,lx1*lz1),intent(in))
       real um(toteq,lx1*lz1)
 C> external dirichlet state's conserved variables (dimension(toteq,lx1*lz1),intent(out))
       real up(toteq,lx1*lz1)
+
       real mach
       integer eq
 
@@ -194,6 +195,7 @@ C> external dirichlet state's conserved variables (dimension(toteq,lx1*lz1),inte
       enddo
       enddo
 
+C> @}
       return
       end
 

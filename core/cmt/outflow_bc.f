@@ -6,11 +6,20 @@ C> wrapper for other BC routines. Just one for now. More to come.
       INCLUDE 'INPUT'
       INCLUDE 'CMTBCDATA'
 
-C> face f, element e, nvar primitive variables
-      integer nvar,f,e
-C> primitive variables from flow solution in wminus, external dirichlet state in wplus.
-      real wminus(nvar,lx1*lz1),wplus(nvar,lx1*lz1),
-     >     uminus(toteq,lx1*lz1),uplus(toteq,lx1*lz1)
+C> face index from 1 to 2*ldim
+      integer f
+C> element index
+      integer e
+C> number of primitive variables
+      integer nvar ! intent(in)
+C> primitive variables from flow solution (dimension(nvar,lx1*lz1),intent(in))
+      real wminus(nvar,lx1*lz1)
+C> external dirichlet state's primitive variables (dimension(nvar,lx1*lz1),intent(out))
+      real wplus(nvar,lx1*lz1)
+C> conserved variables from flow solution (dimension(toteq,lx1*lz1),intent(in))
+      real uminus(toteq,lx1*lz1)
+C> external dirichlet state's conserved variables (dimension(toteq,lx1*lz1),intent(out))
+      real uplus(toteq,lx1*lz1)
 
       call outflow_df(f,e,wminus,wplus,uminus,uplus,nvar)
 
@@ -30,11 +39,21 @@ C> Hartmann & Houston (2006). A poor default.
       include 'NEKUSE'
       include 'CMTDATA'
 
-C> face f, element e, nvar primitive variables
-      integer f,e,nvar ! intent(in)
-C> primitive variables from flow solution in wm, external dirichlet state in wp.
-      real wm(nvar,lx1*lz1),wp(nvar,lx1*lz1),
-     >     um(toteq,lx1*lz1),up(toteq,lx1*lz1)
+C> face index from 1 to 2*ldim
+      integer f
+C> element index
+      integer e
+C> number of primitive variables
+      integer nvar ! intent(in)
+C> primitive variables from flow solution (dimension(nvar,lx1*lz1),intent(in))
+      real wm(nvar,lx1*lz1)
+C> external dirichlet state's primitive variables (dimension(nvar,lx1*lz1),intent(out))
+      real wp(nvar,lx1*lz1)
+C> conserved variables from flow solution (dimension(toteq,lx1*lz1),intent(in))
+      real um(toteq,lx1*lz1)
+C> external dirichlet state's conserved variables (dimension(toteq,lx1*lz1),intent(out))
+      real up(toteq,lx1*lz1)
+
       real mach
       integer eq
 
@@ -98,6 +117,7 @@ C> primitive variables from flow solution in wm, external dirichlet state in wp.
       enddo
       enddo
 
+C> @}
       return
       end
 
