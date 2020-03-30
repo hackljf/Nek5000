@@ -147,12 +147,16 @@ C> \f$U_{\mbox{ivar}}\f$. Wraps full2face_cmt for each element; a single
 C> call to full2face with \f$U\f$ will not work because element varies
 C> with the outermost index of the u array.
       subroutine faceu(ivar,yourface)
-! get faces of conserved variables stored contiguously
       include 'SIZE'
       include 'CMTDATA'
       include 'DG'
-      integer e
+
+C> index of variable within U. ivar=1 for \f$\phi\rho\f$, ivar=2-4 for \f$\phi\rho\u_i\f$, etc.
+      integer ivar
+C> contiguous pile of faces for the \f$ivar^{th}\f$ conserved variable. (dimension(lx1,lz1,2*ldim,nelt), intent(out))
       real yourface(lx1,lz1,2*ldim,nelt)
+
+      integer e
 
       do e=1,nelt
          call full2face_cmt(1,lx1,ly1,lz1,iface_flux(1,e),
@@ -172,11 +176,16 @@ C> jvar in wminus
       include 'SIZE'
       include 'DG'
 
-      integer jvar! intent(in)
-      real field(lx1,ly1,lz1,nelt)! intent(in)
-!     real, intent(out)wminus(7,lx1*lz1*2*ldim*nelt) ! gs_op no worky
-      real wminus(lx1*lz1*2*ldim*nelt,*)! intent(out)
+C> index within wminus where field array at points lying on faces will be stored (intent(in))
+      integer jvar
+C> full array of values at each GLL point in all elements (intent(in), dimension(lx1,ly1,lz1,nelt))
+      real field(lx1,ly1,lz1,nelt)
+C> contiguous storage for multiple fields at all GLL nodes lying on faces of each element (intent(out), dimension(lx1*lz1*2*ldim*nelt,*))
+      real wminus(lx1*lz1*2*ldim*nelt,*)
+C> contiguous scratch array for a single field at all GLL nodes lying on faces of each element (intent(out), dimension(lx1*lz1*2*ldim*nelt))
       real yourface(lx1*lz1*2*ldim*nelt)
+
+!     real, intent(out)wminus(7,lx1*lz1*2*ldim*nelt) ! gs_op no worky
       integer e,f
 
       call full2face_cmt(nelt,lx1,ly1,lz1,iface_flux,yourface,field)
@@ -201,7 +210,13 @@ C> Replaces \f$mine\f$ with \f$\{\{mine\}\}\f$.
 !          mine: starting parameter vector of nstate quantities,
 !                quantity outermost, on piles of faces with nf points
 
-      integer handle,nf,nstate ! intent(in)
+C> integer handle for gs_op. needs to be set by fgslib_gs_setup call in setup_cmt_gs call (intent(in))
+      integer handle
+C> Total number of face points on all faces in the domain. (intent(in), but should always be lx1*lz1*2*ldim*nelt)
+      integer nf
+C> Number of distinct fields whose averages between neighboring elements are to be computed and stored at face points (intent(in))
+      integer nstate 
+C> Buffer, but should be some large array within /CMTSURFLX/ (real, intent(inout))
       real mine(*)
 
       ntot=nf*nstate
@@ -235,8 +250,16 @@ C> face into ``yours.''
 !          ordering of state variables. I want variable innermost, not
 !          grid point.
 
-      integer handle,nf,nstate ! intent(in)
-      real yours(*),mine(*)
+C> integer handle for gs_op. needs to be set by fgslib_gs_setup call in setup_cmt_gs call (intent(in))
+      integer handle
+C> Total number of face points on all faces in the domain. (intent(in), but should always be lx1*lz1*2*ldim*nelt)
+      integer nf
+C> Number of distinct fields whose copies are to be transfered between neighboring elements (intent(in))
+      integer nstate 
+C> Buffer storing interior states \f$v^-\f$ in /CMTSURFLX/ (real, intent(in))
+      real mine(*)
+C> Buffer storing exterior/neighbor states \f$v^+\f$ in /CMTSURFLX/ (real, intent(out))
+      real yours(*)
 
       ntot=nf*nstate
       call copy(yours,mine,ntot)
@@ -253,12 +276,21 @@ C> @}
 
       subroutine avg_and_jump(avg,jump,scratch,nf,nstate,handle)
 
-! JH011419 Get the most out of every gs_op. pile of faces of U in avg
-!          gets overwritten by {{U}}. jump gets [[U]].
+! JH011419 Get the most out of every gs_op. pile of faces of \f$v^-\f$ in avg
+!          gets overwritten by \f$\{\{v\}\}\f$. jump gets filled with \f$\[\[v\]\]\f$.
 
-      integer handle,nf,nstate ! intent(in)
-      real avg(*) !, intent(inout) ! U- on input, {{U}} on output
-      real jump(*),scratch(*) !, intent(out) ! jump becomes [[U]]
+C> integer handle for gs_op. needs to be set by fgslib_gs_setup call in setup_cmt_gs call (intent(in))
+      integer handle
+C> Total number of face points on all faces in the domain. (intent(in), but should always be lx1*lz1*2*ldim*nelt)
+      integer nf
+C> Number of distinct fields whose copies are to be transfered between neighboring elements (intent(in))
+      integer nstate 
+C> Real buffer (intent(inout)) \f$v^-\f$ on input,\f$\{\{v\}\}\f$ on output
+      real avg(*)
+C> Real buffer (intent(out)) \f$v^-\f$ on input,\f$\[\[v\]\]\f$ on output
+      real jump(*)
+C> Real scratch (intent(out))
+      real scratch(*)
 
       ntot=nf*nstate
       call copy(scratch,avg,ntot)
@@ -272,6 +304,8 @@ C> @}
       call cmult(scratch,0.5,ntot)
       call copy(avg,scratch,ntot) ! avg={{scratch}}
       return
+C> @}
+
       end
 
 !-----------------------------------------------------------------------

@@ -91,7 +91,11 @@ C> Determining rind state for Dirichlet boundary conditions
 
 ! stabilization flux
             call sequential_flux(flx,wminus,wplus,uminus,uplus,jaminus,
-     >                           japlus,llf_euler,toteq,nxz)
+     >                           japlus,llf_euler,nparm,nxz)
+! BAD032x20 HUGE bugfix. wminus through japlus MUST be refilled completely
+!           for sequential flux to redimension innermost index from nparm
+!           to toteq
+!    >                           japlus,llf_euler,toteq,nxz)
             do eq=1,toteq
             do i=1,nxz
             flux(i,f,e,eq)=flux(i,f,e,eq)+flx(eq,i)*jface(i,1,f,e)
