@@ -189,7 +189,8 @@ C> for all toteq equations.
       include 'CMTDATA'
       include 'GEOM'
 C> element e
-      integer e,eq
+      integer e
+      integer eq
 
       n=3*lx1*ly1*lz1*toteq
 
@@ -589,11 +590,11 @@ C> @}
       return
       end
 
+C> \ingroup convhvol
+C> @{
+C> Evaluates consistent (i.e. \f$F^{\#}(U_{i,j,k},U_{l,j,k}),i=l\f$)
+C> flux function at all GLL nodes and stores it in convh.
       subroutine evaluate_aliased_conv_h(e)
-! JH082418 Unstable. not long for this world
-! computed as products between primitive variables and conserved variables.
-! if you want to write rho u_i u_j as (rho u_i) (rho u_j) (rho^{-1}), this
-! is the place to do it
       include  'SIZE'
       include  'SOLN'
       include  'DEALIAS'
@@ -603,7 +604,9 @@ C> @}
       parameter (ldd=lx1*ly1*lz1)
       common /ctmp1/ ju(ldd),jv(ldd)!,ur(ldd),us(ldd),ud(ldd),tu(ldd)
       real ju,jv
-      integer  e,eq
+C> integer index of the element
+      integer e
+      integer eq
 
       n=lx1*ly1*lz1
 
@@ -634,9 +637,9 @@ C> @}
       call col2(convh(1,2,eq),vy(1,1,1,e),n)
       if (if3d) call col2(convh(1,3,eq),vz(1,1,1,e),n)
 
+C> @}
       return
       end
-C> @}
 
 C> \ingroup convhvol
 C> @{
@@ -703,10 +706,9 @@ C> \f$(\nabla v)\cdot \mathbf{H}^c=\mathcal{I}^{\intercal}\mathbf{D}^{\intercal}
       call sub2(res1(1,1,1,e,eq),tu,nxyz)
       enddo ! toteq
 
+C> @}
       return
       end
-
-C> @}
 
 !-----------------------------------------------------------------------
 
@@ -772,14 +774,21 @@ C> @}
 
 !-----------------------------------------------------------------------
 
+C> \ingroup convhvol
+C> @{
+C> Transforms consistent (i.e. \f$F^{\#}(U_{i,j,k},U_{l,j,k}),i=l\f$)
+C> flux for one conserved variable to the contravariant frame.
       subroutine contravariant_flux(frst,fxyz,ja,nel)
       include 'SIZE'
-      integer e
+C> Metrics for the nel elements (intent(in))
       real ja(nx1*ny1*nz1,ldim*ldim,nel)
+C> Spatial vector of contravariant flux for one variable, nel elements (intent(out))
       real frst(nx1*ny1*nz1,ldim,nel)
+C> Spatial vector of physical flux for one variable, nel elements (intent(in))
       real fxyz(nx1*ny1*nz1,ldim,nel)
       parameter (l11=lx1*ly1*lz1)
       common /ctmp1/ ftmp(l11,ldim)
+      integer e
 ! JH082418 transform to reference element via contravariant metrics
 
       nxyz=lx1*ly1*lz1
@@ -796,6 +805,7 @@ C> @}
          call copy(frst(1,1,e),ftmp,nxyz3)
       enddo
 
+C> @}
       return
       end
 

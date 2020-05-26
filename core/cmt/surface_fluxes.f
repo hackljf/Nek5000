@@ -2,7 +2,9 @@ C> @file surface_fluxes.f Routines for surface terms on RHS.
 
 C> \ingroup isurf
 C> @{
-C> overwrite beginning of /CMTSURFLX/ with -[[U]] for viscous terms
+C> overwrite beginning of /CMTSURFLX/ with \f$-\[\[\mathbf{U}\]\]\f$ for
+C> flux of auxiliary variable in the viscous flux of Bassi and Rebay
+C> computed in br1auxflux.
       subroutine fillujumpu
 !-----------------------------------------------------------------------
 ! JH091319 Yes, I know things like llf_euler already did this, but
@@ -49,16 +51,16 @@ C> @}
       return
       end
 
-C> \ingroup isurf
-C> @{
-C> Restrict and copy face data and compute inviscid numerical flux 
-C> \f$\oint \mathbf{H}^{c\ast}\cdot\mathbf{n}dA\f$ on face points
 !     subroutine fluxes_full_field(fstab,parameter_vector,fsharp)
 ! still not sure how to abstract these three functions out
 !     subroutine fluxes_full_field_kepec
 !     iwp =iwm+(nstate-1)*nfq  ! you're going to try to be clever later
 !     iflx=iwm+nstate*nfq
-
+C> \ingroup isurf
+C> @{
+C> Restrict and copy face data and compute inviscid numerical flux 
+C> \f$\oint \mathbf{H}^{c\ast}\cdot\mathbf{n}dA\f$ on face points.
+C> This particular wrapper is for the symmetric flux of Kennedy and Gruber.
       subroutine fluxes_full_field_kg
 !-----------------------------------------------------------------------
 ! JH041419 Kennedy and Gruber (2008) split form adapted to DGSEM and
@@ -96,8 +98,8 @@ C> store it before phi, which lives at jph=nqq
 ! until we can verify correct multiphase two-point fluxes
 !     call faceu(1,fatface(iwm+nfq*(jrhof-1)))
 
-C> stabilization first
-C> LLF for equations 1 through 4 (mass & momentum)
+C> Stabilization first.
+C> Local Lax Friedrichs for equations 1 through 4 (mass & momentum)
       call fillq(jux, vx,    fatface(iwm),fatface(iwp))
       call fillq(juy, vy,    fatface(iwm),fatface(iwp))
       call fillq(juz, vz,    fatface(iwm),fatface(iwp))
@@ -107,20 +109,22 @@ C> LLF for equations 1 through 4 (mass & momentum)
       call llf_euler_vec(fatface(iwm),fatface(iwp),fatface(iflx),nstate)
 
       call fillq(jpr, pr,    fatface(iwm),fatface(iwp))
+
 C> ONLY needed by Kennedy-Gruber (2008) as written. This is done in fstab
 C> for Chandrashekar (2013), but overwrites jsnd for KG and friends.
       call fillq(jrhof,vtrans,fatface(iwm),fatface(iwp))
-C> q- -> z-. Kennedy-Gruber, Pirozzoli, and most energy-
-C>           conserving fluxes have z=q, so I just divide total energy by
-C>           U1 here since Kennedy-Gruber needs E
 
+C> \f$\mathbf{q}^- \rightarrow \mathbf{z}^-\f$. Kennedy-Gruber, Pirozzoli, and most energy-
+C> conserving fluxes have \f$\mathbf{z}=\mathbf{q}\f$, so I just divide total energy by
+C> \f$U_1\f$ here since Kennedy-Gruber needs \f$E\f$.
       call rhoe_to_e(fatface(iwm),nfq,nstate)
 
-C> z- -> z^, which is {{z}} for Kennedy-Gruber, Pirozzoli, and some parts
+C> \f$\mathbf{z}^- \rightarrow \hat{z}^-\f$, which is  
+C> \f$\{\{\mathbf{z}\}\}\f$ for Kennedy-Gruber, Pirozzoli, and some parts
 C>           of other energy-conserving fluxes.
       call dg_face_avg(fatface(iwm),nfq,nstate,dg_hndl)
 
-C> z^ -> F#. Some parameter-vector stuff can go here too as long as it's all
+C> \f$\hat{z} \rightarrow F^{\#}\f$. Some parameter-vector stuff can go here too as long as it's all
 C>           local to a given element.
       call kennedygruber_vec(fatface(iwm),fatface(iflx),nstate,toteq)
 
@@ -130,7 +134,7 @@ C>           local to a given element.
 !        i_cvars=i_cvars+nfq
 !     enddo
 
-C> Now do all fluxes for all boundaries, both F# and stabilized
+C> Now do all fluxes for all boundaries, both \f$F^{\#}\f$ and stabilized
       call InviscidBC(fatface(iflx))
 C> @}
 
@@ -274,10 +278,11 @@ C> @}
 
 !-----------------------------------------------------------------------
 
+C> \ingroup isurf
+C> @{
+C> Overwrites \f$w^-\f$ at interior face points stored in avg
+C> with \f$\{\{w\}\}\f$. jump gets filled with \f$\[\[w\]\]\f$.
       subroutine avg_and_jump(avg,jump,scratch,nf,nstate,handle)
-
-! JH011419 Get the most out of every gs_op. pile of faces of \f$v^-\f$ in avg
-!          gets overwritten by \f$\{\{v\}\}\f$. jump gets filled with \f$\[\[v\]\]\f$.
 
 C> integer handle for gs_op. needs to be set by fgslib_gs_setup call in setup_cmt_gs call (intent(in))
       integer handle
@@ -285,9 +290,9 @@ C> Total number of face points on all faces in the domain. (intent(in), but shou
       integer nf
 C> Number of distinct fields whose copies are to be transfered between neighboring elements (intent(in))
       integer nstate 
-C> Real buffer (intent(inout)) \f$v^-\f$ on input,\f$\{\{v\}\}\f$ on output
+C> Real buffer (intent(inout)) \f$w^-\f$ on input,\f$\{\{w\}\}\f$ on output
       real avg(*)
-C> Real buffer (intent(out)) \f$v^-\f$ on input,\f$\[\[v\]\]\f$ on output
+C> Real buffer (intent(out)) \f$w^-\f$ on input,\f$\[\[w\]\]\f$ on output
       real jump(*)
 C> Real scratch (intent(out))
       real scratch(*)
@@ -323,17 +328,36 @@ C> @}
 
 !-------------------------------------------------------------------------------
 
+C> \ingroup flux
+C> @{
+C> Calls two-point external fluxfunction \f$F^{\#}(U^-,U^+)\f$ at npt points 
+C> Mostly intended to allow quantity-innermost volume flux
+C> functions to be used where needed for surface fluxes at boundary points,
+C> after *bc routines provide Dirichlet ``rind'' states in wplus and uplus.
       subroutine sequential_flux(flux,wminus,wplus,uminus,uplus,
      >                           jaminus,japlus,
      >                           fluxfunction,nstate,npt)
-! Calls two-point flux functions one point at a time for npt points for which both
-! points are given. Mostly intended to allow quantity-innermost volume flux
-! functions to be used where needed for boundary points too, after *bc routines
-! provide Dirichlet ``rind'' states in wplus and uplus.
       include 'SIZE'
       include 'CMTSIZE'
-      real flux(toteq,npt),wminus(nstate,npt),wplus(nstate,npt),
-     >   jaminus(3,npt),japlus(3,npt),uminus(toteq,npt),uplus(toteq,npt)
+C> Real (intent(out)) \f$F^{\#}(U^-,U^+)\f$ on output
+      real flux(toteq,npt)
+C> Real (intent(in)) Primitive variables at one point.
+C> Usually \f$w^-\f$ at interior nodes
+      real wminus(nstate,npt)
+C> Real (intent(in)) Primitive variables at the other point.
+C> Usually \f$w^+\f$ at rind state or nodes of neighboring element
+      real wplus(nstate,npt)
+C> Real (intent(in)) Mesh metrics at one point.
+      real jaminus(3,npt)
+C> Real (intent(in)) Mesh metrics at the other point.
+      real japlus(3,npt)
+C> Real (intent(in)) Conserved variables one point.
+C> Usually \f$U^-\f$ at interior nodes.
+      real uminus(toteq,npt)
+C> Real (intent(in)) Conserved variables at the other point.
+C> Usually \f$U^+\f$ at rind state or nodes of neighboring element
+      real uplus(toteq,npt)
+C> External subroutine for \f$F^{\#}\f$. See fluxfn.f
       external fluxfunction
 
       do i=1,npt

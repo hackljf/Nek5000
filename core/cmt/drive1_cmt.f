@@ -5,6 +5,7 @@ C> \defgroup diffhvol Volume integral for viscous fluxes
 C> \defgroup vfjac Jacobians for viscous fluxes
 C> \defgroup isurf Inviscid surface terms
 C> \defgroup vsurf Viscous surface terms
+C> \defgroup flux Flux functions and wrappers
 C> \defgroup faceops utility functions for manipulating face data
 C> \defgroup twopoint structure for symmetric flux functions in split forms
 C> \defgroup initialconds flow field initialization routines 
