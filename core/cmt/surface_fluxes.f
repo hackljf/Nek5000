@@ -2,7 +2,7 @@ C> @file surface_fluxes.f Routines for surface terms on RHS.
 
 C> \ingroup isurf
 C> @{
-C> overwrite beginning of /CMTSURFLX/ with \f$-\[\[\mathbf{U}\]\]\f$ for
+C> overwrite beginning of /CMTSURFLX/ with \f$-[[\mathbf{U}]]\f$ for
 C> flux of auxiliary variable in the viscous flux of Bassi and Rebay
 C> computed in br1auxflux.
       subroutine fillujumpu
@@ -155,7 +155,7 @@ C> with the outermost index of the u array.
       include 'CMTDATA'
       include 'DG'
 
-C> index of variable within U. ivar=1 for \f$\phi\rho\f$, ivar=2-4 for \f$\phi\rho\u_i\f$, etc.
+C> index of variable within U. ivar=1 for \f$\phi\rho\f$, ivar=2-4 for \f$\phi\rho u_i\f$, etc.
       integer ivar
 C> contiguous pile of faces for the \f$ivar^{th}\f$ conserved variable. (dimension(lx1,lz1,2*ldim,nelt), intent(out))
       real yourface(lx1,lz1,2*ldim,nelt)
@@ -281,7 +281,7 @@ C> @}
 C> \ingroup isurf
 C> @{
 C> Overwrites \f$w^-\f$ at interior face points stored in avg
-C> with \f$\{\{w\}\}\f$. jump gets filled with \f$\[\[w\]\]\f$.
+C> with \f$\{\{w\}\}\f$. jump gets filled with \f$[[w]]\f$.
       subroutine avg_and_jump(avg,jump,scratch,nf,nstate,handle)
 
 C> integer handle for gs_op. needs to be set by fgslib_gs_setup call in setup_cmt_gs call (intent(in))
@@ -292,7 +292,7 @@ C> Number of distinct fields whose copies are to be transfered between neighbori
       integer nstate 
 C> Real buffer (intent(inout)) \f$w^-\f$ on input,\f$\{\{w\}\}\f$ on output
       real avg(*)
-C> Real buffer (intent(out)) \f$w^-\f$ on input,\f$\[\[w\]\]\f$ on output
+C> Real buffer (intent(out)) \f$w^-\f$ on input,\f$[[w]]\f$ on output
       real jump(*)
 C> Real scratch (intent(out))
       real scratch(*)
