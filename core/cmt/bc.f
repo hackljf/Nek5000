@@ -224,6 +224,9 @@ C> @}
       return
       end
 
+C> \ingroup bcond
+C> @{
+C> computes boundary flux for adiabatic wall in igu
       subroutine a5adiabatic_wall(eflx,f,e,dU,wstate)
       include 'SIZE'
       include 'INPUT'
@@ -249,13 +252,16 @@ C> @}
          call a53dUadia(flxscr,f,e,dU,wstate)
          call add2col2(eflx(1,f,e),flxsxcr,unz(1,1,f,e),nxz)
       endif
+C> @}
       return
       end
 
+C> \ingroup bcond
+C> @{
+C> same as A51 for volume flux (x-direction viscous flux of energy, but
+C> 1. uses wstate for contiguous storage of data on faces.
+C> 2. locally sets K=0 to prevent heat transfer through adiabatic walls
       subroutine a51dUadia(flux,f,ie,dU,wstate)
-! same as A51 for volume flux, but
-! 1. uses surface storage of quantities in wstate <-qminus (intent(in))
-! 2. SETS K=0. ADIABATIC WALLS HAVE VISCOUS HEATING, BUT DON'T CONDUCT
       include 'SIZE'
       include 'CMTDATA'
       real wstate(lx1*lz1,2*ldim,nelt,nqq)
@@ -299,13 +305,16 @@ C> @}
      3   *u1*u2*dU1y+(K*u3**2-cv*mu*u3**2+K*u2**2-cv*mu*u2**2-cv*la
      4   mbda*u1**2+K*u1**2-2*cv*mu*u1**2-E*K)*dU1x)/(cv*rho)
       enddo
+C> @}
       return
       end
 
+C> \ingroup bcond
+C> @{
+C> same as A51 for volume flux (y-direction viscous flux of energy, but
+C> 1. uses wstate for contiguous storage of data on faces.
+C> 2. locally sets K=0 to prevent heat transfer through adiabatic walls
       subroutine a52dUadia(flux,f,ie,dU,wstate)
-! same as A52 for volume flux, but
-! 1. uses surface storage of quantities in wstate <-qminus (intent(in))
-! 2. SETS K=0. ADIABATIC WALLS HAVE VISCOUS HEATING, BUT DON'T CONDUCT
       include 'SIZE'
       include 'CMTDATA'
       real wstate(lx1*lz1,2*ldim,nelt,nqq)
@@ -349,13 +358,16 @@ C> @}
      3   *u3**2-cv*lambda*u2**2+K*u2**2-2*cv*mu*u2**2+K*u1**2-cv*mu*
      4   u1**2-E*K)*dU1y-cv*lambdamu*u1*u2*dU1x)/(cv*rho)
       enddo
+C> @}
       return
       end
 
+C> \ingroup bcond
+C> @{
+C> same as A51 for volume flux (z-direction viscous flux of energy, but
+C> 1. uses wstate for contiguous storage of data on faces.
+C> 2. locally sets K=0 to prevent heat transfer through adiabatic walls
       subroutine a53dUadia(flux,f,ie,dU,wstate)
-! same as A53 for volume flux, but
-! 1. uses surface storage of quantities in wstate <-qminus (intent(in))
-! 2. SETS K=0. ADIABATIC WALLS HAVE VISCOUS HEATING, BUT DON'T CONDUCT
       include 'SIZE'
       include 'CMTDATA'
       real wstate(lx1*lz1,2*ldim,nelt,nqq)
@@ -399,5 +411,6 @@ C> @}
      3   K*u2**2*dU1z-cv*mu*u2**2*dU1z+K*u1**2*dU1z-cv*mu*u1**2*dU1z-c
      4   _v*(lambda+mu)*u2*u3*dU1y-cv*(lambda+mu)*u1*u3*dU1x)/(cv*rho)
       enddo
+C> @}
       return
       end
