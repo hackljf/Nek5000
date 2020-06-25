@@ -2,11 +2,7 @@ C> @file eqnsolver_cmt.f Routines for entire terms on RHS. Mostly volume integra
 
 C> \ingroup diffhvol
 C> @{
-C> Volume integral for diffusive terms. Compute \f$\mathbf{H}^d\f$
-C> and store it for one element, then compute the integrand
-C> \f$\mathbf{D}^{T}\mathbf{H}^d\f$ of the weak-form volume
-C> integral and store it in res1. Store faces of \f$\mathbf{H}^d\f$ 
-C> in /CMTSURFLX/ for IGU.
+C> Volume integral for diffusive terms.
       subroutine viscous_cmt(e,eq)
       include  'SIZE'
       include  'CMTDATA'
@@ -32,14 +28,20 @@ C> in /CMTSURFLX/ for IGU.
 
       call rzero(diffh,3*nxyz)
 
+C> Compute \f$\mathbf{H}^d=A\nablaU\f$ and store it in diffh for element \f$e\f$.
       call agradu(diffh,gradu,e,eq)
 
 ! FIND OUT IF YOU NEED TO COMPUTE {{Hd.n}}
 !     call diffh2gradu(e,eq,graduf)
 ! OR IF YOU NEED TO COMPUTE {{Hd}}.n
+C> Store faces of \f$\mathbf{H}^d\f$ 
+C> in /CMTSURFLX/ for \f$\mathbf{I}_{GU}\f$ or BR1.
       call diffh2face(e,eq,graduf)  ! on faces {{Hd}} after element loop
 
 ! volume integral involving "DG-ish" stiffness operator K
+C> Compute the integrand
+C> \f$\mathbf{D}^{T}\mathbf{H}^d\f$ of the weak-form volume
+C> integral and store it in res1.
       call half_iku_cmt(res1(1,1,1,e,eq),diffh,e)
 
 C> @}
@@ -174,11 +176,8 @@ C> @}
 
 C> \ingroup convhvol
 C> @{
-C> Evaluates inviscid volume terms in two-point split form in an efficient
-C> way. Consistent (i.e. \f$F^{\#}(U_{i,j,k},U_{l,j,k}),i=l\f$)
-C> flux is stored in convh for a single element, and the full flux
-C> divergence is computed in totalh and added to res1(:,:,:,e,:)
-C> for all toteq equations.
+C> Evaluates inviscid volume terms for all toteq equations in two-point split form
+C> and adds them to res1(:,:,:,e,:).
       subroutine convective_cmt(e)
 ! JH081916 convective flux divergence integrated in weak form and
 !          placed in res1.
@@ -195,7 +194,10 @@ C> element e
       n=3*lx1*ly1*lz1*toteq
 
       call rzero(convh,n)
+C> Consistent flux (i.e. \f$F^{\#}(U_{i,j,k},U_{l,j,k}),i=l\f$)
+C> is computed by evaluate_aliased_conv_h and stored in convh for a single element.
       call evaluate_aliased_conv_h(e)
+C> Transform the consistent flux to the contravariant frame in the reference element.
       do eq=1,toteq
       call contravariant_flux(totalh(1,1,eq),convh(1,1,eq),rx(1,1,e),1)
       enddo
@@ -203,6 +205,9 @@ C> element e
 !     call fluxdiv_2point_scr(res1,totalh,e,rx(1,1,e))
 !     call fluxdiv_2point_noscr(res1,totalh,e,rx(1,1,e))
 ! two-point, KEP/EC
+C> Compute the flux divergence in 2-point form using the flux function
+C> defined in cmt_usrflx and the consistent contravariant flux stored in convh.
+C> store it in totalh and add it to res1(:,:,:,e,:)
       call fluxdiv_2point_noscr(res1,totalh,e,rx(1,1,e))
 C> @}
 
@@ -436,13 +441,7 @@ C> @{
 C> Evaluates the two-point split form of the volume integral
 C> \f$\int v \nabla\cdot\mathbf{H}^c dV\f$ and the discontinuous surface
 C> flux \f$\oint v \mathbf{H}^c\cdot\mathbf{n} dA\f$ for the inviscid
-C> flux function in a single element. Both of these terms are added
-C> to res1 for the element \f$e\f$. The volume integrand is approximated
-C> by \f$\sum D_{il} F^{\#}(z_{i,j,k},z_{l,j,k})\f$ in each of the
-C> three directions of the reference element. The two-point flux function
-C> \f$F^{\#}(z_1,z_2)\f$ is taken from fluxfn.f and specified in the usr file
-C> in cmt_usr2pt. The parameter vector \f$z\f$ is stored one element at a
-C> time in /scrns/ zaux according to cmt_usrz.
+C> flux function in a single element.
       subroutine fluxdiv_2point_noscr(res,fcons,e,ja)
       include 'SIZE'
       include 'DG'
@@ -467,7 +466,18 @@ C> time in /scrns/ zaux according to cmt_usrz.
      >              ,rhsscr(lx1,toteq)
       real zaux,ut,zauxt,jat,rhsscr
       real flx(5)
+C> Both \f$\int v \nabla\cdot\mathbf{H}^c dV\f$ and 
+C> flux \f$\oint v \mathbf{H}^c\cdot\mathbf{n} dA\f$ for the inviscid
+C> flux are added to res1 for the element \f$e\f$.
+C> The volume integrand is approximated
+C> by \f$\sum D_{il} F^{\#}(z_{i,j,k},z_{l,j,k})\f$ in each of the
+C> ndim directions of the reference element. The two-point flux function
+C> \f$F^{\#}(z_1,z_2)\f$ is taken from fluxfn.f and specified in the usr file
+C> in cmt_usr2pt.
 
+C> The parameter vector \f$z\f$ is computed from primitive variables in element
+C> \f$e\f$ of SOLN and stored one element at a time in /scrns/ zaux according
+C> to cmt_usrz.  \f$U\f$ is transposed and stored for element \f$e\f$ in ut.
       call cmt_usrz(zaux,zauxt,ut,e,nparm)
 
       call rzero(jat,9*lx1*ly1*lz1)

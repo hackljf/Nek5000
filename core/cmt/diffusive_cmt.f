@@ -376,6 +376,11 @@ C> the compressible Navier-Stokes equations (NS).
 
 !-----------------------------------------------------------------------
 
+C> \ingroup diffhvol
+C> @{
+C> Compute the integrand
+C> \f$\mathbf{D}^{T}\mathbf{H}^d\f$ of the weak-form volume
+C> integral and store it in res1.
       subroutine half_iku_cmt(res,diffh,e)
       include 'SIZE'
       include 'MASS'
@@ -390,27 +395,32 @@ C> the compressible Navier-Stokes equations (NS).
       n=lx1*ly1*lz1
       call rzero(rscr,n)
 
-! M
+C> \f$\mathbf{M}\mathbf{H}^d\f$ in diffh
       do j=1,ldim
          call col2(diffh(1,j),bm1(1,1,1,e),n)
 !        call col2(diffh(1,j),phig(1,1,1,e),n) ! still no idea where phi goes
       enddo
 
 !     const=-1.0 ! I0
-! D^T M
+C> \f$\mathbf{D}^{T}\mathbf{M}\mathbf{H}^d\f$ in rscr for element \f$e\f$.
       const=1.0  ! *-1 in time march
       call gradm11_t_contra(rscr,diffh,const,e)
-! M^{-1}D^T M
+C> \f$\mathbf{M}^{-1}\mathbf{D}^{T}\mathbf{M}\mathbf{H}^d\f$ in rscr for element \f$e\f$.
       call invcol2(rscr,bm1(1,1,1,e),n)
+C> add rscr to res
       call add2(res,rscr,n)
 
+C> @}
       return
       end
 
 !-----------------------------------------------------------------------
 
+C> \ingroup vfjac
+C> @{
+C> Fill vdiff with transport properties. Hardcoded indices for Navier-Stokes
+C> Used for both artificial and physical viscosities.
       subroutine compute_transport_props
-! get vdiff props
 ! viscosity in jmu
 ! second viscosity in ilam; second viscosity is usually -2/3mu
 ! but we refuse to assume Stokes' hypothesis for the user
@@ -443,6 +453,7 @@ C> the compressible Navier-Stokes equations (NS).
          enddo
       enddo
 
+C> @}
       return
       end
 
