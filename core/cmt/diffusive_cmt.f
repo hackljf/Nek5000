@@ -6,13 +6,8 @@ C> Some surface. Some volume. All pain. Jacobians and other factorizations.
 C> \ingroup vsurf
 C> @{
 C> add BR1 auxiliary flux \f$\frac{1}{2}\left(\mathbf{U}^+-\mathbf{U}^-\right)\f$
-C> to viscous flux in diffh
+C> to the gradient for a single element
       subroutine br1auxflux(e,flux,ujump)
-! JH091319 CHECK IF THIS IS FREESTREAM-PRESERVING!!!
-!     include 'CMTDATA'
-! JH091819 REWRITE TO USE JFACE AND WXM1 INSTEAD OF indexing 3D arrays
-!          with facind!!!! Try removing jacmi from compute_gradients_contra
-!          and multiplying gradu by it just before viscous_cmt
       include 'SIZE'
       include 'INPUT' ! if3d
       include 'GEOM'  ! for unx (and area in oldcode)
@@ -20,13 +15,28 @@ C> to viscous flux in diffh
       include 'DG'
       include 'WZ'
       include 'MASS'
+! TODO This is written for auxiliary variable S=\grad U. Write/flag a version
+! where S=H^{(d)-}=A\gradU i.e. viscous flux is computed earlier, stored in
+! diffh, and used instead
 
+C> Indexes the element inside ujump, GEOM and DG (intent(in))
       integer e
-      real ujump(lx1*lz1*2*ldim,nelt),
-     >     flux(lx1*ly1*lz1,ldim)
+C> Jump in a single conserved variable \f$\left[\left[U\right]\right]\f$
+C> on all faces of all elements (intent(in))
+      real ujump(lx1*lz1*2*ldim,nelt)
+!! On entry: flux \f$\mathbf{H}^{(d)-}\f$ of a single conserved variable.
+C> On entry: gradient \f$\partial U_i^{-}/\partial x_k\f$ of a single conserved variable.
+C> On exit: all three components of auxiliary variable \f$\mathbf{S}\f$
+C> of a single conserved variable. (intent(inout))
+      real flux(lx1*ly1*lz1,ldim)
       integer f,i,k,nxz,nface
       common /scrns/ facepile(lx1*lz1,2*ldim),facen(lx1*lz1,2*ldim)
       real facepile,facen
+! JH091319 CHECK IF THIS IS FREESTREAM-PRESERVING!!!
+!     include 'CMTDATA'
+! JH091819 REWRITE TO USE JFACE AND WXM1 INSTEAD OF indexing 3D arrays
+!          with facind!!!! Try removing jacmi from compute_gradients_contra
+!          and multiplying gradu by it just before viscous_cmt
 
       nface = 2*ldim
       nxz   = lx1*lz1
@@ -91,9 +101,12 @@ C> ummcu = \f$\mathbf{U}^--\{\{\mathbf{U}\}\}\f$
       include 'SIZE'
       include 'CMTSIZE'
 
-      real ummcu (lx1*lz1*2*ldim*nelt,toteq) ! intent(out)
-      real uminus(lx1*lz1*2*ldim*nelt,toteq) ! intent(in)
-      real uplus (lx1*lz1*2*ldim*nelt,toteq) ! intent(in)
+C> ummcu = \f$\mathbf{U}^--\{\{\mathbf{U}\}\}\f$ for all faces (intent(out))
+      real ummcu (lx1*lz1*2*ldim*nelt,toteq)
+C> \f$\mathbf{U}^-\f$ for all faces on all elements (intent(in))
+      real uminus(lx1*lz1*2*ldim*nelt,toteq)
+C> Neighbor values \f$\mathbf{U}^+\f$ for all faces on all elements (intent(in))
+      real uplus (lx1*lz1*2*ldim*nelt,toteq)
       integer ivar
 
       nf = lx1*lz1*2*ldim*nelt
@@ -114,7 +127,9 @@ C> @}
 
 C> \ingroup bcond
 C> @{
-C> umubc = \f$\mathbf{U}^--\mathbf{U}^D\f$
+C> \f$\left(\mathbf{I}-1/2QQ^T\right)\mathbf{U}\rightarrow\mathbf{U}^--\mathbf{U}^D\f$
+C> on Dirichlet boundaries. Currently only modifies \f$\mathbf{U}^+\f$ in the
+C> case of walls.
       subroutine imqqtu_dirichlet(umubc,wminus,wplus)
 ! v+ undefined on boundary faces, so (I-0.5QQ^T) degenerates to 
 ! [[U]] with respect to the Dirichlet boundary state
@@ -122,9 +137,14 @@ C> umubc = \f$\mathbf{U}^--\mathbf{U}^D\f$
       include 'INPUT' ! do we need this?
       include 'TSTEP' ! for ifield
       include 'CMTDATA'
-      real umubc (lx1*lz1,2*ldim,nelt,toteq) ! intent(out)
-      real wminus(lx1*lz1,2*ldim,nelt,nqq),
-     >     wplus (lx1*lz1,2*ldim,nelt,nqq)
+C> \f$\mathbf{U}^--\mathbf{U}^D\f$ (intent(out))
+      real umubc (lx1*lz1,2*ldim,nelt,toteq)
+C> interior values of primitive variables on boundary faces (intent(in))
+      real wminus(lx1*lz1,2*ldim,nelt,nqq)
+C> exterior values of primitive variables on faces with
+C> Dirichlet BC. Filled with desired boundary condition values (intent(inout))
+C> on entry, but modified for adiabatic walls.
+      real wplus (lx1*lz1,2*ldim,nelt,nqq)
       real nTol
       integer e,f
       character*132 deathmessage
@@ -180,7 +200,10 @@ C> @}
 
 C> \ingroup vfjac
 C> @{
-C> flux = \f$\mathscr{A}\f$ dU = \f$\left(\mathscr{A}^{\mbox{NS}}+\mathscr{A}^{\mbox{EVM}}\right) \f$dU 
+C> Transforms the gradients of conserved variables \f$\nabla \mathbf{U}\f$
+C> to the viscous flux \f$\mathbf{H}^{(d)}\f$ in a single element for a
+C> single equation. Particular choice of viscous stress tensor is currently
+C> hardcoded for Navier-Stokes.
       subroutine agradu(flux,du,e,eq)
       include 'SIZE'
       include 'CMTDATA'
@@ -210,14 +233,23 @@ C> flux = \f$\mathscr{A}\f$ dU = \f$\left(\mathscr{A}^{\mbox{NS}}+\mathscr{A}^{\
 ! constructive feedback is always welcome
 ! flux is zero on entry
 !-----------------------------------------------------------------------
-      integer e, eq
-      real flux(lx1*ly1*lz1,ldim),du(lx1*ly1*lz1,3,toteq)
+C> index of element for primitive variables within different flux jacobians
+C> (intent(in))
+      integer e
+C> index of conserved variable whose viscous flux is being computed.
+C> (intent(in))
+      integer eq
+C> gradient of conserved variables \f$\partial U_i/\patial x_j\f$ (intent(in))
+      real du(lx1*ly1*lz1,3,toteq)
+!! flux = \f$\mathbf{H}^{(d)}=\mathscr{A}\f$ dU = \f$\left(\mathscr{A}^{\mbox{NS}}+\mathscr{A}^{\mbox{EVM}}\right) \f$dU 
+C> flux = \f$\mathbf{H}^{(d)}=\mathscr{A}\nabla \mathbf{U}\f$ (intent(out))
+      real flux(lx1*ly1*lz1,ldim)
 
-C> \f$\tau_{ij}\f$ and \f$u_j \tau_{ij}\f$.  \f$\lambda=0\f$ and \f$\kappa=0\f$
-C> for EVM
+!! \f$\tau_{ij}\f$ and \f$u_j \tau_{ij}\f$.  \f$\lambda=0\f$ and \f$\kappa=0\f$
+!! for EVM
       call fluxj_ns (flux,du,e,eq)
-C> \f$\nu_s \nabla \rho\f$, \f$\nu_s \left(\nabla \rho \right) \otimes \mathbf{u}\f$
-C> and \f$\nu_s \nabla \left(\rho e\right)\f$.  \f$\nu_s=0\f$ for Navier-Stokes
+!! \f$\nu_s \nabla \rho\f$, \f$\nu_s \left(\nabla \rho \right) \otimes \mathbf{u}\f$
+!! and \f$\nu_s \nabla \left(\rho e\right)\f$.  \f$\nu_s=0\f$ for Navier-Stokes
 !     call fluxj_evm(flux,du,e,eq)
 
 ! no idea where phi goes. put it out front
@@ -229,9 +261,11 @@ C> @}
 
 !-----------------------------------------------------------------------
 
+C> \ingroup vfjac
+C> @{
 C> \f$ \tau_{ij}=2 \mu\sigma_{ij} + \lambda \Delta \delta_{ij}\f$
-C> Navier-Stokes, so no mass diffusion. uservp provides properties.
-C> Implemented via maxima-generated code
+C> Navier-Stokes. uservp provides properties stored in SOLN.
+C> Implemented via maxima-generated code.
       subroutine fluxj_ns(flux,gradu,e,eq)
 ! viscous flux jacobian for compressible Navier-Stokes equations (NS)
 ! SOLN and CMTDATA are indexed, assuming vdiff has been filled by uservp
@@ -245,8 +279,16 @@ C> Implemented via maxima-generated code
       common /ctmp1/ viscscr(lx1,ly1,lz1)
       real viscscr
 
-      integer e,eq,eq2
-      real flux(lx1*ly1*lz1,ldim),gradu(lx1*ly1*lz1,3,toteq)
+      integer eq2
+C> index of element under consideration (intent(in))
+      integer e
+C> index of conserved variable whose viscous flux is being computed.
+C> (intent(in))
+      integer eq
+C> flux = \f$\mathbf{H}^{(d)}=\mathscr{A}\nabla \mathbf{U}\f$ (intent(out))
+      real flux(lx1*ly1*lz1,ldim)
+C> gradient of conserved variables \f$\nabla \mathbf{U}\f$ (intent(in))
+      real gradu(lx1*ly1*lz1,3,toteq)
       integer eijk3(3,3,3)
 !     data eijk2 / 0, -1, 1, 0/
       data eijk3
@@ -302,6 +344,7 @@ C> Implemented via maxima-generated code
          call a52kldUldxk(flux(1,2),gradu,e)
       endif
 
+C> @}
       return
       end
 
@@ -380,7 +423,7 @@ C> \ingroup diffhvol
 C> @{
 C> Compute the integrand
 C> \f$\mathbf{D}^{T}\mathbf{H}^d\f$ of the weak-form volume
-C> integral and store it in res1.
+C> integral and store it in res1 one element per call.
       subroutine half_iku_cmt(res,diffh,e)
       include 'SIZE'
       include 'MASS'
@@ -388,9 +431,15 @@ C> integral and store it in res1.
 ! the residual res with the result
       common /ctmp0/ rscr(lx1,ly1,lz1) ! scratch element for residual.
       real rscr
+C> index of element under consideration (intent(in))
       integer e ! lopsided. routine for one element must reference bm1
                 ! check if this is freestream-preserving or not
-      real res(lx1,ly1,lz1),diffh(lx1*ly1*lz1,ldim)
+C> res+=\f$\mathbf{D}^{T}\mathbf{H}^{(d)}\f$. Actual argument is a single
+C> element of res1 for a single equation (intent(inout))
+      real res(lx1,ly1,lz1)
+C> viscous flux \f$\mathbf{H}^{(d)}\f$ for a single element and single
+C> equation. Overwritten (intent(inout))
+      real diffh(lx1*ly1*lz1,ldim)
 
       n=lx1*ly1*lz1
       call rzero(rscr,n)
@@ -434,6 +483,7 @@ C> Used for both artificial and physical viscosities.
       include 'SOLN'
       include 'CMTDATA'
 
+C> Indexes the element inside SOLN (intent(in))
       integer   e
 
       do e=1,nelt
@@ -460,6 +510,9 @@ C> @}
 !-----------------------------------------------------------------------
 ! TRIAGE BELOW UNTIL I CAN FIX AGRADU_NS
 !-----------------------------------------------------------------------
+C> \ingroup vfjac
+C> @{
+C> WRITE OUT NOTATION
       subroutine a51kldUldxk(flux,dU,ie)
       include 'SIZE'
       include 'SOLN'
@@ -502,9 +555,13 @@ C> @}
      3   *u1*u2*dU1y+(K*u3**2-cv*mu*u3**2+K*u2**2-cv*mu*u2**2-cv*la
      4   mbda*u1**2+K*u1**2-2*cv*mu*u1**2-E*K)*dU1x)/(cv*rho)
       enddo
+C> @}
       return
       end
 
+C> \ingroup vfjac
+C> @{
+C> WRITE OUT NOTATION
       subroutine a52kldUldxk(flux,dU,ie)
       include 'SIZE'
       include 'SOLN'
@@ -548,7 +605,11 @@ C> @}
      4   u1**2-E*K)*dU1y-cv*lambdamu*u1*u2*dU1x)/(cv*rho)
       enddo
       return
+C> @}
       end
+C> \ingroup vfjac
+C> @{
+C> WRITE OUT NOTATION
       subroutine a53kldUldxk(flux,dU,ie)
       include 'SIZE'
       include 'SOLN'
@@ -592,8 +653,12 @@ C> @}
      4   v*(lambda+mu)*u2*u3*dU1y-cv*(lambda+mu)*u1*u3*dU1x)/(cv*rho)
       enddo
       return
+C> @}
       end
 
+C> \ingroup vfjac
+C> @{
+C> WRITE OUT NOTATION
       subroutine A21kldUldxk(flux,dU,ie)
       include 'SIZE'
       include 'SOLN'
@@ -620,7 +685,11 @@ C> @}
      >(lambda*(dU4z+dU3y-u3*dU1z-u2*dU1y)+lambdamu*(dU2x-u1*dU1x))/rho
       enddo
       return
+C> @}
       end
+C> \ingroup vfjac
+C> @{
+C> WRITE OUT NOTATION
       subroutine A22kldUldxk(flux,dU,ie)
       include 'SIZE'
       include 'SOLN'
@@ -641,7 +710,11 @@ C> @}
          flux(i)=mu*(dU3x+dU2y-u1*dU1y-u2*dU1x)/rho
       enddo
       return
+C> @}
       end
+C> \ingroup vfjac
+C> @{
+C> WRITE OUT NOTATION
       subroutine A23kldUldxk(flux,dU,ie)
       include 'SIZE'
       include 'SOLN'
@@ -662,8 +735,12 @@ C> @}
          flux(i)=mu*(dU4x+dU2z-u1*dU1z-u3*dU1x)/rho
       enddo
       return
+C> @}
       end
 
+C> \ingroup vfjac
+C> @{
+C> WRITE OUT NOTATION
       subroutine A31kldUldxk(flux,dU,ie)
       include 'SIZE'
       include 'SOLN'
@@ -684,7 +761,11 @@ C> @}
          flux(i)=mu*(dU3x+dU2y-u1*dU1y-u2*dU1x)/rho
       enddo
       return
+C> @}
       end
+C> \ingroup vfjac
+C> @{
+C> WRITE OUT NOTATION
       subroutine A32kldUldxk(flux,dU,ie)
       include 'SIZE'
       include 'SOLN'
@@ -711,7 +792,11 @@ C> @}
      >   lambdamu*(dU3y-u2*dU1y))/rho
       enddo
       return
+C> @}
       end
+C> \ingroup vfjac
+C> @{
+C> WRITE OUT NOTATION
       subroutine A33kldUldxk(flux,dU,ie)
       include 'SIZE'
       include 'SOLN'
@@ -732,8 +817,12 @@ C> @}
          flux(i)=mu*(dU4y+dU3z-u2*dU1z-u3*dU1y)/rho
       enddo
       return
+C> @}
       end
 
+C> \ingroup vfjac
+C> @{
+C> WRITE OUT NOTATION
       subroutine A41kldUldxk(flux,dU,ie)
       include 'SIZE'
       include 'SOLN'
@@ -754,7 +843,11 @@ C> @}
          flux(i)=mu*(dU4x+dU2z-u1*dU1z-u3*dU1x)/rho
       enddo
       return
+C> @}
       end
+C> \ingroup vfjac
+C> @{
+C> WRITE OUT NOTATION
       subroutine A42kldUldxk(flux,dU,ie)
       include 'SIZE'
       include 'SOLN'
@@ -775,7 +868,11 @@ C> @}
          flux(i)=mu*(dU4y+dU3z-u2*dU1z-u3*dU1y)/rho
       enddo
       return
+C> @}
       end
+C> \ingroup vfjac
+C> @{
+C> WRITE OUT NOTATION
       subroutine A43kldUldxk(flux,dU,ie)
       include 'SIZE'
       include 'SOLN'
@@ -802,4 +899,5 @@ C> @}
      >lambdamu*(dU4z-u3*dU1z))/rho
       enddo
       return
+C> @}
       end
