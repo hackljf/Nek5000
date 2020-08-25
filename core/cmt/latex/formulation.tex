@@ -1,0 +1,101 @@
+%--- Begin generated contents ---
+\chapter{The discontinuous Galerkin spectral element method}
+CMT-nek is an implementation of the
+\textbf{discontinuous Galerkin spectral element method (DGSEM)} written for
+systems of conservation laws. General descriptions and theory of DG methods is
+found in a few textbooks. I recommend \cite{hw08,CHQZ3}, where much of the notation
+in this document is taken.
+It solves for 5 conserved variables $\bU(\mathbf{x},t) \in \mathbb{R}^5$, 
+$\mathbf{x} =\left(x_1,x_2,x_3\right)^{\Txp} \in \Omega \subset \mathbb{R}^3$, $t\in\mathbb{R}^+$,
+satisfying the conservation law
+\begin{equation}
+\pp{\bU}{t} + \divnce \bH=\mathbf{R},
+\label{claw}
+\end{equation}
+where each of the 5 equations has its own flux vector
+$\bH(\bU) : \bU \rightarrow \mathbb{R}^3$.
+
+\input{dgkernel}
+\input{split2pt}
+\input{surface}
+
+\chapter{Time-marching and top-level assembly}
+\input{data}
+\input{assembly}
+
+\chapter{Governing equations and fluid properties}
+We now divide the flux function $\mathbf{H}$ into
+\begin{equation}
+\bH=\bH_c(\bU)+\bH_d(\bU,\nabla \bU),
+\label{convanddiff}
+\end{equation}
+where $\bH_c$ is the \textbf{convective flux} function and $\bH_d$ is the \textbf{diffusive flux} function.
+The convective fluxes come from the Euler equations of gas dynamics and the diffusive
+fluxes come from artificial viscosity used to capture shocks on spectral elements.
+\input{eom}
+
+Vectors of nodal values are usually stored consecutively in
+multidimensional arrays whose ``outermost'' index is fixed for that particular quantity.
+\textcolor{red}{As an exception, conserved variables are dimensioned element-outermost, and the second-to-last dimension
+is fixed for a given conserved variable.} The indexing for this purpose is given in Table~\ref{tab:cvar}.
+
+\begin{table}
+\begin{tabular}{|c|c|}
+\hline
+conserved variable in \S\ref{sec:gaseom} & index in U(ix,iy,iz,:,e) \\
+\hline
+mass $\phi_g \rho$ & irg=1 \\
+$x$-momentum $\phi_g \rho u$ & irpu=2 \\
+$y$-momentum $\phi_g \rho v$ & irpv=3 \\
+$z$-momentum $\phi_g \rho w$ & irpw=4 \\
+total energy per unit mass, gas $\phi_g \rho E$  & irpe=5 \\
+\hline
+\end{tabular}
+\caption{Declarations and locations for conserved variables (Equation~\ref{uvect}) in CMT-nek in U in /solnconsvar/ in CMTDATA. Indices are parameters at the end of CMTDATA.}
+\label{tab:cvar}
+\end{table}
+
+Table~\ref{tab:soln} lays out where some of the physical variables are declared and stored. We recycle
+many of nek5000's arrays, \textcolor{red}{with some abuse.} In the classic $P_NP_{N-2}$ spectral
+element method, pressure is stored at nodal values on a separate mesh (m2=``mesh 2'') of Gauss-Legendre(GL) and not GLL quadrature nodes. \textcolor{red}{CMT-nek may need this mesh to follow Fisher \& Carpenter in a DGSEM formulation with the summation-by-parts property. For now,  however, pressure is not staggered.}
+\textcolor{red}{CMT-nek must be run in the $P_N P_N$ mode with lx2=lx1, and using mesh-1 metrics for
+everything, including pr, which is not correct for nek5000 in general.}
+\begin{table}
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+primitive variable in \S\ref{sec:gaseom} & variable in code & outer index & common & include file \\
+\hline
+$x$-velocity $u$, Eq.~\ref{uxpedantic} & vx(lx1,ly1,lz1,lelt) & & /vptsol/ & core/SOLN \\
+$y$-velocity $v$, Eq.~\ref{uxpedantic} & vy(lx1,ly1,lz1,lelt) & & /vptsol/ & core/SOLN \\
+$z$-velocity $w$, Eq.~\ref{uxpedantic} & vz(lx1,ly1,lz1,lelt) & & /vptsol/ & core/SOLN \\
+thermodynamic gas pressure $p$ & pr(lx2,ly2,lz2,lelv) & & /cbm2/ & core/SOLN \\
+gas temperature $T$ & t (lx1,ly1,lz1,lelt,ldimt) & 1 & /vptsol/ & core/SOLN \\
+gas density $\rho$ & vtrans(lx1,ly1,lz1,lelt,ldimt1) & irho & /vptsol/ & core/SOLN \\
+mass-weighted specific heat $\rho c_p$ & vtrans(lx1,ly1,lz1,lelt,ldimt1) & icp & /vptsol/ & core/SOLN \\
+mass-weighted specific heat $\rho c_v$ & vtrans(lx1,ly1,lz1,lelt,ldimt1) & icv & /vptsol/ & core/SOLN \\
+isentropic sound speed $a$, Eq.~\ref{asndtpg}  & csound(lx1,ly1,lz1,lelt) & & /cmtgasprop/ & CMTDATA \\
+\hline
+\end{tabular}
+\caption{Declarations and locations for CMT-nek primitive variables. Outer indices are parameters in CMTDATA}
+\label{tab:soln}
+\end{table}
+
+Fluxes in the Euler equations (Equation~\ref{convh1} through~\ref{convh5}) are functions of
+\textbf{primitive variables} (Table~\ref{tab:soln}) in addition to the primary unknowns, the conserved variables.
+(Equation~\ref{uvect}).
+
+\chapter{Right-hand-side evaluation: volume terms}
+\input{fsharp}
+
+%\input{viscreg}
+The volume integral term for the diffusive fluxes $\mbox{K}_{m,d}$ is, for the $m$\nth conserved variable,
+\begin{equation}
+\mbox{K}_{m,d}\equiv \mathbf{B}^{-1}\left(\mathbf{D}_{r_l}^{\Txp}
+\left[\mbox{diag}\left(\pp{r_l}{x_i}\right)\mathbf{B}\left(\mathscr{A}_{mijL}
+\left[\mbox{diag}\left(\pp{r_k}{x_j}\right)\mathbf{D}_{r_k} \mathbf{u}_L\right]\right)\right]\right),
+\label{iku}
+\end{equation}
+where Einstein summation convention is used on all Roman subscripts. The ranges of these subscripts follow
+their ordering in $\mathscr{A}_{mijL}$ (\ref{eq:vfjac,lazya}),  % must correctly couple all 5 governing equations
+and $\bu_L$ refers to a nodal vector (\ref{gridvects}) of the $L$\nth conserved variable in
+\ref{uvect}.

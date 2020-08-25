@@ -1,0 +1,125 @@
+\hypertarget{group__flux}{\section{Flux functions and wrappers}
+\label{group__flux}\index{Flux functions and wrappers@{Flux functions and wrappers}}
+}
+\begin{DoxyCompactItemize}
+\item 
+subroutine \hyperlink{group__flux_ga4498a8903b8de21f2c0afd0d34c5e00c}{sequential\-\_\-flux} (flux, wminus, wplus, uminus, uplus, jaminus, japlus, fluxfunction, nstate, npt)
+\begin{DoxyCompactList}\small\item\em Calls two-\/point external fluxfunction $F^{\#}(U^-,U^+)$ at npt points Mostly intended to allow quantity-\/innermost volume flux functions to be used where needed for surface fluxes at boundary points, after $\ast$bc routines provide Dirichlet ``rind'' states in wplus and uplus. \end{DoxyCompactList}\item 
+\hypertarget{group__flux_ga07b6f239f6de61d489a639234c55dac3}{subroutine {\bfseries inviscidflux} (wminus, wplus, flux, nstate, nflux)}\label{group__flux_ga07b6f239f6de61d489a639234c55dac3}
+
+\item 
+\hypertarget{group__flux_ga799332814e9d69e56ae5cc53dd448ebc}{subroutine {\bfseries surface\-\_\-integral\-\_\-full} (vol, flux)}\label{group__flux_ga799332814e9d69e56ae5cc53dd448ebc}
+
+\item 
+\hypertarget{group__flux_ga88fa0428bc395bf4e785ac7c484fc587}{subroutine {\bfseries diffh2graduf} (e, eq, graduf)}\label{group__flux_ga88fa0428bc395bf4e785ac7c484fc587}
+
+\item 
+\hypertarget{group__flux_ga41a0b6638f2086e785a2eee46c838140}{subroutine {\bfseries diffh2face} (e, eq, diffhf)}\label{group__flux_ga41a0b6638f2086e785a2eee46c838140}
+
+\item 
+\hypertarget{group__flux_ga28b5864db9a8cc5516dff0524e5281dd}{subroutine {\bfseries igu\-\_\-cmt} (flxscr, gdudxk, wminus)}\label{group__flux_ga28b5864db9a8cc5516dff0524e5281dd}
+
+\item 
+\hypertarget{group__flux_ga9e1df29c0b6ddab6d384439c68f98361}{subroutine {\bfseries igu\-\_\-dirichlet} (flux, \hyperlink{group__vfjac_ga9087d56c6c467d3ffeb9aa6be3f43e82}{agradu})}\label{group__flux_ga9e1df29c0b6ddab6d384439c68f98361}
+
+\item 
+\hypertarget{group__flux_ga549c3560ff566ecc4ebe5a26cd8d7434}{subroutine {\bfseries br1primary} (flux, gdudxk)}\label{group__flux_ga549c3560ff566ecc4ebe5a26cd8d7434}
+
+\item 
+\hypertarget{group__flux_gaf5460e23edcfc140cce7884a9e3ebdac}{subroutine {\bfseries agradu\-\_\-normal\-\_\-flux} (flux, graduf)}\label{group__flux_gaf5460e23edcfc140cce7884a9e3ebdac}
+
+\item 
+\hypertarget{group__flux_gaf39815444396f97adffa0273bf02d6e5}{subroutine {\bfseries br1bc} (flux)}\label{group__flux_gaf39815444396f97adffa0273bf02d6e5}
+
+\item 
+\hypertarget{group__flux_gad4b2470bb6d756ae16a22aa09bff20cd}{subroutine {\bfseries bcflux\-\_\-br1} (flux, f, e)}\label{group__flux_gad4b2470bb6d756ae16a22aa09bff20cd}
+
+\item 
+\hypertarget{group__flux_gadcea35e25dbe44ed6a9f9816974a8dc7}{subroutine {\bfseries strong\-\_\-sfc\-\_\-flux} (flux, vflx, e, eq)}\label{group__flux_gadcea35e25dbe44ed6a9f9816974a8dc7}
+
+\item 
+\hypertarget{group__flux_ga565a7f26aa4697a900499931ca224e37}{subroutine {\bfseries fluxes\-\_\-full\-\_\-field\-\_\-chold}}\label{group__flux_ga565a7f26aa4697a900499931ca224e37}
+
+\item 
+\hypertarget{group__flux_gade9f72409b237ebd1810b9d856f2c0d2}{subroutine {\bfseries fluxes\-\_\-full\-\_\-field\-\_\-old}}\label{group__flux_gade9f72409b237ebd1810b9d856f2c0d2}
+
+\item 
+\hypertarget{group__flux_gae3c480e559a6d01be27381e8517a210d}{subroutine {\bfseries inviscidfluxrot} (wminus, wplus, flux, nstate, nflux)}\label{group__flux_gae3c480e559a6d01be27381e8517a210d}
+
+\item 
+subroutine \hyperlink{group__flux_gab4541d3a9fc0c10583e47fa4b6cc9f2d}{gtu\-\_\-wrapper} (fatface)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+
+
+\subsection{Function/\-Subroutine Documentation}
+\hypertarget{group__flux_gab4541d3a9fc0c10583e47fa4b6cc9f2d}{\index{Flux functions and wrappers@{Flux functions and wrappers}!gtu\-\_\-wrapper@{gtu\-\_\-wrapper}}
+\index{gtu\-\_\-wrapper@{gtu\-\_\-wrapper}!Flux functions and wrappers@{Flux functions and wrappers}}
+\subsubsection[{gtu\-\_\-wrapper}]{\setlength{\rightskip}{0pt plus 5cm}subroutine gtu\-\_\-wrapper (
+\begin{DoxyParamCaption}
+\item[{real, dimension($\ast$)}]{fatface}
+\end{DoxyParamCaption}
+)}}\label{group__flux_gab4541d3a9fc0c10583e47fa4b6cc9f2d}
+res1+= $\int_{\Gamma} \{\{\mathbf{A}^{\intercal}\nabla v\}\} \cdot \left[\mathbf{U}\right] dA$
+
+res1+= $\int \left(\nabla v\right) \cdot \left(\mathbf{H}^c+\mathbf{H}^d\right)dV$ for each equation (inner), one element at a time (outer) 
+
+Here is the call graph for this function\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{group__flux_gab4541d3a9fc0c10583e47fa4b6cc9f2d_cgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{group__flux_ga4498a8903b8de21f2c0afd0d34c5e00c}{\index{Flux functions and wrappers@{Flux functions and wrappers}!sequential\-\_\-flux@{sequential\-\_\-flux}}
+\index{sequential\-\_\-flux@{sequential\-\_\-flux}!Flux functions and wrappers@{Flux functions and wrappers}}
+\subsubsection[{sequential\-\_\-flux}]{\setlength{\rightskip}{0pt plus 5cm}subroutine sequential\-\_\-flux (
+\begin{DoxyParamCaption}
+\item[{real, dimension(toteq,npt)}]{flux, }
+\item[{real, dimension(nstate,npt)}]{wminus, }
+\item[{real, dimension(nstate,npt)}]{wplus, }
+\item[{real, dimension(toteq,npt)}]{uminus, }
+\item[{real, dimension(toteq,npt)}]{uplus, }
+\item[{real, dimension(3,npt)}]{jaminus, }
+\item[{real, dimension(3,npt)}]{japlus, }
+\item[{external}]{fluxfunction, }
+\item[{}]{nstate, }
+\item[{}]{npt}
+\end{DoxyParamCaption}
+)}}\label{group__flux_ga4498a8903b8de21f2c0afd0d34c5e00c}
+
+
+Calls two-\/point external fluxfunction $F^{\#}(U^-,U^+)$ at npt points Mostly intended to allow quantity-\/innermost volume flux functions to be used where needed for surface fluxes at boundary points, after $\ast$bc routines provide Dirichlet ``rind'' states in wplus and uplus. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em flux} & Real (intent(out)) $F^{\#}(U^-,U^+)$ on output\\
+\hline
+{\em wminus} & Real (intent(in)) Primitive variables at one point. Usually $w^-$ at interior nodes\\
+\hline
+{\em wplus} & Real (intent(in)) Primitive variables at the other point. Usually $w^+$ at rind state or nodes of neighboring element\\
+\hline
+{\em jaminus} & Real (intent(in)) Mesh metrics at one point.\\
+\hline
+{\em japlus} & Real (intent(in)) Mesh metrics at the other point.\\
+\hline
+{\em uminus} & Real (intent(in)) Conserved variables one point. Usually $U^-$ at interior nodes.\\
+\hline
+{\em uplus} & Real (intent(in)) Conserved variables at the other point. Usually $U^+$ at rind state or nodes of neighboring element \\
+\hline
+\end{DoxyParams}
+External subroutine for $F^{\#}$. See \hyperlink{fluxfn_8f}{fluxfn.\-f} 
+
+Here is the call graph for this function\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{group__flux_ga4498a8903b8de21f2c0afd0d34c5e00c_cgraph}
+\end{center}
+\end{figure}
+
+

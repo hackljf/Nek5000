@@ -1,0 +1,12 @@
+Each GLL node in each element making up
+$\buu_L$, the union of $\bu$ for all $K$ elements, is integrated in time in this subroutine
+via explicit time marching to discretizes the
+the left-hand-side time derivative of Equation~\ref{dgsemifinal}.
+We choose the third-order total-variation-diminishing\footnote{Equivalent to
+the strong-stability-preserving explicit RK scheme at this order} Runge-Kutta scheme (TVDRK3) in low-storage form.
+We advance from $t_n$ to $t_{n+1}=t_n+\Delta t$ via
+\begin{align}
+\buu_L^{(1)}&=\buu_L^{(n)}+\Delta t \mbox{RHS}(\buu_L^{(n)}), \nonumber \\
+\buu_L^{(2)}&=\frac{3}{4}\buu_L^{(n)}+\frac{1}{4}\buu_L^{(1)}+\frac{1}{4}\Delta t\, \mbox{RHS}(\buu_L^{(1)}), \label{eq:rk3} \\
+\buu_L^{(n+1)}&=\frac{1}{3}\buu_L^{(n)}+\frac{2}{3}\buu_L^{(2)}+\frac{2}{3}\Delta t\, \mbox{RHS}(\buu_L^{(2)}). \nonumber
+\end{align}

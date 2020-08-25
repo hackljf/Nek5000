@@ -1,0 +1,290 @@
+\hypertarget{group__isurf}{\section{Inviscid surface terms}
+\label{group__isurf}\index{Inviscid surface terms@{Inviscid surface terms}}
+}
+\subsection*{Functions/\-Subroutines}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{group__isurf_ga2b8162e02f3f2266c59f717fa1363226}{subroutine \hyperlink{group__isurf_ga2b8162e02f3f2266c59f717fa1363226}{ausm\-\_\-fluxfunction} (ntot, nx, ny, nz, nm, fs, rl, ul, vl, wl, pl, al, tl, rr, ur, vr, wr, pr, ar, tr, flx, el, er)}\label{group__isurf_ga2b8162e02f3f2266c59f717fa1363226}
+
+\begin{DoxyCompactList}\small\item\em Computes inviscid numerical surface flux from A\-U\-S\-M+ Riemann solver. \end{DoxyCompactList}\item 
+subroutine \hyperlink{group__isurf_ga15e4fb7f0dbe0767ef81c6b291f611cb}{inflow\-\_\-df} (f, e, wm, wp, um, up, nvar)
+\begin{DoxyCompactList}\small\item\em more conventional Dolejsi \& Feistauer (2015) Section 8.\-3.\-2.\-2 ``physical'' boundary conditions. Also encountered in Hartmann \& Houston (2006). A poor default. \end{DoxyCompactList}\item 
+subroutine \hyperlink{group__isurf_ga0293ec162f23a55a9e89cf0797cbf2b2}{outflow\-\_\-df} (f, e, wm, wp, um, up, nvar)
+\begin{DoxyCompactList}\small\item\em Dolejsi \& Feistauer (2015) Section 8.\-3.\-2.\-2. Very rudimentary ``physical'' boundary conditions. Also encountered in Hartmann \& Houston (2006). A poor default. \end{DoxyCompactList}\item 
+\hypertarget{group__isurf_gaecf15d43e4c71d130e4ef9e4a6a7821a}{subroutine \hyperlink{group__isurf_gaecf15d43e4c71d130e4ef9e4a6a7821a}{fillujumpu}}\label{group__isurf_gaecf15d43e4c71d130e4ef9e4a6a7821a}
+
+\begin{DoxyCompactList}\small\item\em overwrite beginning of /\-C\-M\-T\-S\-U\-R\-F\-L\-X/ with $-[[\mathbf{U}]]$ for flux of auxiliary variable in the viscous flux of Bassi and Rebay computed in br1auxflux. \end{DoxyCompactList}\item 
+subroutine \hyperlink{group__isurf_ga0013a607a259d0c07734b1816f8c9f60}{fluxes\-\_\-full\-\_\-field\-\_\-kg}
+\begin{DoxyCompactList}\small\item\em Restrict and copy face data and compute inviscid numerical flux $\oint \mathbf{H}^{c\ast}\cdot\mathbf{n}dA$ on face points. This particular wrapper is for the symmetric flux of Kennedy and Gruber. \end{DoxyCompactList}\item 
+subroutine \hyperlink{group__isurf_ga272adf58402c1bfb170c8667bf6be790}{faceu} (ivar, yourface)
+\begin{DoxyCompactList}\small\item\em Restrict and copy face data for conserved variables $U_{\mbox{ivar}}$. Wraps full2face\-\_\-cmt for each element; a single call to full2face with $U$ will not work because element varies with the outermost index of the u array. \end{DoxyCompactList}\item 
+subroutine \hyperlink{group__isurf_gae375bb9d6acee4eff74aa072206109a2}{fillq} (jvar, field, wminus, yourface)
+\begin{DoxyCompactList}\small\item\em Restrict and copy face data for one full field and store it in index jvar in wminus. \end{DoxyCompactList}\item 
+subroutine \hyperlink{group__isurf_ga317b9a948c8717ad9c64e0fae72c8641}{dg\-\_\-face\-\_\-avg} (mine, nf, nstate, handle)
+\begin{DoxyCompactList}\small\item\em Overwrite values stored at points on faces with the average with its values in the neighboring face without duplication. Replaces $mine$ with $\{\{mine\}\}$. \end{DoxyCompactList}\item 
+subroutine \hyperlink{group__isurf_ga53412d5d95cd62ca86dd08374a330b02}{face\-\_\-state\-\_\-commo} (mine, yours, nf, nstate, handle)
+\begin{DoxyCompactList}\small\item\em Sends face values $v^-$ stored in ``mine'' to the neighbor that shares that face and copies the neighbor's values $v^+$ at each face into ``yours.''. \end{DoxyCompactList}\item 
+subroutine \hyperlink{group__isurf_gaf55d5b18c1b922832898c46176f13386}{avg\-\_\-and\-\_\-jump} (avg, jump, scratch, nf, nstate, handle)
+\begin{DoxyCompactList}\small\item\em Overwrites $w^-$ at interior face points stored in avg with $\{\{w\}\}$. jump gets filled with $[[w]]$. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+
+
+\subsection{Function/\-Subroutine Documentation}
+\hypertarget{group__isurf_gaf55d5b18c1b922832898c46176f13386}{\index{Inviscid surface terms@{Inviscid surface terms}!avg\-\_\-and\-\_\-jump@{avg\-\_\-and\-\_\-jump}}
+\index{avg\-\_\-and\-\_\-jump@{avg\-\_\-and\-\_\-jump}!Inviscid surface terms@{Inviscid surface terms}}
+\subsubsection[{avg\-\_\-and\-\_\-jump}]{\setlength{\rightskip}{0pt plus 5cm}subroutine avg\-\_\-and\-\_\-jump (
+\begin{DoxyParamCaption}
+\item[{real, dimension($\ast$)}]{avg, }
+\item[{real, dimension($\ast$)}]{jump, }
+\item[{real, dimension($\ast$)}]{scratch, }
+\item[{integer}]{nf, }
+\item[{integer}]{nstate, }
+\item[{integer}]{handle}
+\end{DoxyParamCaption}
+)}}\label{group__isurf_gaf55d5b18c1b922832898c46176f13386}
+
+
+Overwrites $w^-$ at interior face points stored in avg with $\{\{w\}\}$. jump gets filled with $[[w]]$. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em handle} & integer handle for gs\-\_\-op. needs to be set by fgslib\-\_\-gs\-\_\-setup call in setup\-\_\-cmt\-\_\-gs call (intent(in))\\
+\hline
+{\em nf} & Total number of face points on all faces in the domain. (intent(in), but should always be lx1$\ast$lz1$\ast$2$\ast$ldim$\ast$nelt)\\
+\hline
+{\em nstate} & Number of distinct fields whose copies are to be transfered between neighboring elements (intent(in))\\
+\hline
+{\em avg} & Real buffer (intent(inout)) $w^-$ on input, $\{\{w\}\}$ on output\\
+\hline
+{\em jump} & Real buffer (intent(out)) $w^-$ on input, $[[w]]$ on output\\
+\hline
+{\em scratch} & Real scratch (intent(out)) \\
+\hline
+\end{DoxyParams}
+\hypertarget{group__isurf_ga317b9a948c8717ad9c64e0fae72c8641}{\index{Inviscid surface terms@{Inviscid surface terms}!dg\-\_\-face\-\_\-avg@{dg\-\_\-face\-\_\-avg}}
+\index{dg\-\_\-face\-\_\-avg@{dg\-\_\-face\-\_\-avg}!Inviscid surface terms@{Inviscid surface terms}}
+\subsubsection[{dg\-\_\-face\-\_\-avg}]{\setlength{\rightskip}{0pt plus 5cm}subroutine dg\-\_\-face\-\_\-avg (
+\begin{DoxyParamCaption}
+\item[{real, dimension($\ast$)}]{mine, }
+\item[{integer}]{nf, }
+\item[{integer}]{nstate, }
+\item[{integer}]{handle}
+\end{DoxyParamCaption}
+)}}\label{group__isurf_ga317b9a948c8717ad9c64e0fae72c8641}
+
+
+Overwrite values stored at points on faces with the average with its values in the neighboring face without duplication. Replaces $mine$ with $\{\{mine\}\}$. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em handle} & integer handle for gs\-\_\-op. needs to be set by fgslib\-\_\-gs\-\_\-setup call in setup\-\_\-cmt\-\_\-gs call (intent(in))\\
+\hline
+{\em nf} & Total number of face points on all faces in the domain. (intent(in), but should always be lx1$\ast$lz1$\ast$2$\ast$ldim$\ast$nelt)\\
+\hline
+{\em nstate} & Number of distinct fields whose averages between neighboring elements are to be computed and stored at face points (intent(in))\\
+\hline
+{\em mine} & Buffer, but should be some large array within /\-C\-M\-T\-S\-U\-R\-F\-L\-X/ (real, intent(inout)) \\
+\hline
+\end{DoxyParams}
+\hypertarget{group__isurf_ga53412d5d95cd62ca86dd08374a330b02}{\index{Inviscid surface terms@{Inviscid surface terms}!face\-\_\-state\-\_\-commo@{face\-\_\-state\-\_\-commo}}
+\index{face\-\_\-state\-\_\-commo@{face\-\_\-state\-\_\-commo}!Inviscid surface terms@{Inviscid surface terms}}
+\subsubsection[{face\-\_\-state\-\_\-commo}]{\setlength{\rightskip}{0pt plus 5cm}subroutine face\-\_\-state\-\_\-commo (
+\begin{DoxyParamCaption}
+\item[{real, dimension($\ast$)}]{mine, }
+\item[{real, dimension($\ast$)}]{yours, }
+\item[{integer}]{nf, }
+\item[{integer}]{nstate, }
+\item[{integer}]{handle}
+\end{DoxyParamCaption}
+)}}\label{group__isurf_ga53412d5d95cd62ca86dd08374a330b02}
+
+
+Sends face values $v^-$ stored in ``mine'' to the neighbor that shares that face and copies the neighbor's values $v^+$ at each face into ``yours.''. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em handle} & integer handle for gs\-\_\-op. needs to be set by fgslib\-\_\-gs\-\_\-setup call in setup\-\_\-cmt\-\_\-gs call (intent(in))\\
+\hline
+{\em nf} & Total number of face points on all faces in the domain. (intent(in), but should always be lx1$\ast$lz1$\ast$2$\ast$ldim$\ast$nelt)\\
+\hline
+{\em nstate} & Number of distinct fields whose copies are to be transfered between neighboring elements (intent(in))\\
+\hline
+{\em mine} & Buffer storing interior states $v^-$ in /\-C\-M\-T\-S\-U\-R\-F\-L\-X/ (real, intent(in))\\
+\hline
+{\em yours} & Buffer storing exterior/neighbor states $v^+$ in /\-C\-M\-T\-S\-U\-R\-F\-L\-X/ (real, intent(out)) \\
+\hline
+\end{DoxyParams}
+\hypertarget{group__isurf_ga272adf58402c1bfb170c8667bf6be790}{\index{Inviscid surface terms@{Inviscid surface terms}!faceu@{faceu}}
+\index{faceu@{faceu}!Inviscid surface terms@{Inviscid surface terms}}
+\subsubsection[{faceu}]{\setlength{\rightskip}{0pt plus 5cm}subroutine faceu (
+\begin{DoxyParamCaption}
+\item[{integer}]{ivar, }
+\item[{real, dimension(lx1,lz1,2$\ast$ldim,nelt)}]{yourface}
+\end{DoxyParamCaption}
+)}}\label{group__isurf_ga272adf58402c1bfb170c8667bf6be790}
+
+
+Restrict and copy face data for conserved variables $U_{\mbox{ivar}}$. Wraps full2face\-\_\-cmt for each element; a single call to full2face with $U$ will not work because element varies with the outermost index of the u array. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em ivar} & index of variable within U. ivar=1 for $\phi\rho$, ivar=2-\/4 for $\phi\rho u_i$, etc.\\
+\hline
+{\em yourface} & contiguous pile of faces for the $ivar^{th}$ conserved variable. (dimension(lx1,lz1,2$\ast$ldim,nelt), intent(out)) \\
+\hline
+\end{DoxyParams}
+\hypertarget{group__isurf_gae375bb9d6acee4eff74aa072206109a2}{\index{Inviscid surface terms@{Inviscid surface terms}!fillq@{fillq}}
+\index{fillq@{fillq}!Inviscid surface terms@{Inviscid surface terms}}
+\subsubsection[{fillq}]{\setlength{\rightskip}{0pt plus 5cm}subroutine fillq (
+\begin{DoxyParamCaption}
+\item[{integer}]{jvar, }
+\item[{real, dimension(lx1,ly1,lz1,nelt)}]{field, }
+\item[{real, dimension(lx1$\ast$lz1$\ast$2$\ast$ldim$\ast$nelt,$\ast$)}]{wminus, }
+\item[{real, dimension(lx1$\ast$lz1$\ast$2$\ast$ldim$\ast$nelt)}]{yourface}
+\end{DoxyParamCaption}
+)}}\label{group__isurf_gae375bb9d6acee4eff74aa072206109a2}
+
+
+Restrict and copy face data for one full field and store it in index jvar in wminus. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em jvar} & index within wminus where field array at points lying on faces will be stored (intent(in))\\
+\hline
+{\em field} & full array of values at each G\-L\-L point in all elements (intent(in), dimension(lx1,ly1,lz1,nelt))\\
+\hline
+{\em wminus} & contiguous storage for multiple fields at all G\-L\-L nodes lying on faces of each element (intent(out), dimension(lx1$\ast$lz1$\ast$2$\ast$ldim$\ast$nelt,$\ast$))\\
+\hline
+{\em yourface} & contiguous scratch array for a single field at all G\-L\-L nodes lying on faces of each element (intent(out), dimension(lx1$\ast$lz1$\ast$2$\ast$ldim$\ast$nelt)) \\
+\hline
+\end{DoxyParams}
+\hypertarget{group__isurf_ga0013a607a259d0c07734b1816f8c9f60}{\index{Inviscid surface terms@{Inviscid surface terms}!fluxes\-\_\-full\-\_\-field\-\_\-kg@{fluxes\-\_\-full\-\_\-field\-\_\-kg}}
+\index{fluxes\-\_\-full\-\_\-field\-\_\-kg@{fluxes\-\_\-full\-\_\-field\-\_\-kg}!Inviscid surface terms@{Inviscid surface terms}}
+\subsubsection[{fluxes\-\_\-full\-\_\-field\-\_\-kg}]{\setlength{\rightskip}{0pt plus 5cm}subroutine fluxes\-\_\-full\-\_\-field\-\_\-kg (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{group__isurf_ga0013a607a259d0c07734b1816f8c9f60}
+
+
+Restrict and copy face data and compute inviscid numerical flux $\oint \mathbf{H}^{c\ast}\cdot\mathbf{n}dA$ on face points. This particular wrapper is for the symmetric flux of Kennedy and Gruber. 
+
+\char`\"{}heresize\char`\"{} and \char`\"{}hdsize\char`\"{} come from a failed attempt at managing memory in C\-M\-T\-S\-U\-R\-F\-L\-X by redeclaration that was abandoned before the two-\/point split form. They need to be taken care of in C\-M\-T\-S\-I\-Z\-E and consistent with the desired subroutine
+
+duplicate one conserved variable (from neighboring elements) at a time for jumps in L\-L\-F
+
+store it before phi, which lives at jph=nqq
+
+Stabilization first. Local Lax Friedrichs for equations 1 through 4 (mass \& momentum)
+
+O\-N\-L\-Y needed by Kennedy-\/\-Gruber (2008) as written. This is done in fstab for Chandrashekar (2013), but overwrites jsnd for K\-G and friends.
+
+$\mathbf{q}^- \rightarrow \mathbf{z}^-$. Kennedy-\/\-Gruber, Pirozzoli, and most energy-\/ conserving fluxes have $\mathbf{z}=\mathbf{q}$, so I just divide total energy by $U_1$ here since Kennedy-\/\-Gruber needs $E$.
+
+$\mathbf{z}^- \rightarrow \hat{z}^-$, which is $\{\{\mathbf{z}\}\}$ for Kennedy-\/\-Gruber, Pirozzoli, and some parts of other energy-\/conserving fluxes.
+
+$\hat{z} \rightarrow F^{\#}$. Some parameter-\/vector stuff can go here too as long as it's all local to a given element.
+
+Now do all fluxes for all boundaries, both $F^{\#}$ and stabilized
+
+Here is the call graph for this function\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{group__isurf_ga0013a607a259d0c07734b1816f8c9f60_cgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{group__isurf_ga15e4fb7f0dbe0767ef81c6b291f611cb}{\index{Inviscid surface terms@{Inviscid surface terms}!inflow\-\_\-df@{inflow\-\_\-df}}
+\index{inflow\-\_\-df@{inflow\-\_\-df}!Inviscid surface terms@{Inviscid surface terms}}
+\subsubsection[{inflow\-\_\-df}]{\setlength{\rightskip}{0pt plus 5cm}subroutine inflow\-\_\-df (
+\begin{DoxyParamCaption}
+\item[{integer}]{f, }
+\item[{integer}]{e, }
+\item[{real, dimension(nvar,lx1$\ast$lz1)}]{wm, }
+\item[{real, dimension(nvar,lx1$\ast$lz1)}]{wp, }
+\item[{real, dimension(toteq,lx1$\ast$lz1)}]{um, }
+\item[{real, dimension(toteq,lx1$\ast$lz1)}]{up, }
+\item[{integer}]{nvar}
+\end{DoxyParamCaption}
+)}}\label{group__isurf_ga15e4fb7f0dbe0767ef81c6b291f611cb}
+
+
+more conventional Dolejsi \& Feistauer (2015) Section 8.\-3.\-2.\-2 ``physical'' boundary conditions. Also encountered in Hartmann \& Houston (2006). A poor default. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em f} & face index from 1 to 2$\ast$ldim\\
+\hline
+{\em e} & element index\\
+\hline
+{\em nvar} & number of primitive variables\\
+\hline
+{\em wm} & primitive variables from flow solution (dimension(nvar,lx1$\ast$lz1),intent(in))\\
+\hline
+{\em wp} & external dirichlet state's primitive variables (dimension(nvar,lx1$\ast$lz1),intent(out))\\
+\hline
+{\em um} & conserved variables from flow solution (dimension(toteq,lx1$\ast$lz1),intent(in))\\
+\hline
+{\em up} & external dirichlet state's conserved variables (dimension(toteq,lx1$\ast$lz1),intent(out)) \\
+\hline
+\end{DoxyParams}
+
+
+Here is the call graph for this function\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=238pt]{group__isurf_ga15e4fb7f0dbe0767ef81c6b291f611cb_cgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{group__isurf_ga0293ec162f23a55a9e89cf0797cbf2b2}{\index{Inviscid surface terms@{Inviscid surface terms}!outflow\-\_\-df@{outflow\-\_\-df}}
+\index{outflow\-\_\-df@{outflow\-\_\-df}!Inviscid surface terms@{Inviscid surface terms}}
+\subsubsection[{outflow\-\_\-df}]{\setlength{\rightskip}{0pt plus 5cm}subroutine outflow\-\_\-df (
+\begin{DoxyParamCaption}
+\item[{integer}]{f, }
+\item[{integer}]{e, }
+\item[{real, dimension(nvar,lx1$\ast$lz1)}]{wm, }
+\item[{real, dimension(nvar,lx1$\ast$lz1)}]{wp, }
+\item[{real, dimension(toteq,lx1$\ast$lz1)}]{um, }
+\item[{real, dimension(toteq,lx1$\ast$lz1)}]{up, }
+\item[{integer}]{nvar}
+\end{DoxyParamCaption}
+)}}\label{group__isurf_ga0293ec162f23a55a9e89cf0797cbf2b2}
+
+
+Dolejsi \& Feistauer (2015) Section 8.\-3.\-2.\-2. Very rudimentary ``physical'' boundary conditions. Also encountered in Hartmann \& Houston (2006). A poor default. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em f} & face index from 1 to 2$\ast$ldim\\
+\hline
+{\em e} & element index\\
+\hline
+{\em nvar} & number of primitive variables\\
+\hline
+{\em wm} & primitive variables from flow solution (dimension(nvar,lx1$\ast$lz1),intent(in))\\
+\hline
+{\em wp} & external dirichlet state's primitive variables (dimension(nvar,lx1$\ast$lz1),intent(out))\\
+\hline
+{\em um} & conserved variables from flow solution (dimension(toteq,lx1$\ast$lz1),intent(in))\\
+\hline
+{\em up} & external dirichlet state's conserved variables (dimension(toteq,lx1$\ast$lz1),intent(out)) \\
+\hline
+\end{DoxyParams}
+
+
+Here is the call graph for this function\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=244pt]{group__isurf_ga0293ec162f23a55a9e89cf0797cbf2b2_cgraph}
+\end{center}
+\end{figure}
+
+

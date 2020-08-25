@@ -239,7 +239,7 @@ C> (intent(in))
 C> index of conserved variable whose viscous flux is being computed.
 C> (intent(in))
       integer eq
-C> gradient of conserved variables \f$\partial U_i/\patial x_j\f$ (intent(in))
+C> gradient of conserved variables \f$\partial U_i/\partial x_j\f$ (intent(in))
       real du(lx1*ly1*lz1,3,toteq)
 !! flux = \f$\mathbf{H}^{(d)}=\mathscr{A}\f$ dU = \f$\left(\mathscr{A}^{\mbox{NS}}+\mathscr{A}^{\mbox{EVM}}\right) \f$dU 
 C> flux = \f$\mathbf{H}^{(d)}=\mathscr{A}\nabla \mathbf{U}\f$ (intent(out))

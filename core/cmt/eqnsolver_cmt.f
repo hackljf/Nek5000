@@ -28,7 +28,7 @@ C> Volume integral for diffusive terms.
 
       call rzero(diffh,3*nxyz)
 
-C> Compute \f$\mathbf{H}^d=A\nablaU\f$ and store it in diffh for element \f$e\f$.
+C> Compute \f$\mathbf{H}^d=A\nabla U\f$ and store it in diffh for element \f$e\f$.
       call agradu(diffh,gradu,e,eq)
 
 ! FIND OUT IF YOU NEED TO COMPUTE {{Hd.n}}

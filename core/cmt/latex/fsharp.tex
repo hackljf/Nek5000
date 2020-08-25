@@ -1,0 +1,72 @@
+\section{Two-point flux functions}
+Gaussian quadrature on $N$ GLL points exactly integrates a polynomial of order
+${2(\!N\!-\!1\!)-1}$. However, nonlinear flux functions like
+\ref{convh2to4} produce integrands that are rational functions of $\mathbf{U}$
+since we are dividing by density to get velocity from momentum. Gaussian
+quadrature at any order is not exact for rational integrands. %PROVE
+Worse arithmetic than mere division is required by most state equations. 
+integrated on only $N$ points. These errors tend to accumulate with time,
+and something must be done to stabilize the scheme against their deleterious
+effects.
+
+The major motivation for \S\ref{splitform} is a robust stabilization scheme
+for doing quadrature on these fluxes. Equation~\ref{finally2pt} has been
+proven to guarantee that if the two-point form $\bF^{\#}$ conserves kinetic energy,
+then a high-order SBP operator using it in Equations~\ref{splitr}
+through~\ref{splitt} will do so exactly and discretely. %99% sure travis said this p.530
+% of JCP 252
+More importantly, if $\bF^{\#}$ is \textbf{entropy-stable} (provably increases
+physical entropy or conserves it), then high-order SBP operators using it in
+DGSEM will be discretely entropy-stable as well. A growing body of tests
+\cite{WALCHCOMPARISONTODEAL} has shown that these discrete stability properties
+are recovered without loss of formal order of accuracy in constructed solutions
+and turbulent flows. Furthermore, these properties translate to better stability
+at lower cost than in traditional
+``overintegration\cite{KirbyKard}'' or ``dealiasing'' techniques.
+
+We finally give some examples of the two-point flux functions that DGSEM depends on.
+As usual, details and motivation may be found in Gassner, Winters and Kopriva\cite{}.
+\subsection{Kennedy and Gruber}
+The flux in Equation~(3.10) of Gassner, Winters \& Kopriva\cite{} is 
+the kinetic-energy-preserving skew-symmetric split form of Kennedy \& Gruber\cite{kg}
+reformulated for SBP operators in the form of Equation~\ref{finally2pt}. In
+each coordinate direction this flux is, for all 5 conserved variables,
+\begin{equation}
+\bF_1^{\#}\left(\bu_{(ijk)},\bu_{(ljk)}\right),
+\bF_2^{\#}\left(\bu_{(ijk)},\bu_{(ilk)}\right),
+\bF_3^{\#}\left(\bu_{(ijk)},\bu_{(ijl)}\right),
+\label{someargs}
+\end{equation}
+\begin{equation}
+\bF_1^{\#}=\left[\begin{array}{c} \hat{\rho}\hat{u} \\
+                               \hat{\rho}\hat{u}^2 + \hat{p} \\ 
+                               \hat{\rho}\hat{u}\hat{v} \\ 
+                               \hat{\rho}\hat{u}\hat{w} \\ 
+                               \hat{u}\left(\hat{\rho}\hat{e} +\hat{p}\right)
+              \end{array}\right], 
+\bF_2^{\#}=\left[\begin{array}{c} \hat{\rho}\hat{v} \\
+                               \hat{\rho}\hat{v}\hat{u} \\ 
+                               \hat{\rho}\hat{v}^2 + \hat{p} \\ 
+                               \hat{\rho}\hat{v}\hat{w} \\ 
+                               \hat{v}\left(\hat{\rho}\hat{e} +\hat{p}\right)
+              \end{array}\right], 
+\bF_3^{\#}=\left[\begin{array}{c} \hat{\rho}\hat{w} \\
+                               \hat{\rho}\hat{w}\hat{u} \\ 
+                               \hat{\rho}\hat{w}\hat{v} \\ 
+                               \hat{\rho}\hat{w}^2 + \hat{p} \\ 
+                               \hat{w}\left(\hat{\rho}\hat{e} +\hat{p}\right)
+              \end{array}\right], 
+\label{kennedygruber}
+\end{equation}
+where the ``hat'' variables are actually function of the indicated quantity
+at the two points upon which $\bF^{\#}_k$ acts. For the Kennedy-Gruber and other
+energy-stable fluxes,
+\begin{equation}
+\hat{f}\left(\mathbf{f}_{(ijk)},\mathbf{f}_{(ljk)}\right)\equiv \left\{\left\{
+f\right\}\right\}_{((i,l)jk)},
+\label{ezhat}
+\end{equation}
+where Equation~\ref{avgr} defines the ``$\{\{\}\}$'' averaging operator.
+Similar definitions exist for the grid lines in other directions on the reference
+element. Thus, the Kennedy and Gruber flux is a \textbf{product of averages}
+of quantities at the two points used to evaluate $\bF^{\#}$ in Equation~\ref{finally2pt}.

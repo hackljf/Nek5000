@@ -1,0 +1,148 @@
+\hypertarget{group__vfjac}{\section{Jacobians for viscous fluxes}
+\label{group__vfjac}\index{Jacobians for viscous fluxes@{Jacobians for viscous fluxes}}
+}
+\subsection*{Functions/\-Subroutines}
+\begin{DoxyCompactItemize}
+\item 
+subroutine \hyperlink{group__vfjac_ga9087d56c6c467d3ffeb9aa6be3f43e82}{agradu} (flux, du, e, eq)
+\begin{DoxyCompactList}\small\item\em Transforms the gradients of conserved variables $\nabla \mathbf{U}$ to the viscous flux $\mathbf{H}^{(d)}$ in a single element for a single equation. Particular choice of viscous stress tensor is currently hardcoded for Navier-\/\-Stokes. \end{DoxyCompactList}\item 
+subroutine \hyperlink{group__vfjac_ga2c0d85531a9af69b9d464571ca530e5d}{fluxj\-\_\-ns} (flux, gradu, e, eq)
+\begin{DoxyCompactList}\small\item\em $ \tau_{ij}=2 \mu\sigma_{ij} + \lambda \Delta \delta_{ij}$ Navier-\/\-Stokes. uservp provides properties stored in S\-O\-L\-N. Implemented via maxima-\/generated code. \end{DoxyCompactList}\item 
+subroutine \hyperlink{group__vfjac_ga15f8f8f0e3d305dc065f004aa09de57c}{compute\-\_\-transport\-\_\-props}
+\begin{DoxyCompactList}\small\item\em Fill vdiff with transport properties. Hardcoded indices for Navier-\/\-Stokes Used for both artificial and physical viscosities. \end{DoxyCompactList}\item 
+\hypertarget{group__vfjac_ga34cccfbb67ddce8c68e7f2742a94af96}{subroutine \hyperlink{group__vfjac_ga34cccfbb67ddce8c68e7f2742a94af96}{a51klduldxk} (flux, d\-U, ie)}\label{group__vfjac_ga34cccfbb67ddce8c68e7f2742a94af96}
+
+\begin{DoxyCompactList}\small\item\em W\-R\-I\-T\-E O\-U\-T N\-O\-T\-A\-T\-I\-O\-N. \end{DoxyCompactList}\item 
+\hypertarget{group__vfjac_gad8d6f5b90772f9f1082fba425cece421}{subroutine \hyperlink{group__vfjac_gad8d6f5b90772f9f1082fba425cece421}{a52klduldxk} (flux, d\-U, ie)}\label{group__vfjac_gad8d6f5b90772f9f1082fba425cece421}
+
+\begin{DoxyCompactList}\small\item\em W\-R\-I\-T\-E O\-U\-T N\-O\-T\-A\-T\-I\-O\-N. \end{DoxyCompactList}\item 
+\hypertarget{group__vfjac_ga68680b2ed51dce76ed38535fee8c7f63}{subroutine \hyperlink{group__vfjac_ga68680b2ed51dce76ed38535fee8c7f63}{a53klduldxk} (flux, d\-U, ie)}\label{group__vfjac_ga68680b2ed51dce76ed38535fee8c7f63}
+
+\begin{DoxyCompactList}\small\item\em W\-R\-I\-T\-E O\-U\-T N\-O\-T\-A\-T\-I\-O\-N. \end{DoxyCompactList}\item 
+\hypertarget{group__vfjac_ga7818a3a1981f80b10cfc4f1d93d5babc}{subroutine \hyperlink{group__vfjac_ga7818a3a1981f80b10cfc4f1d93d5babc}{a21klduldxk} (flux, d\-U, ie)}\label{group__vfjac_ga7818a3a1981f80b10cfc4f1d93d5babc}
+
+\begin{DoxyCompactList}\small\item\em W\-R\-I\-T\-E O\-U\-T N\-O\-T\-A\-T\-I\-O\-N. \end{DoxyCompactList}\item 
+\hypertarget{group__vfjac_ga608f83273074946557a9015117c11670}{subroutine \hyperlink{group__vfjac_ga608f83273074946557a9015117c11670}{a22klduldxk} (flux, d\-U, ie)}\label{group__vfjac_ga608f83273074946557a9015117c11670}
+
+\begin{DoxyCompactList}\small\item\em W\-R\-I\-T\-E O\-U\-T N\-O\-T\-A\-T\-I\-O\-N. \end{DoxyCompactList}\item 
+\hypertarget{group__vfjac_ga9271a9b027c374b2b2fba0f7f0e00a1e}{subroutine \hyperlink{group__vfjac_ga9271a9b027c374b2b2fba0f7f0e00a1e}{a23klduldxk} (flux, d\-U, ie)}\label{group__vfjac_ga9271a9b027c374b2b2fba0f7f0e00a1e}
+
+\begin{DoxyCompactList}\small\item\em W\-R\-I\-T\-E O\-U\-T N\-O\-T\-A\-T\-I\-O\-N. \end{DoxyCompactList}\item 
+\hypertarget{group__vfjac_ga3485906a061442ec51929856cc8f4d4a}{subroutine \hyperlink{group__vfjac_ga3485906a061442ec51929856cc8f4d4a}{a31klduldxk} (flux, d\-U, ie)}\label{group__vfjac_ga3485906a061442ec51929856cc8f4d4a}
+
+\begin{DoxyCompactList}\small\item\em W\-R\-I\-T\-E O\-U\-T N\-O\-T\-A\-T\-I\-O\-N. \end{DoxyCompactList}\item 
+\hypertarget{group__vfjac_ga2a280e4b1d5fbba00356ca9120709fa0}{subroutine \hyperlink{group__vfjac_ga2a280e4b1d5fbba00356ca9120709fa0}{a32klduldxk} (flux, d\-U, ie)}\label{group__vfjac_ga2a280e4b1d5fbba00356ca9120709fa0}
+
+\begin{DoxyCompactList}\small\item\em W\-R\-I\-T\-E O\-U\-T N\-O\-T\-A\-T\-I\-O\-N. \end{DoxyCompactList}\item 
+\hypertarget{group__vfjac_ga4b542714fa89c4288fa5846a11cc28b1}{subroutine \hyperlink{group__vfjac_ga4b542714fa89c4288fa5846a11cc28b1}{a33klduldxk} (flux, d\-U, ie)}\label{group__vfjac_ga4b542714fa89c4288fa5846a11cc28b1}
+
+\begin{DoxyCompactList}\small\item\em W\-R\-I\-T\-E O\-U\-T N\-O\-T\-A\-T\-I\-O\-N. \end{DoxyCompactList}\item 
+\hypertarget{group__vfjac_ga8b5ee49aa820086e3596a1a91e9dc799}{subroutine \hyperlink{group__vfjac_ga8b5ee49aa820086e3596a1a91e9dc799}{a41klduldxk} (flux, d\-U, ie)}\label{group__vfjac_ga8b5ee49aa820086e3596a1a91e9dc799}
+
+\begin{DoxyCompactList}\small\item\em W\-R\-I\-T\-E O\-U\-T N\-O\-T\-A\-T\-I\-O\-N. \end{DoxyCompactList}\item 
+\hypertarget{group__vfjac_ga7cf0c00202b223c51bed9c61c7937bc6}{subroutine \hyperlink{group__vfjac_ga7cf0c00202b223c51bed9c61c7937bc6}{a42klduldxk} (flux, d\-U, ie)}\label{group__vfjac_ga7cf0c00202b223c51bed9c61c7937bc6}
+
+\begin{DoxyCompactList}\small\item\em W\-R\-I\-T\-E O\-U\-T N\-O\-T\-A\-T\-I\-O\-N. \end{DoxyCompactList}\item 
+\hypertarget{group__vfjac_ga7d4c71aaaae94de9cd5f41a93836699a}{subroutine \hyperlink{group__vfjac_ga7d4c71aaaae94de9cd5f41a93836699a}{a43klduldxk} (flux, d\-U, ie)}\label{group__vfjac_ga7d4c71aaaae94de9cd5f41a93836699a}
+
+\begin{DoxyCompactList}\small\item\em W\-R\-I\-T\-E O\-U\-T N\-O\-T\-A\-T\-I\-O\-N. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+
+
+\subsection{Function/\-Subroutine Documentation}
+\hypertarget{group__vfjac_ga9087d56c6c467d3ffeb9aa6be3f43e82}{\index{Jacobians for viscous fluxes@{Jacobians for viscous fluxes}!agradu@{agradu}}
+\index{agradu@{agradu}!Jacobians for viscous fluxes@{Jacobians for viscous fluxes}}
+\subsubsection[{agradu}]{\setlength{\rightskip}{0pt plus 5cm}subroutine agradu (
+\begin{DoxyParamCaption}
+\item[{real, dimension(lx1$\ast$ly1$\ast$lz1,ldim)}]{flux, }
+\item[{real, dimension(lx1$\ast$ly1$\ast$lz1,3,toteq)}]{du, }
+\item[{integer}]{e, }
+\item[{integer}]{eq}
+\end{DoxyParamCaption}
+)}}\label{group__vfjac_ga9087d56c6c467d3ffeb9aa6be3f43e82}
+
+
+Transforms the gradients of conserved variables $\nabla \mathbf{U}$ to the viscous flux $\mathbf{H}^{(d)}$ in a single element for a single equation. Particular choice of viscous stress tensor is currently hardcoded for Navier-\/\-Stokes. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em e} & index of element for primitive variables within different flux jacobians (intent(in))\\
+\hline
+{\em eq} & index of conserved variable whose viscous flux is being computed. (intent(in))\\
+\hline
+{\em du} & gradient of conserved variables $\partial U_i/\partial x_j$ (intent(in))\\
+\hline
+{\em flux} & flux = $\mathbf{H}^{(d)}=\mathscr{A}\nabla \mathbf{U}$ (intent(out)) \\
+\hline
+\end{DoxyParams}
+
+
+Here is the call graph for this function\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=334pt]{group__vfjac_ga9087d56c6c467d3ffeb9aa6be3f43e82_cgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{group__vfjac_ga15f8f8f0e3d305dc065f004aa09de57c}{\index{Jacobians for viscous fluxes@{Jacobians for viscous fluxes}!compute\-\_\-transport\-\_\-props@{compute\-\_\-transport\-\_\-props}}
+\index{compute\-\_\-transport\-\_\-props@{compute\-\_\-transport\-\_\-props}!Jacobians for viscous fluxes@{Jacobians for viscous fluxes}}
+\subsubsection[{compute\-\_\-transport\-\_\-props}]{\setlength{\rightskip}{0pt plus 5cm}subroutine compute\-\_\-transport\-\_\-props (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{group__vfjac_ga15f8f8f0e3d305dc065f004aa09de57c}
+
+
+Fill vdiff with transport properties. Hardcoded indices for Navier-\/\-Stokes Used for both artificial and physical viscosities. 
+
+Indexes the element inside S\-O\-L\-N (intent(in))
+
+Here is the call graph for this function\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=318pt]{group__vfjac_ga15f8f8f0e3d305dc065f004aa09de57c_cgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{group__vfjac_ga2c0d85531a9af69b9d464571ca530e5d}{\index{Jacobians for viscous fluxes@{Jacobians for viscous fluxes}!fluxj\-\_\-ns@{fluxj\-\_\-ns}}
+\index{fluxj\-\_\-ns@{fluxj\-\_\-ns}!Jacobians for viscous fluxes@{Jacobians for viscous fluxes}}
+\subsubsection[{fluxj\-\_\-ns}]{\setlength{\rightskip}{0pt plus 5cm}subroutine fluxj\-\_\-ns (
+\begin{DoxyParamCaption}
+\item[{real, dimension(lx1$\ast$ly1$\ast$lz1,ldim)}]{flux, }
+\item[{real, dimension(lx1$\ast$ly1$\ast$lz1,3,toteq)}]{gradu, }
+\item[{integer}]{e, }
+\item[{integer}]{eq}
+\end{DoxyParamCaption}
+)}}\label{group__vfjac_ga2c0d85531a9af69b9d464571ca530e5d}
+
+
+$ \tau_{ij}=2 \mu\sigma_{ij} + \lambda \Delta \delta_{ij}$ Navier-\/\-Stokes. uservp provides properties stored in S\-O\-L\-N. Implemented via maxima-\/generated code. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em e} & index of element under consideration (intent(in))\\
+\hline
+{\em eq} & index of conserved variable whose viscous flux is being computed. (intent(in))\\
+\hline
+{\em flux} & flux = $\mathbf{H}^{(d)}=\mathscr{A}\nabla \mathbf{U}$ (intent(out))\\
+\hline
+{\em gradu} & gradient of conserved variables $\nabla \mathbf{U}$ (intent(in)) \\
+\hline
+\end{DoxyParams}
+
+
+Here is the call graph for this function\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=248pt]{group__vfjac_ga2c0d85531a9af69b9d464571ca530e5d_cgraph}
+\end{center}
+\end{figure}
+
+

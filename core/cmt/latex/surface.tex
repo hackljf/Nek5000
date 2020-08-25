@@ -1,0 +1,56 @@
+\section{Surface integral terms}%\label{sfcmath}}\index{Surface\_math@{Surface\_math}}
+%INDEX YOUR SHIT!!!
+\begin{equation}
+I_{\mbox{sfc}}=-\left(\sum_{f=1}^6
+\mathbf{E}^{(f)\Txp}\mathbf{B}^{(f)}\left[\mbox{diag}\left(\bhn^{(f)}_j\right)\left(\bh_j-\bh^{\ast(f)}_j\right)\right]\right).
+\label{isfc} % was dgweak
+\end{equation}
+where the ``face'' mass matrix $\mathbf{B}^{(f)}$ is
+\begin{equation}
+\mathbf{B}^{(f)}\equiv \left[\begin{array}{ccc} \diagdown & & 0 \\ &  \omega_i\omega_j J^{(f)}(\mathbf{x}(r_i,s_j)) &  \\  0 & & \diagdown \end{array}\right]\in\mathbb{R}^{N^2 \times N^2},
+\label{massA}
+\end{equation}
+and we note that the vectors of nodal values $\bhn^{(f)}_j$ and $\bh^{(f)}_j$ in
+\ref{isfc} have only $N^2$ elements since they correspond to GLL nodes on face $f$.
+Crucially, we have also introduced the \emph{restriction operator} $\mathbf{E}^{(f)}\in\mathbb{R}^{N^2\times N^3}$ for the $f^{\mbox{th}}$ face in \ref{isfc}.
+The restriction operator is defined as an indicator that is zero for all GLL nodes except those on the
+element faces $\dO_e$, an operation easily expressed as Kronecker products (for example, in the
+$r_1-$direction for $f=1$ at $r=r_1=-1$)
+\begin{equation}
+\bE^{(1)}=\bI\otimes \bI\otimes \mathcal{E}_1
+\label{bigE1}
+\end{equation}
+of the $\bI\in\mathbb{R}^{N\times N}$ identity matrix with unit vectors $\mathcal{E}\in\mathbb{R}^N$
+(in \ref{bigE1}, $\mathcal{E}_1\equiv\left(1,0,\dots, 0\right)^{\Txp}$).
+Similar indicators may be built up in the $r_2$- and $r_3$-directions by following the ordering of
+Kronecker products in \ref{diffkron}.
+%Substituting \ref{isfc} into~\ref{sfcintcube} and applying the matrix identity $(\bA\bB)^{\Txp}=\bB^{\Txp}\bA^{\Txp}$ discretely represents the surface integral of the numerical flux on $\Oh$:
+Applying the matrix identity $(\bA\bB)^{\Txp}=\bB^{\Txp}\bA^{\Txp}$ to Equation~\ref{isfc} discretely represents the surface integral of the numerical flux on $\Oh$:
+\begin{equation}
+\sum_{f=1}^6\iint\displaylimits_{-1}^1 v(\br) H^{\ast(f)}_j\hat{n}^{(f)}_j J^{(f)}\, dr \, ds=\sum_{f=1}^6
+\bv^{\Txp}\mathbf{E}^{(f)\Txp}\mathbf{B}^{(f)}\left(\left[\mbox{diag}\left(\bhn^{(f)}_j\right)\bh^{\ast(f)}_j\right]\right).
+\label{sfcintmatvect}
+\end{equation}
+
+\subsection{Surface flux functions}%\label{sfcmath}}\index{Surface\_math@{Surface\_math}}
+%INDEX YOUR SHIT!!!
+According to a vast body of literature not cited here, summation-by-parts (SBP)
+operators need appropriate boundary treatment to behave well. These are
+called \textbf{simultaneous approximation terms} (SAT), and the family of
+methods that have nice conservation and stability properties always have these
+two things together and are called ``SBP-SAT'' methods. For the purposes of
+DGSEM, Gassner, Winters \& Kopriva \cite[Eq]{} recommend a numerical flux
+function consisting of a symmetric function and an extra dissipative term:
+\begin{equation}
+\bH^{\ast}\left(\bU^-,\bU^+\right)=\mathbf{F}^{\#}\left(\bU^-,\bU^+\right)+\mathbf{F}_{\mbox{stab}}\left(\bU^-,\bU^+\right),
+\label{numfluxfinally}
+\end{equation}
+where $\bH^{\ast}$ is the flux between neighboring elements
+in Equation~\ref{dghstrong}. Gassner, Winters and Kopriva have indeed recycled
+the same split-form flux function used in Equations~\ref{splitr} through~\ref{splitt},
+but instead of evaluating it at two separate points, they evaluate it using the
+two values present at each interface between elements.
+
+SAT tend to be dissipative, and the dissipative nature of $\bH^{\ast}$ in
+DG is needed in DGSEM as well. $\bF^{\#}$ is augmented with a stabilizing
+flux $\bF_{\mbox{stab}}$. Examples of this will be given in \S.

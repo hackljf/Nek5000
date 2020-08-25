@@ -1,0 +1,71 @@
+\hypertarget{group__diffhvol}{\section{Volume integral for viscous fluxes}
+\label{group__diffhvol}\index{Volume integral for viscous fluxes@{Volume integral for viscous fluxes}}
+}
+\subsection*{Functions/\-Subroutines}
+\begin{DoxyCompactItemize}
+\item 
+subroutine \hyperlink{group__diffhvol_ga90ef567419c8aa503af50a7e747c884e}{half\-\_\-iku\-\_\-cmt} (res, diffh, e)
+\begin{DoxyCompactList}\small\item\em Compute the integrand $\mathbf{D}^{T}\mathbf{H}^d$ of the weak-\/form volume integral and store it in res1 one element per call. \end{DoxyCompactList}\item 
+subroutine \hyperlink{group__diffhvol_ga6d611a250fb98acf77e8a3880c0e608d}{viscous\-\_\-cmt} (e, eq)
+\begin{DoxyCompactList}\small\item\em Volume integral for diffusive terms. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+
+
+\subsection{Function/\-Subroutine Documentation}
+\hypertarget{group__diffhvol_ga90ef567419c8aa503af50a7e747c884e}{\index{Volume integral for viscous fluxes@{Volume integral for viscous fluxes}!half\-\_\-iku\-\_\-cmt@{half\-\_\-iku\-\_\-cmt}}
+\index{half\-\_\-iku\-\_\-cmt@{half\-\_\-iku\-\_\-cmt}!Volume integral for viscous fluxes@{Volume integral for viscous fluxes}}
+\subsubsection[{half\-\_\-iku\-\_\-cmt}]{\setlength{\rightskip}{0pt plus 5cm}subroutine half\-\_\-iku\-\_\-cmt (
+\begin{DoxyParamCaption}
+\item[{real, dimension(lx1,ly1,lz1)}]{res, }
+\item[{real, dimension(lx1$\ast$ly1$\ast$lz1,ldim)}]{diffh, }
+\item[{integer}]{e}
+\end{DoxyParamCaption}
+)}}\label{group__diffhvol_ga90ef567419c8aa503af50a7e747c884e}
+
+
+Compute the integrand $\mathbf{D}^{T}\mathbf{H}^d$ of the weak-\/form volume integral and store it in res1 one element per call. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em e} & index of element under consideration (intent(in))\\
+\hline
+{\em res} & res+= $\mathbf{D}^{T}\mathbf{H}^{(d)}$. Actual argument is a single element of res1 for a single equation (intent(inout))\\
+\hline
+{\em diffh} & viscous flux $\mathbf{H}^{(d)}$ for a single element and single equation. Overwritten (intent(inout)) \\
+\hline
+\end{DoxyParams}
+$\mathbf{M}\mathbf{H}^d$ in diffh
+
+$\mathbf{D}^{T}\mathbf{M}\mathbf{H}^d$ in rscr for element $e$.
+
+$\mathbf{M}^{-1}\mathbf{D}^{T}\mathbf{M}\mathbf{H}^d$ in rscr for element $e$.
+
+add rscr to res\hypertarget{group__diffhvol_ga6d611a250fb98acf77e8a3880c0e608d}{\index{Volume integral for viscous fluxes@{Volume integral for viscous fluxes}!viscous\-\_\-cmt@{viscous\-\_\-cmt}}
+\index{viscous\-\_\-cmt@{viscous\-\_\-cmt}!Volume integral for viscous fluxes@{Volume integral for viscous fluxes}}
+\subsubsection[{viscous\-\_\-cmt}]{\setlength{\rightskip}{0pt plus 5cm}subroutine viscous\-\_\-cmt (
+\begin{DoxyParamCaption}
+\item[{integer}]{e, }
+\item[{integer}]{eq}
+\end{DoxyParamCaption}
+)}}\label{group__diffhvol_ga6d611a250fb98acf77e8a3880c0e608d}
+
+
+Volume integral for diffusive terms. 
+
+Compute $\mathbf{H}^d=A\nabla U$ and store it in diffh for element $e$.
+
+Store faces of $\mathbf{H}^d$ in /\-C\-M\-T\-S\-U\-R\-F\-L\-X/ for $\mathbf{I}_{GU}$ or B\-R1.
+
+Compute the integrand $\mathbf{D}^{T}\mathbf{H}^d$ of the weak-\/form volume integral and store it in res1.
+
+Here is the call graph for this function\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{group__diffhvol_ga6d611a250fb98acf77e8a3880c0e608d_cgraph}
+\end{center}
+\end{figure}
+
+

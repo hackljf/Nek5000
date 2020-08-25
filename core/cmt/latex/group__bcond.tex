@@ -1,0 +1,111 @@
+\hypertarget{group__bcond}{\section{Surface integrals due to boundary conditions}
+\label{group__bcond}\index{Surface integrals due to boundary conditions@{Surface integrals due to boundary conditions}}
+}
+\subsection*{Functions/\-Subroutines}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{group__bcond_ga45475eec850fc7ef33c51a25b4f86602}{subroutine \hyperlink{group__bcond_ga45475eec850fc7ef33c51a25b4f86602}{inviscidbc} (flux)}\label{group__bcond_ga45475eec850fc7ef33c51a25b4f86602}
+
+\begin{DoxyCompactList}\small\item\em Determining rind state for Dirichlet boundary conditions. \end{DoxyCompactList}\item 
+\hypertarget{group__bcond_ga917af547cc29afcf40e2b54c6a97c90d}{subroutine \hyperlink{group__bcond_ga917af547cc29afcf40e2b54c6a97c90d}{bcmask\-\_\-cmt} (bmsk)}\label{group__bcond_ga917af547cc29afcf40e2b54c6a97c90d}
+
+\begin{DoxyCompactList}\small\item\em Mask to make sure Fsharp doesn't clobber boundary faces, where gs\-\_\-op is null This routine intents to take a real array for all face points, bmask, and only zero out faces on boundaries. It is thus not limited to an array only of indicators. \end{DoxyCompactList}\item 
+\hypertarget{group__bcond_ga73b8f242bb8ea95b0c7baf512eeac825}{subroutine \hyperlink{group__bcond_ga73b8f242bb8ea95b0c7baf512eeac825}{bcflux} (flux, \hyperlink{group__vfjac_ga9087d56c6c467d3ffeb9aa6be3f43e82}{agradu}, qminus)}\label{group__bcond_ga73b8f242bb8ea95b0c7baf512eeac825}
+
+\begin{DoxyCompactList}\small\item\em Determining I\-G\-U contribution to boundary flux. 0 for artificial viscosity, and strictly interior for physical viscosity. \end{DoxyCompactList}\item 
+\hypertarget{group__bcond_ga9a5825c588243a1c261d107376f5a873}{subroutine \hyperlink{group__bcond_ga9a5825c588243a1c261d107376f5a873}{a5adiabatic\-\_\-wall} (eflx, f, e, d\-U, wstate)}\label{group__bcond_ga9a5825c588243a1c261d107376f5a873}
+
+\begin{DoxyCompactList}\small\item\em computes boundary flux for adiabatic wall in igu \end{DoxyCompactList}\item 
+subroutine \hyperlink{group__bcond_ga224b6cf6476419f057df67c7a0d05504}{a51duadia} (flux, f, ie, d\-U, wstate)
+\begin{DoxyCompactList}\small\item\em same as A51 for volume flux (x-\/direction viscous flux of energy, but \end{DoxyCompactList}\item 
+subroutine \hyperlink{group__bcond_gaaaddd14c010da1bce6192846a45b63f2}{a52duadia} (flux, f, ie, d\-U, wstate)
+\begin{DoxyCompactList}\small\item\em same as A51 for volume flux (y-\/direction viscous flux of energy, but \end{DoxyCompactList}\item 
+subroutine \hyperlink{group__bcond_ga4311cb4d64847bc8b17c653ca9185866}{a53duadia} (flux, f, ie, d\-U, wstate)
+\begin{DoxyCompactList}\small\item\em same as A51 for volume flux (z-\/direction viscous flux of energy, but \end{DoxyCompactList}\item 
+subroutine \hyperlink{group__bcond_ga01708cdee955465babb7a371d4e5effa}{imqqtu\-\_\-dirichlet} (umubc, wminus, wplus)
+\begin{DoxyCompactList}\small\item\em $\left(\mathbf{I}-1/2QQ^T\right)\mathbf{U}\rightarrow\mathbf{U}^--\mathbf{U}^D$ on Dirichlet boundaries. Currently only modifies $\mathbf{U}^+$ in the case of walls. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+
+
+\subsection{Function/\-Subroutine Documentation}
+\hypertarget{group__bcond_ga224b6cf6476419f057df67c7a0d05504}{\index{Surface integrals due to boundary conditions@{Surface integrals due to boundary conditions}!a51duadia@{a51duadia}}
+\index{a51duadia@{a51duadia}!Surface integrals due to boundary conditions@{Surface integrals due to boundary conditions}}
+\subsubsection[{a51duadia}]{\setlength{\rightskip}{0pt plus 5cm}subroutine a51duadia (
+\begin{DoxyParamCaption}
+\item[{real, dimension  (lx1$\ast$ly1$\ast$lz1)}]{flux, }
+\item[{integer}]{f, }
+\item[{}]{ie, }
+\item[{real, dimension    (lx1$\ast$lz1,2$\ast$ldim,nelt,toteq,3)}]{d\-U, }
+\item[{real, dimension(lx1$\ast$lz1,2$\ast$ldim,nelt,nqq)}]{wstate}
+\end{DoxyParamCaption}
+)}}\label{group__bcond_ga224b6cf6476419f057df67c7a0d05504}
+
+
+same as A51 for volume flux (x-\/direction viscous flux of energy, but 
+
+
+\begin{DoxyEnumerate}
+\item uses wstate for contiguous storage of data on faces.
+\item locally sets K=0 to prevent heat transfer through adiabatic walls 
+\end{DoxyEnumerate}\hypertarget{group__bcond_gaaaddd14c010da1bce6192846a45b63f2}{\index{Surface integrals due to boundary conditions@{Surface integrals due to boundary conditions}!a52duadia@{a52duadia}}
+\index{a52duadia@{a52duadia}!Surface integrals due to boundary conditions@{Surface integrals due to boundary conditions}}
+\subsubsection[{a52duadia}]{\setlength{\rightskip}{0pt plus 5cm}subroutine a52duadia (
+\begin{DoxyParamCaption}
+\item[{real, dimension  (lx1$\ast$ly1$\ast$lz1)}]{flux, }
+\item[{integer}]{f, }
+\item[{}]{ie, }
+\item[{real, dimension    (lx1$\ast$lz1,2$\ast$ldim,nelt,toteq,3)}]{d\-U, }
+\item[{real, dimension(lx1$\ast$lz1,2$\ast$ldim,nelt,nqq)}]{wstate}
+\end{DoxyParamCaption}
+)}}\label{group__bcond_gaaaddd14c010da1bce6192846a45b63f2}
+
+
+same as A51 for volume flux (y-\/direction viscous flux of energy, but 
+
+
+\begin{DoxyEnumerate}
+\item uses wstate for contiguous storage of data on faces.
+\item locally sets K=0 to prevent heat transfer through adiabatic walls 
+\end{DoxyEnumerate}\hypertarget{group__bcond_ga4311cb4d64847bc8b17c653ca9185866}{\index{Surface integrals due to boundary conditions@{Surface integrals due to boundary conditions}!a53duadia@{a53duadia}}
+\index{a53duadia@{a53duadia}!Surface integrals due to boundary conditions@{Surface integrals due to boundary conditions}}
+\subsubsection[{a53duadia}]{\setlength{\rightskip}{0pt plus 5cm}subroutine a53duadia (
+\begin{DoxyParamCaption}
+\item[{real, dimension  (lx1$\ast$ly1$\ast$lz1)}]{flux, }
+\item[{integer}]{f, }
+\item[{}]{ie, }
+\item[{real, dimension    (lx1$\ast$lz1,2$\ast$ldim,nelt,toteq,3)}]{d\-U, }
+\item[{real, dimension(lx1$\ast$lz1,2$\ast$ldim,nelt,nqq)}]{wstate}
+\end{DoxyParamCaption}
+)}}\label{group__bcond_ga4311cb4d64847bc8b17c653ca9185866}
+
+
+same as A51 for volume flux (z-\/direction viscous flux of energy, but 
+
+
+\begin{DoxyEnumerate}
+\item uses wstate for contiguous storage of data on faces.
+\item locally sets K=0 to prevent heat transfer through adiabatic walls 
+\end{DoxyEnumerate}\hypertarget{group__bcond_ga01708cdee955465babb7a371d4e5effa}{\index{Surface integrals due to boundary conditions@{Surface integrals due to boundary conditions}!imqqtu\-\_\-dirichlet@{imqqtu\-\_\-dirichlet}}
+\index{imqqtu\-\_\-dirichlet@{imqqtu\-\_\-dirichlet}!Surface integrals due to boundary conditions@{Surface integrals due to boundary conditions}}
+\subsubsection[{imqqtu\-\_\-dirichlet}]{\setlength{\rightskip}{0pt plus 5cm}subroutine imqqtu\-\_\-dirichlet (
+\begin{DoxyParamCaption}
+\item[{real, dimension (lx1$\ast$lz1,2$\ast$ldim,nelt,toteq)}]{umubc, }
+\item[{real, dimension(lx1$\ast$lz1,2$\ast$ldim,nelt,nqq)}]{wminus, }
+\item[{real, dimension (lx1$\ast$lz1,2$\ast$ldim,nelt,nqq)}]{wplus}
+\end{DoxyParamCaption}
+)}}\label{group__bcond_ga01708cdee955465babb7a371d4e5effa}
+
+
+$\left(\mathbf{I}-1/2QQ^T\right)\mathbf{U}\rightarrow\mathbf{U}^--\mathbf{U}^D$ on Dirichlet boundaries. Currently only modifies $\mathbf{U}^+$ in the case of walls. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em umubc} & $\mathbf{U}^--\mathbf{U}^D$ (intent(out))\\
+\hline
+{\em wminus} & interior values of primitive variables on boundary faces (intent(in))\\
+\hline
+{\em wplus} & exterior values of primitive variables on faces with Dirichlet B\-C. Filled with desired boundary condition values (intent(inout)) on entry, but modified for adiabatic walls. \\
+\hline
+\end{DoxyParams}

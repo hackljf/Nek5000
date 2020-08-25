@@ -1,0 +1,19 @@
+111,112c111
+< \input{jh}
+< \input{pf}
+---
+> 
+137,144d135
+< 
+< %--------------------------------
+< % INSERT FORMULATION HERE
+< %--------------------------------
+< \input{formulation}
+< %--------------------------------
+< % INSERT FORMULATION THERE
+< %--------------------------------
+176,177c167
+< %\bibliographystyle{unsrt}
+< %\bibliography{zebib}
+---
+> 

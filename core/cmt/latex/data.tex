@@ -1,0 +1,87 @@
+A parallel program like CMT-nek only fits
+\textbf{nelt} elements on the memory available to a single MPI task. \textbf{lelt}
+is the maximum number of elements that may be stored on a single MPI task. It is
+set in the SIZE file. Quantities such as Equation~\ref{gridvects} and~\ref{diagalot}
+are stored in multidimensional arrays to facilitate nested-tensor-product operations.
+An example is the storage of the values of the $x$-coordinate at grid points in each element in
+the mesh that lies on a given MPI task.
+\begin{table}
+\begin{tabular}{|c|c|c|c|}
+\hline
+Mathematical variable & variable in code & common & include file \\
+$N$ & lx1=ly1 &  & SIZE \\
+dimension $d$ & ldim &  & SIZE \\
+\hline
+grid coordinate of GLL nodes & variable in code & common & include file (core/)\\
+\hline
+$x$ & xm1(lx1,ly1,lz1,lelt) & /gxyz/ & GEOM \\
+$y$ & ym1(lx1,ly1,lz1,lelt) & /gxyz/ & GEOM \\
+$z$ & zm1(lx1,ly1,lz1,lelt) & /gxyz/ & GEOM \\
+\hline
+\end{tabular}
+\caption{Declarations and locations for basic geometry}
+\label{tab:xm1gridvect}
+\end{table}
+
+\textbf{Note on lz1}: The triple ``lx1,ly1,lz1'' is mandated for all declarations and loops intended
+to cover or otherwise refer to the grid of $N^d$ quadrature nodes within an element. 
+Although lx1, ly1 and lz1 are not
+arbitrary, the limited rules surrounding their use does make it easier to reuse code
+and share it between 2D and 3D cases. An important rule for such sharing is in
+Table~\ref{tab:dimz}.
+\begin{table}
+\begin{tabular}{|c|c|c|}
+\hline
+case & value of ldim & value of lz1 \\
+\hline
+two-dimensional, $d=2$ & ldim=2 & lz1=1 \\
+three-dimensional, $d=3$ & ldim=3 & lz1=lx1=ly1$=N$ \\
+\hline
+\end{tabular}
+\caption{Problem dimensionality and how the SIZE file can take care of so many things}
+\label{tab:dimz}
+\end{table}
+
+Table~\ref{tab:mass} shows where quadrature-related
+quantities live (again, in core/, not core/cmt/)
+
+\begin{table}
+\begin{tabular}{|c|c|c|c|}
+\hline
+Mathematical variable & variable in code        & common & include file \\
+\hline
+$\mathbf{B}$          & bm1(lx1,ly1,lz1,lelt)   & /mass/ & MASS \\
+$J$                   & jacm1(lx1,ly1,lz1,lelt) &  /giso1/ & GEOM \\
+$r$, $s$ and $t$      & zgm1(lx1,3)             &  /gauss/ & WZ \\
+$\omega_i$, $i=1,\dots,N$ & wxm1(lx1)           &  /gauss/ & WZ \\
+\hline
+\end{tabular}
+\caption{Declarations and locations for quadrature}
+\label{tab:mass}
+\end{table}
+
+\section{Data structure of surface quantities}\label{sfcdata}\index{Surface\_data@{Surface\_data}}
+Surface terms and nodal vectors of surface quantities are stored in a different format from
+the one introduced in Table~\ref{tab:soln} for general storage of variables on the whole mesh.
+Every face point in every element, from an element-centered point of view (i.e., 
+every element has is own copy of values at nodes lying on its 2*ldim faces), fits
+in an array of size
+\begin{verbatim}
+nfq=lx1*lz1*2*ldim*nelt
+\end{verbatim}%\label{nfq}
+ordered according to:
+\begin{verbatim}
+dimension(lx1,lz1,2*ldim,lelt)
+\end{verbatim}%\label{pileoffaces}
+I call this a ``pile of faces.''
+I also made a common block to store many of them, /CMTSURFLX/, that I had intended to be somewhat malleable.
+Thus, quantities in it are very large 1D arrays, indexed by whole-number multiples of nfq, and
+passed to different subroutines. \textbf{ONLY inside subroutines} are \textbf{dummy arguments} dimensioned
+(lx1,lz1,2*ldim,lelt). 
+Every face has lx1$\times$lz1 nodes on the face. This makes it suitable for both 2D (lz1=1) and 3D (lz1=lx1=ly1=$N$) meshes.
+Every element has 2*ldim faces, and arrays in /CMTSURFLX/ (and in core commons like /GSURF/ and /FACEWZ/)
+store nodal vectors on faces contiguously element by element.
+
+Subroutines that index face nodes within arrays dimensioned (lx1,ly1,lz1,lelt) storing full fields
+and copy such data into arrays dimensioned (lx1,lz1,2*ldim,lelt) are stored in face.f
+(\S~\ref{face_8f}).

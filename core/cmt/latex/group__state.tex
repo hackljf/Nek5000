@@ -1,0 +1,93 @@
+\hypertarget{group__state}{\section{Thermodynamic state variables from conserved variables}
+\label{group__state}\index{Thermodynamic state variables from conserved variables@{Thermodynamic state variables from conserved variables}}
+}
+\subsection*{Functions/\-Subroutines}
+\begin{DoxyCompactItemize}
+\item 
+subroutine \hyperlink{group__state_ga150496cc6bdf94171d8f6822cd697145}{compute\-\_\-primitive\-\_\-vars} (ilim)
+\begin{DoxyCompactList}\small\item\em Compute primitive variables (velocity, thermodynamic state) from conserved unknowns U and store them in S\-O\-L\-N and C\-M\-T\-D\-A\-T\-A. \end{DoxyCompactList}\item 
+subroutine \hyperlink{group__state_ga91fd597ad604e7412e8d78a79beefe34}{tdstate} (e, energy)
+\begin{DoxyCompactList}\small\item\em calls cmt\-\_\-user\-E\-O\-S in the usr file. Compute thermodynamic state for element e from internal energy and density. \end{DoxyCompactList}\item 
+\hypertarget{group__state_ga9e9e837579897a93f40aae1fe6060255}{subroutine \hyperlink{group__state_ga9e9e837579897a93f40aae1fe6060255}{poscheck} (ifail, what)}\label{group__state_ga9e9e837579897a93f40aae1fe6060255}
+
+\begin{DoxyCompactList}\small\item\em if positive posflags, write failure message and exit \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+
+
+\subsection{Function/\-Subroutine Documentation}
+\hypertarget{group__state_ga150496cc6bdf94171d8f6822cd697145}{\index{Thermodynamic state variables from conserved variables@{Thermodynamic state variables from conserved variables}!compute\-\_\-primitive\-\_\-vars@{compute\-\_\-primitive\-\_\-vars}}
+\index{compute\-\_\-primitive\-\_\-vars@{compute\-\_\-primitive\-\_\-vars}!Thermodynamic state variables from conserved variables@{Thermodynamic state variables from conserved variables}}
+\subsubsection[{compute\-\_\-primitive\-\_\-vars}]{\setlength{\rightskip}{0pt plus 5cm}subroutine compute\-\_\-primitive\-\_\-vars (
+\begin{DoxyParamCaption}
+\item[{integer}]{ilim}
+\end{DoxyParamCaption}
+)}}\label{group__state_ga150496cc6bdf94171d8f6822cd697145}
+
+
+Compute primitive variables (velocity, thermodynamic state) from conserved unknowns U and store them in S\-O\-L\-N and C\-M\-T\-D\-A\-T\-A. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em ilim} & ilim is a flag for positivity checks. ilim==0 means {\ttfamily do not perform positivity checks.'' ilim !=0 means}perform positivity checks and exit with a diagnostic dump if density, energy or temperature fall to zero or below at any G\-L\-L node.'' \\
+\hline
+\end{DoxyParams}
+Flags for density, energy and temperature positivity
+
+Density positivity check.
+
+Divide momentum by density to get velocity
+
+Compute kinetic energy using vdot2/3
+
+Compute internal energy. First, subtract volume-\/fraction-\/weighted kinetic energy from total energy.
+
+Then, divide internal energy by density.
+
+Compute density by dividing U1 by gas volume fraction. store in vtrans(\-:,jrho)
+
+Check positivity of internal energy.
+
+Compute thermodynamic state variables cv, T and p. Check temperature positivity using ifailt in /posflags/
+
+call poscheck for each of the posflags and exit if ilim!=0 and any posflag$>$0. Nonzero posflags are set to the global element number where the first positivity failure on each M\-P\-I task was encountered.
+
+Here is the call graph for this function\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{group__state_ga150496cc6bdf94171d8f6822cd697145_cgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{group__state_ga91fd597ad604e7412e8d78a79beefe34}{\index{Thermodynamic state variables from conserved variables@{Thermodynamic state variables from conserved variables}!tdstate@{tdstate}}
+\index{tdstate@{tdstate}!Thermodynamic state variables from conserved variables@{Thermodynamic state variables from conserved variables}}
+\subsubsection[{tdstate}]{\setlength{\rightskip}{0pt plus 5cm}subroutine tdstate (
+\begin{DoxyParamCaption}
+\item[{integer}]{e, }
+\item[{real, dimension(lx1,ly1,lz1)}]{energy}
+\end{DoxyParamCaption}
+)}}\label{group__state_ga91fd597ad604e7412e8d78a79beefe34}
+
+
+calls cmt\-\_\-user\-E\-O\-S in the usr file. Compute thermodynamic state for element e from internal energy and density. 
+
+loop over G\-L\-L nodes in element e. Fill /\-N\-E\-K\-U\-S\-E/ and /nekuscmt/ by nekasgn and cmtasgn calls, respectively.
+
+Compute thermodynamic state from scalars declared in /\-N\-E\-K\-U\-S\-E/ and /nekuscmt/ store state variables in temp,cv,cp,pres and asnd
+
+Check temperature positivity
+
+Fill S\-O\-L\-N and C\-M\-T\-D\-A\-T\-A arrays one G\-L\-L node at a time from scalars in /\-N\-E\-K\-U\-S\-E/ and /nekuscmt/
+
+Here is the call graph for this function\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=228pt]{group__state_ga91fd597ad604e7412e8d78a79beefe34_cgraph}
+\end{center}
+\end{figure}
+
+

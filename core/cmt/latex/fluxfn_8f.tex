@@ -1,0 +1,51 @@
+\hypertarget{fluxfn_8f}{\section{fluxfn.\-f File Reference}
+\label{fluxfn_8f}\index{fluxfn.\-f@{fluxfn.\-f}}
+}
+
+
+Riemann solvers, other rocflu miscellany and two-\/point fluxes.  
+
+
+\subsection*{Functions/\-Subroutines}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{fluxfn_8f_aa0303cef4d920383bd1c82425e0ca07d}{subroutine {\bfseries kgrotfluxfunction} (ntot, nm, rl, ul, vl, wl, pl, al, tl, rr, ur, vr, wr, pr, ar, tr, flx, el, er)}\label{fluxfn_8f_aa0303cef4d920383bd1c82425e0ca07d}
+
+\item 
+\hypertarget{group__isurf_ga2b8162e02f3f2266c59f717fa1363226}{subroutine \hyperlink{group__isurf_ga2b8162e02f3f2266c59f717fa1363226}{ausm\-\_\-fluxfunction} (ntot, nx, ny, nz, nm, fs, rl, ul, vl, wl, pl, al, tl, rr, ur, vr, wr, pr, ar, tr, flx, el, er)}\label{group__isurf_ga2b8162e02f3f2266c59f717fa1363226}
+
+\begin{DoxyCompactList}\small\item\em Computes inviscid numerical surface flux from A\-U\-S\-M+ Riemann solver. \end{DoxyCompactList}\item 
+\hypertarget{fluxfn_8f_a3a083fcb64cd04500931d07c3c271a3d}{subroutine {\bfseries centralinviscid\-\_\-fluxfunction} (ntot, nx, ny, nz, fs, ul, pl, ur, pr, flx)}\label{fluxfn_8f_a3a083fcb64cd04500931d07c3c271a3d}
+
+\item 
+\hypertarget{fluxfn_8f_acbc3512b880f3599497696d179efcaf4}{subroutine {\bfseries llf\-\_\-euler} (flx, ul, ur, wl, wr, nrm, dum)}\label{fluxfn_8f_acbc3512b880f3599497696d179efcaf4}
+
+\item 
+\hypertarget{fluxfn_8f_aa210cc6f937700f2161b8ef80941b1b7}{subroutine {\bfseries llf\-\_\-euler\-\_\-vec} (wminus, uplus, flux, nstate)}\label{fluxfn_8f_aa210cc6f937700f2161b8ef80941b1b7}
+
+\item 
+\hypertarget{fluxfn_8f_acdcfc163b5cd7fad3949be97707176d0}{subroutine {\bfseries kennedygruber} (flx, ul, ur, wl, wr, jal, jar)}\label{fluxfn_8f_acdcfc163b5cd7fad3949be97707176d0}
+
+\item 
+\hypertarget{fluxfn_8f_a59e9fe9c53edce67292dbcb47f7c3853}{subroutine {\bfseries kepec\-\_\-ch} (flx, ul, ur, wl, wr, jal, jar)}\label{fluxfn_8f_a59e9fe9c53edce67292dbcb47f7c3853}
+
+\item 
+\hypertarget{fluxfn_8f_a25cb36e6b50d76a9d6d788b9c3656808}{subroutine {\bfseries kennedygruber\-\_\-vec} (z, flux, nstate, nflux)}\label{fluxfn_8f_a25cb36e6b50d76a9d6d788b9c3656808}
+
+\item 
+\hypertarget{fluxfn_8f_abf0b8321ecdfdf41f3a2259935c250c9}{subroutine {\bfseries trivial}}\label{fluxfn_8f_abf0b8321ecdfdf41f3a2259935c250c9}
+
+\item 
+\hypertarget{fluxfn_8f_a3263d754d306110417d51b61cc67a28b}{subroutine {\bfseries rhoe\-\_\-to\-\_\-e} (fatface, nf, ns)}\label{fluxfn_8f_a3263d754d306110417d51b61cc67a28b}
+
+\item 
+\hypertarget{fluxfn_8f_a3264aa63a47559ee42fcf884419d86ca}{subroutine {\bfseries parameter\-\_\-vector\-\_\-vol} (z, zt, ut, e, idum)}\label{fluxfn_8f_a3264aa63a47559ee42fcf884419d86ca}
+
+\item 
+\hypertarget{fluxfn_8f_ac2c150a9f3b7c48db9387a5d1840ee5d}{subroutine {\bfseries kepec\-\_\-duplicated} (wminus, wplus, flux)}\label{fluxfn_8f_ac2c150a9f3b7c48db9387a5d1840ee5d}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Riemann solvers, other rocflu miscellany and two-\/point fluxes. 

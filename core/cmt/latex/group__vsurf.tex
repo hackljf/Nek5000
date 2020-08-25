@@ -1,0 +1,93 @@
+\hypertarget{group__vsurf}{\section{Viscous surface terms}
+\label{group__vsurf}\index{Viscous surface terms@{Viscous surface terms}}
+}
+\subsection*{Functions/\-Subroutines}
+\begin{DoxyCompactItemize}
+\item 
+subroutine \hyperlink{group__vsurf_gac863c5b9f5cfae59ded7447a0c5e6d93}{br1auxflux} (e, flux, ujump)
+\begin{DoxyCompactList}\small\item\em add B\-R1 auxiliary flux $\frac{1}{2}\left(\mathbf{U}^+-\mathbf{U}^-\right)$ to the gradient for a single element \end{DoxyCompactList}\item 
+subroutine \hyperlink{group__vsurf_ga57cdf5eb9ed721fdf3cd454454b47122}{imqqtu} (ummcu, uminus, uplus)
+\begin{DoxyCompactList}\small\item\em ummcu = $\mathbf{U}^--\{\{\mathbf{U}\}\}$ \end{DoxyCompactList}\item 
+subroutine \hyperlink{group__vsurf_ga98d826061a0ffb225d37cb73b86a9475}{igtu\-\_\-cmt} (qminus, ummcu, hface)
+\begin{DoxyCompactList}\small\item\em Computes $G^T U$, the volume integral of $[[u]]\cdot\{\{\nabla v\}\}$, and increments res1 with it. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+
+
+\subsection{Function/\-Subroutine Documentation}
+\hypertarget{group__vsurf_gac863c5b9f5cfae59ded7447a0c5e6d93}{\index{Viscous surface terms@{Viscous surface terms}!br1auxflux@{br1auxflux}}
+\index{br1auxflux@{br1auxflux}!Viscous surface terms@{Viscous surface terms}}
+\subsubsection[{br1auxflux}]{\setlength{\rightskip}{0pt plus 5cm}subroutine br1auxflux (
+\begin{DoxyParamCaption}
+\item[{integer}]{e, }
+\item[{real, dimension(lx1$\ast$ly1$\ast$lz1,ldim)}]{flux, }
+\item[{real, dimension(lx1$\ast$lz1$\ast$2$\ast$ldim,nelt)}]{ujump}
+\end{DoxyParamCaption}
+)}}\label{group__vsurf_gac863c5b9f5cfae59ded7447a0c5e6d93}
+
+
+add B\-R1 auxiliary flux $\frac{1}{2}\left(\mathbf{U}^+-\mathbf{U}^-\right)$ to the gradient for a single element 
+
+
+\begin{DoxyParams}{Parameters}
+{\em e} & Indexes the element inside ujump, G\-E\-O\-M and D\-G (intent(in))\\
+\hline
+{\em ujump} & Jump in a single conserved variable $\left[\left[U\right]\right]$ on all faces of all elements (intent(in))\\
+\hline
+{\em flux} & On entry\-: gradient $\partial U_i^{-}/\partial x_k$ of a single conserved variable. On exit\-: all three components of auxiliary variable $\mathbf{S}$ of a single conserved variable. (intent(inout)) \\
+\hline
+\end{DoxyParams}
+\hypertarget{group__vsurf_ga98d826061a0ffb225d37cb73b86a9475}{\index{Viscous surface terms@{Viscous surface terms}!igtu\-\_\-cmt@{igtu\-\_\-cmt}}
+\index{igtu\-\_\-cmt@{igtu\-\_\-cmt}!Viscous surface terms@{Viscous surface terms}}
+\subsubsection[{igtu\-\_\-cmt}]{\setlength{\rightskip}{0pt plus 5cm}subroutine igtu\-\_\-cmt (
+\begin{DoxyParamCaption}
+\item[{real, dimension(lx1$\ast$lz1,2$\ast$ldim,nelt,$\ast$)}]{qminus, }
+\item[{real, dimension(lx1$\ast$lz1$\ast$2$\ast$ldim,nelt,toteq)}]{ummcu, }
+\item[{real, dimension(lx1$\ast$lz1$\ast$2$\ast$ldim$\ast$nelt,toteq,3)}]{hface}
+\end{DoxyParamCaption}
+)}}\label{group__vsurf_ga98d826061a0ffb225d37cb73b86a9475}
+
+
+Computes $G^T U$, the volume integral of $[[u]]\cdot\{\{\nabla v\}\}$, and increments res1 with it. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em qminus} & qminus contains values of state variables indexed by j$\ast$ at each element's own face points ummcu contains $U-\{\{U\}\}$ \\
+\hline
+\end{DoxyParams}
+Symmetric interior penalty method (S\-I\-P) and Baumann-\/\-Oden have opposite signs for this term. The sign is H\-A\-R\-D\-C\-O\-D\-E\-D here.
+
+gradm1\-\_\-t uses /ctmp1/
+
+Here is the call graph for this function\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{group__vsurf_ga98d826061a0ffb225d37cb73b86a9475_cgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{group__vsurf_ga57cdf5eb9ed721fdf3cd454454b47122}{\index{Viscous surface terms@{Viscous surface terms}!imqqtu@{imqqtu}}
+\index{imqqtu@{imqqtu}!Viscous surface terms@{Viscous surface terms}}
+\subsubsection[{imqqtu}]{\setlength{\rightskip}{0pt plus 5cm}subroutine imqqtu (
+\begin{DoxyParamCaption}
+\item[{real, dimension (lx1$\ast$lz1$\ast$2$\ast$ldim$\ast$nelt,toteq)}]{ummcu, }
+\item[{real, dimension(lx1$\ast$lz1$\ast$2$\ast$ldim$\ast$nelt,toteq)}]{uminus, }
+\item[{real, dimension (lx1$\ast$lz1$\ast$2$\ast$ldim$\ast$nelt,toteq)}]{uplus}
+\end{DoxyParamCaption}
+)}}\label{group__vsurf_ga57cdf5eb9ed721fdf3cd454454b47122}
+
+
+ummcu = $\mathbf{U}^--\{\{\mathbf{U}\}\}$ 
+
+
+\begin{DoxyParams}{Parameters}
+{\em ummcu} & ummcu = $\mathbf{U}^--\{\{\mathbf{U}\}\}$ for all faces (intent(out))\\
+\hline
+{\em uminus} & $\mathbf{U}^-$ for all faces on all elements (intent(in))\\
+\hline
+{\em uplus} & Neighbor values $\mathbf{U}^+$ for all faces on all elements (intent(in)) \\
+\hline
+\end{DoxyParams}

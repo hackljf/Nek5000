@@ -1,0 +1,68 @@
+\hypertarget{outflow__bc_8f}{\section{outflow\-\_\-bc.\-f File Reference}
+\label{outflow__bc_8f}\index{outflow\-\_\-bc.\-f@{outflow\-\_\-bc.\-f}}
+}
+
+
+Dirichlet states for outflow boundary conditions wrapper for other B\-C routines. Just one for now. More to come.  
+
+
+\subsection*{Functions/\-Subroutines}
+\begin{DoxyCompactItemize}
+\item 
+subroutine \hyperlink{outflow__bc_8f_ac197c7083c48cd1062073f9c2b56b573}{outflow} (f, e, wminus, wplus, uminus, uplus, nvar)
+\item 
+subroutine \hyperlink{group__isurf_ga0293ec162f23a55a9e89cf0797cbf2b2}{outflow\-\_\-df} (f, e, wm, wp, um, up, nvar)
+\begin{DoxyCompactList}\small\item\em Dolejsi \& Feistauer (2015) Section 8.\-3.\-2.\-2. Very rudimentary ``physical'' boundary conditions. Also encountered in Hartmann \& Houston (2006). A poor default. \end{DoxyCompactList}\item 
+\hypertarget{outflow__bc_8f_a97fe193b365ccda49446db3dab8bf08d}{subroutine {\bfseries outflow\-\_\-rflu} (nvar, f, e, facew, wbc)}\label{outflow__bc_8f_a97fe193b365ccda49446db3dab8bf08d}
+
+\item 
+\hypertarget{outflow__bc_8f_a52d692beffa8873b023900968d713a1c}{subroutine {\bfseries bcondoutflowperf} (bc\-Opt, pout, sxn, syn, szn, cpgas, mol, rho, rhou, rhov, rhow, rhoe, press, rhob, rhoub, rhovb, rhowb, rhoeb)}\label{outflow__bc_8f_a52d692beffa8873b023900968d713a1c}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Dirichlet states for outflow boundary conditions wrapper for other B\-C routines. Just one for now. More to come. 
+
+\subsection{Function/\-Subroutine Documentation}
+\hypertarget{outflow__bc_8f_ac197c7083c48cd1062073f9c2b56b573}{\index{outflow\-\_\-bc.\-f@{outflow\-\_\-bc.\-f}!outflow@{outflow}}
+\index{outflow@{outflow}!outflow_bc.f@{outflow\-\_\-bc.\-f}}
+\subsubsection[{outflow}]{\setlength{\rightskip}{0pt plus 5cm}subroutine outflow (
+\begin{DoxyParamCaption}
+\item[{integer}]{f, }
+\item[{integer}]{e, }
+\item[{real, dimension(nvar,lx1$\ast$lz1)}]{wminus, }
+\item[{real, dimension(nvar,lx1$\ast$lz1)}]{wplus, }
+\item[{real, dimension(toteq,lx1$\ast$lz1)}]{uminus, }
+\item[{real, dimension(toteq,lx1$\ast$lz1)}]{uplus, }
+\item[{integer}]{nvar}
+\end{DoxyParamCaption}
+)}}\label{outflow__bc_8f_ac197c7083c48cd1062073f9c2b56b573}
+
+\begin{DoxyParams}{Parameters}
+{\em f} & face index from 1 to 2$\ast$ldim\\
+\hline
+{\em e} & element index\\
+\hline
+{\em nvar} & number of primitive variables\\
+\hline
+{\em wminus} & primitive variables from flow solution (dimension(nvar,lx1$\ast$lz1),intent(in))\\
+\hline
+{\em wplus} & external dirichlet state's primitive variables (dimension(nvar,lx1$\ast$lz1),intent(out))\\
+\hline
+{\em uminus} & conserved variables from flow solution (dimension(toteq,lx1$\ast$lz1),intent(in))\\
+\hline
+{\em uplus} & external dirichlet state's conserved variables (dimension(toteq,lx1$\ast$lz1),intent(out)) \\
+\hline
+\end{DoxyParams}
+
+
+Here is the call graph for this function\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=334pt]{outflow__bc_8f_ac197c7083c48cd1062073f9c2b56b573_cgraph}
+\end{center}
+\end{figure}
+
+

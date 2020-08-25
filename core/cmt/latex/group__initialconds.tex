@@ -1,0 +1,63 @@
+\hypertarget{group__initialconds}{\section{flow field initialization routines}
+\label{group__initialconds}\index{flow field initialization routines@{flow field initialization routines}}
+}
+\subsection*{Functions/\-Subroutines}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{group__initialconds_ga0427858fb7b0c582bcd5ff776de86a09}{subroutine \hyperlink{group__initialconds_ga0427858fb7b0c582bcd5ff776de86a09}{cmtasgn} (ix, iy, iz, e)}\label{group__initialconds_ga0427858fb7b0c582bcd5ff776de86a09}
+
+\begin{DoxyCompactList}\small\item\em Fill /\-N\-E\-K\-U\-S\-E/ and /\-N\-E\-K\-U\-S\-C\-M\-T/ common blocks from a single G\-L\-L node extends nekasgn to C\-M\-T-\/nek without affecting core routines. \end{DoxyCompactList}\item 
+subroutine \hyperlink{group__initialconds_ga1be8524b895b1b95b04e8707aa0ba4ae}{cmt\-\_\-ics}
+\begin{DoxyCompactList}\small\item\em set initial values of conserved variables in U for C\-M\-T-\/nek \end{DoxyCompactList}\item 
+subroutine \hyperlink{group__initialconds_ga3e2114ab9f0c76a032cd4d0f708bdc24}{cmtuic}
+\begin{DoxyCompactList}\small\item\em Fresh initialization of conserved variables from useric. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+
+
+\subsection{Function/\-Subroutine Documentation}
+\hypertarget{group__initialconds_ga1be8524b895b1b95b04e8707aa0ba4ae}{\index{flow field initialization routines@{flow field initialization routines}!cmt\-\_\-ics@{cmt\-\_\-ics}}
+\index{cmt\-\_\-ics@{cmt\-\_\-ics}!flow field initialization routines@{flow field initialization routines}}
+\subsubsection[{cmt\-\_\-ics}]{\setlength{\rightskip}{0pt plus 5cm}subroutine cmt\-\_\-ics (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{group__initialconds_ga1be8524b895b1b95b04e8707aa0ba4ae}
+
+
+set initial values of conserved variables in U for C\-M\-T-\/nek 
+
+Over-\/engineered duplicate of setics in core nek5000. Calls cmtuic for a fresh start or my\-\_\-full\-\_\-restart for restart. cmtuic actually initializes the flow field through cmt-\/nek's own dedicated calls to useric. logs min and max of primitive variables as a sanity check in diagnostic I/\-O labeled \char`\"{}\-Cuvwpt,\char`\"{} etc. 
+
+Here is the call graph for this function\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=316pt]{group__initialconds_ga1be8524b895b1b95b04e8707aa0ba4ae_cgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{group__initialconds_ga3e2114ab9f0c76a032cd4d0f708bdc24}{\index{flow field initialization routines@{flow field initialization routines}!cmtuic@{cmtuic}}
+\index{cmtuic@{cmtuic}!flow field initialization routines@{flow field initialization routines}}
+\subsubsection[{cmtuic}]{\setlength{\rightskip}{0pt plus 5cm}subroutine cmtuic (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{group__initialconds_ga3e2114ab9f0c76a032cd4d0f708bdc24}
+
+
+Fresh initialization of conserved variables from useric. 
+
+Calls cmtasgn to interface with userbc, forms conserved variables from scalar primitive variables one grid point at a time, and fills U completely. 
+
+Here is the call graph for this function\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=226pt]{group__initialconds_ga3e2114ab9f0c76a032cd4d0f708bdc24_cgraph}
+\end{center}
+\end{figure}
+
+

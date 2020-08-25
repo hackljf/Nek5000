@@ -1,0 +1,83 @@
+\hypertarget{drive1__cmt_8f}{\section{drive1\-\_\-cmt.\-f File Reference}
+\label{drive1__cmt_8f}\index{drive1\-\_\-cmt.\-f@{drive1\-\_\-cmt.\-f}}
+}
+
+
+high-\/level driver for C\-M\-T-\/nek  
+
+
+\subsection*{Functions/\-Subroutines}
+\begin{DoxyCompactItemize}
+\item 
+subroutine \hyperlink{drive1__cmt_8f_af21718debad3a2fefd68afcc5991813a}{cmt\-\_\-nek\-\_\-advance}
+\begin{DoxyCompactList}\small\item\em Branch from subroutine nek\-\_\-advance in core/drive1.\-f Advance C\-M\-T-\/nek one time step within nek5000 time loop. \end{DoxyCompactList}\item 
+subroutine \hyperlink{drive1__cmt_8f_a001e854c71bfa7c25b504caaa09b7681}{compute\-\_\-rhs\-\_\-and\-\_\-dt}
+\begin{DoxyCompactList}\small\item\em Compute right-\/hand-\/side of the semidiscrete conservation law Store it in res1. \end{DoxyCompactList}\item 
+\hypertarget{drive1__cmt_8f_a682c25d68683aaedd6aa5c7e7cd166ed}{subroutine \hyperlink{drive1__cmt_8f_a682c25d68683aaedd6aa5c7e7cd166ed}{set\-\_\-tstep\-\_\-coef}}\label{drive1__cmt_8f_a682c25d68683aaedd6aa5c7e7cd166ed}
+
+\begin{DoxyCompactList}\small\item\em Compute coefficients for Runge-\/\-Kutta stages {\bfseries [T\-V\-D\-R\-K]}\}. \end{DoxyCompactList}\item 
+\hypertarget{drive1__cmt_8f_a0a2e4794cb7239611d23502b7c312feb}{subroutine \hyperlink{drive1__cmt_8f_a0a2e4794cb7239611d23502b7c312feb}{cmt\-\_\-flow\-\_\-ics}}\label{drive1__cmt_8f_a0a2e4794cb7239611d23502b7c312feb}
+
+\begin{DoxyCompactList}\small\item\em This subroutine must only be called after a restart. It copies arrays that nek5000 reads from S\-L\-N files into their corresponding slots in C\-M\-T\-D\-A\-T\-A. vx stores U(\-:,2,\-:), x-\/momentum. vy stores U(\-:,3,\-:), y-\/momentum. vz stores U(\-:,4,\-:), z-\/momentum. pr stores U(\-:,1,\-:), fluid density The T array stores U(\-:,5,\-:), fluid total energy. \end{DoxyCompactList}\item 
+\hypertarget{drive1__cmt_8f_a2d3a6bf3ca463bb62525dd09836d5c43}{subroutine {\bfseries print\-\_\-cmt\-\_\-timers}}\label{drive1__cmt_8f_a2d3a6bf3ca463bb62525dd09836d5c43}
+
+\item 
+\hypertarget{drive1__cmt_8f_ad434a1c79e4501bf2b0464edc2636e4b}{subroutine {\bfseries init\-\_\-cmt\-\_\-timers}}\label{drive1__cmt_8f_ad434a1c79e4501bf2b0464edc2636e4b}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+high-\/level driver for C\-M\-T-\/nek 
+
+\subsection{Function/\-Subroutine Documentation}
+\hypertarget{drive1__cmt_8f_af21718debad3a2fefd68afcc5991813a}{\index{drive1\-\_\-cmt.\-f@{drive1\-\_\-cmt.\-f}!cmt\-\_\-nek\-\_\-advance@{cmt\-\_\-nek\-\_\-advance}}
+\index{cmt\-\_\-nek\-\_\-advance@{cmt\-\_\-nek\-\_\-advance}!drive1_cmt.f@{drive1\-\_\-cmt.\-f}}
+\subsubsection[{cmt\-\_\-nek\-\_\-advance}]{\setlength{\rightskip}{0pt plus 5cm}subroutine cmt\-\_\-nek\-\_\-advance (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{drive1__cmt_8f_af21718debad3a2fefd68afcc5991813a}
+
+
+Branch from subroutine nek\-\_\-advance in core/drive1.\-f Advance C\-M\-T-\/nek one time step within nek5000 time loop. 
+
+Initialization calls
+
+Runge-\/\-Kutta loop 
+
+Here is the call graph for this function\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{drive1__cmt_8f_af21718debad3a2fefd68afcc5991813a_cgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{drive1__cmt_8f_a001e854c71bfa7c25b504caaa09b7681}{\index{drive1\-\_\-cmt.\-f@{drive1\-\_\-cmt.\-f}!compute\-\_\-rhs\-\_\-and\-\_\-dt@{compute\-\_\-rhs\-\_\-and\-\_\-dt}}
+\index{compute\-\_\-rhs\-\_\-and\-\_\-dt@{compute\-\_\-rhs\-\_\-and\-\_\-dt}!drive1_cmt.f@{drive1\-\_\-cmt.\-f}}
+\subsubsection[{compute\-\_\-rhs\-\_\-and\-\_\-dt}]{\setlength{\rightskip}{0pt plus 5cm}subroutine compute\-\_\-rhs\-\_\-and\-\_\-dt (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{drive1__cmt_8f_a001e854c71bfa7c25b504caaa09b7681}
+
+
+Compute right-\/hand-\/side of the semidiscrete conservation law Store it in res1. 
+
+Restrict via $\mathbf{E}$ to get primitive and conserved variables on interior faces $\mathbf{U}^-$ and neighbor faces $\mathbf{U}^+$; store in C\-M\-T\-S\-U\-R\-F\-L\-X
+
+res1+= $\oint \mathbf{H}^{c\ast}\cdot\mathbf{n}dA$ on face points
+
+res1+= $\int_{\Gamma} \{\{\mathbf{A}\nabla \mathbf{U}\}\} \cdot \left[v\right] dA$ 
+
+Here is the call graph for this function\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{drive1__cmt_8f_a001e854c71bfa7c25b504caaa09b7681_cgraph}
+\end{center}
+\end{figure}
+
+

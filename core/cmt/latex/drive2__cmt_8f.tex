@@ -1,0 +1,27 @@
+\hypertarget{drive2__cmt_8f}{\section{drive2\-\_\-cmt.\-f File Reference}
+\label{drive2__cmt_8f}\index{drive2\-\_\-cmt.\-f@{drive2\-\_\-cmt.\-f}}
+}
+
+
+mid-\/level initialization drivers. Not long for this world.  
+
+
+\subsection*{Functions/\-Subroutines}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{drive2__cmt_8f_a61e619e5f36fba502299223ac6513879}{subroutine \hyperlink{drive2__cmt_8f_a61e619e5f36fba502299223ac6513879}{nek\-\_\-cmt\-\_\-init}}\label{drive2__cmt_8f_a61e619e5f36fba502299223ac6513879}
+
+\begin{DoxyCompactList}\small\item\em This routine was intended to integrate more carefully with nek5000's gs\-\_\-op ifheat was supposed to trigger initialization of Paul Fischer's implementations of D\-G operators K, G and G$^\wedge$\-T, but we never finished keeping up with their work. Right now it's just a wrapper for setup\-\_\-cmt\-\_\-commo. \end{DoxyCompactList}\item 
+\hypertarget{drive2__cmt_8f_ae598a12ef00f223232ba04a1e871a924}{subroutine \hyperlink{drive2__cmt_8f_ae598a12ef00f223232ba04a1e871a924}{izero8} (a, n)}\label{drive2__cmt_8f_ae598a12ef00f223232ba04a1e871a924}
+
+\begin{DoxyCompactList}\small\item\em vector routine to zero out kind=8 integers. \end{DoxyCompactList}\item 
+\hypertarget{drive2__cmt_8f_a81da0b48bc01bfd806b0a9dfe517578f}{subroutine \hyperlink{drive2__cmt_8f_a81da0b48bc01bfd806b0a9dfe517578f}{limiter}}\label{drive2__cmt_8f_a81da0b48bc01bfd806b0a9dfe517578f}
+
+\begin{DoxyCompactList}\small\item\em positivity-\/preserving limiters. Adjusts conserved variables in U for to ensure that density, pressure and internal energy are positive. Follows Zhang \& Shu (2010) J\-C\-P 229. We did get Lv \& Ihme's (2015) entropy-\/bounded discontinuous Galerkin (E\-B\-D\-G) limiter working, but this is only for perfect gases. \end{DoxyCompactList}\item 
+\hypertarget{drive2__cmt_8f_a91f186bf1b4c97f611386abe42e5e547}{real function \hyperlink{drive2__cmt_8f_a91f186bf1b4c97f611386abe42e5e547}{logmean} (l, r)}\label{drive2__cmt_8f_a91f186bf1b4c97f611386abe42e5e547}
+
+\begin{DoxyCompactList}\small\item\em Ismail \& Roe's (2009) version of the logarithmic mean for all possible pairs of values, including equal values. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+mid-\/level initialization drivers. Not long for this world. 

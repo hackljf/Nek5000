@@ -1,0 +1,29 @@
+\hypertarget{driver3__cmt_8f}{\section{driver3\-\_\-cmt.\-f File Reference}
+\label{driver3__cmt_8f}\index{driver3\-\_\-cmt.\-f@{driver3\-\_\-cmt.\-f}}
+}
+
+
+routines for primitive variables, usr-\/file interfaces and properties. Also initializes flow field.  
+
+
+\subsection*{Functions/\-Subroutines}
+\begin{DoxyCompactItemize}
+\item 
+subroutine \hyperlink{group__state_ga150496cc6bdf94171d8f6822cd697145}{compute\-\_\-primitive\-\_\-vars} (ilim)
+\begin{DoxyCompactList}\small\item\em Compute primitive variables (velocity, thermodynamic state) from conserved unknowns U and store them in S\-O\-L\-N and C\-M\-T\-D\-A\-T\-A. \end{DoxyCompactList}\item 
+subroutine \hyperlink{group__state_ga91fd597ad604e7412e8d78a79beefe34}{tdstate} (e, energy)
+\begin{DoxyCompactList}\small\item\em calls cmt\-\_\-user\-E\-O\-S in the usr file. Compute thermodynamic state for element e from internal energy and density. \end{DoxyCompactList}\item 
+\hypertarget{group__initialconds_ga0427858fb7b0c582bcd5ff776de86a09}{subroutine \hyperlink{group__initialconds_ga0427858fb7b0c582bcd5ff776de86a09}{cmtasgn} (ix, iy, iz, e)}\label{group__initialconds_ga0427858fb7b0c582bcd5ff776de86a09}
+
+\begin{DoxyCompactList}\small\item\em Fill /\-N\-E\-K\-U\-S\-E/ and /\-N\-E\-K\-U\-S\-C\-M\-T/ common blocks from a single G\-L\-L node extends nekasgn to C\-M\-T-\/nek without affecting core routines. \end{DoxyCompactList}\item 
+subroutine \hyperlink{group__initialconds_ga1be8524b895b1b95b04e8707aa0ba4ae}{cmt\-\_\-ics}
+\begin{DoxyCompactList}\small\item\em set initial values of conserved variables in U for C\-M\-T-\/nek \end{DoxyCompactList}\item 
+subroutine \hyperlink{group__initialconds_ga3e2114ab9f0c76a032cd4d0f708bdc24}{cmtuic}
+\begin{DoxyCompactList}\small\item\em Fresh initialization of conserved variables from useric. \end{DoxyCompactList}\item 
+\hypertarget{group__state_ga9e9e837579897a93f40aae1fe6060255}{subroutine \hyperlink{group__state_ga9e9e837579897a93f40aae1fe6060255}{poscheck} (ifail, what)}\label{group__state_ga9e9e837579897a93f40aae1fe6060255}
+
+\begin{DoxyCompactList}\small\item\em if positive posflags, write failure message and exit \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+routines for primitive variables, usr-\/file interfaces and properties. Also initializes flow field. 

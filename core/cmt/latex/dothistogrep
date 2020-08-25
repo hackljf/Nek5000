@@ -1,0 +1,1 @@
+while read sub; do echo $sub `grep -c $sub whatsdone`|grep -v "[2-9] *$" ; done<whatsleft>tmp

@@ -1,0 +1,174 @@
+\section{Split forms of evaluating summation-by-parts operators\label{splitform}}
+% MAKE SURE
+%\bh and \bH are not confused
+%\bh_m is used where appropriate for a nodal vector of a single unknown's flux
+% H_m
+We're solving a differential equation. We need to take derivatives of things
+like $U$ and $\mathbf{H}$ approximated by polynomials on each element.
+Finite differences are appropriate for computing derivatives of interpolating polynomials.
+Algorithms are commonplace for finite differences on each of $N$ points expressed as
+products between a $N\times N$ differentiation matrix $\mathcal{D}$ and a
+vector of $N$ nodal values in one spatial dimension,
+\begin{equation}
+\mathcal{D}\bv \approx\left[\left.\dd{v}{r}\right|_{r_1},\, \cdots,\,\left.\dd{v}{r}\right|_{r_N} \right]^{\Txp}.
+\label{diffmat1D}
+\end{equation}
+$\mathcal{D}$ is computed in Nek5000 using formulas derived in \cite[\S]{dfm02}.
+
+Derivatives of $U$ for all $N^3$ GLL nodes in $\Omega_e$ in each of the three coordinate directions on
+$\Oh$ are evaluated via the triple Kronecker product (see \cite[\S]{dfm02}) of $\mathcal{D}$ with
+$\mathbf{I} \in\mathbb{R}^{N\times N}$:
+\begin{equation}
+\mathbf{D}_r=\mathbf{D}_{r_1}=\mathbf{I}  \otimes \mathbf{I} \otimes \mathcal{D}, \quad
+\mathbf{D}_s=\mathbf{D}_{r_2}=\mathbf{I}  \otimes \mathcal{D}\otimes \mathbf{I} , \quad
+\mathbf{D}_t=\mathbf{D}_{r_3}=\mathcal{D} \otimes \mathbf{I} \otimes \mathbf{I}.
+\label{diffkron}
+\end{equation}
+
+On the GLL nodes, $\mathcal{D}$ has the \textbf{summation-by-parts property}:
+\begin{equation}
+\left(\mathbf{B}\mathcal{D}\right)^{Txp}+\mathbf{B}\mathcal{D}=\mbox{diag}\left(\left[-1,0,\dots,0,1\right]\right),
+\label{SBP}
+\end{equation}
+which means that integration by parts in inner products like Equations~\ref{dghweak} and~\ref{dghstrong}
+is done \emph{exactly} at the discrete level \emph{even if} 
+the underlying quadrature is not itself exact.
+Na{\"i}vely, we would write $I_{\mbox{vol}}$ in Equation~\ref{dgsemifinal} by
+approximating the volume integral\footnote{The Einstein summation convention
+applies to multiplication of derivatives in the direction $i$ on the GLL grid with flux in the
+physical direction $j$.}
+\begin{equation}
+\sum_{e=1}^{nelt}\int_{\Omega_e} v \nabla \cdot \bH\, dV \approx
+\bv^{\Txp}\mathbf{B}\mathbf{D}_i\left[\mbox{diag}\left(\frac{\partial r_i}{\partial x_j}\right)\bh_j\right],
+\label{badvolint}
+\end{equation}
+where $\bh_j$ is the flux in the $x_j$ direction at the GLL nodes on all elements. We would then equate coefficients of $\bv$ and left multiply by
+$\mathbf{B}^{-1}$ to get $I_{\mbox{vol}}$. However, it turns out\cite{CarpenterESSC} Equation~\ref{badvolint}
+is itself further approximated by \textbf{a subcell flux difference}. Considering
+a single GLL grid line on an undeformed element (such that $r=x_1$ for brevity, Fisher\cite{FisherJCP252}
+proved\footnote{Cartesian indices in parentheses like ``$(i)$'' refer to the
+$i^{\mbox{th}}$ element of an array and are \emph{not} subject to summation
+convention.}
+\begin{equation}
+\left(\mathbf{D}_r\mathbf{h}_r\right)_{(ijk)}\approx
+\frac{F_{(i+1,jk)}-F_{(ijk)}}{\omega_i}
+\label{travis}
+\end{equation}
+to within the truncation error of the Lagrange polynomials on GLL nodes
+with nodal values of fluxes $\bh$. Fisher introduced a \textbf{auxiliary flux function} $F$
+that provided a way of enforcing bounds on fluxes \emph{even in the face of
+quadrature errors in evaluating them.} The importance of this for stabilization
+will be discussed in \S.
+
+Finally, Fisher derived a \textbf{two-point split form} for Equation~\ref{travis}
+that allowed (further) approximation of $F$ with \emph{yet another} flux function $F^{\#}$
+\begin{equation}
+\frac{F_{(i+1,jk)}-F_{(ijk)}}{\omega_i}\approx 2
+\sum_{l=1}^N\mathcal{D}_{il}F^{\#}\left(\bu_{(ijk)},\bu_{(ljk)}\right),
+\label{finally2pt}
+\end{equation}
+where $F^{\#}\left(\bU_a,\bU_b\right)$ is a flux function of two arguments instead of one!
+At the very least, it must be consistent with the physical flux function.
+%given conserved variable (numbered $m\in[1,5]$ below):
+\begin{equation}
+%F_m^{\#}\left(\bU,\bU\right)=H_m(\bU)
+\bF^{\#}\left(\bU,\bU\right)=\bH(\bU)
+\label{consistency}
+\end{equation}
+and symmetric in its two arguments.
+
+So, to summarize, Equation~\ref{finally2pt} is, for system-dependent choices of
+$\mathbf{F}^{\#}$ to be shown in \S, a \emph{stabilizing} way of approximately
+evaluating the volume integral in Equation~\ref{dghstrong} for schemes based on
+summation-by-parts (SBP) operators. Finite differences on GLL nodes in DGSEM are
+SBP operators. While Equation~\ref{finally2pt} disrupts the matrix-vector
+product $\mathbf{Du}$, it retains $N^4$ scaling in higher dimensions and promises
+some unique stability properties on top of conservation and high-order accuracy\cite{walchidk}.
+As a notational shorthand, we abbreviate Equation~\ref{finally2pt} as
+\begin{equation}
+\mathbb{D}(F^{\#})\equiv 2
+\sum_{l=1}^N\mathcal{D}_{il}F^{\#}\left(\bu_{(ijk)},\bu_{(ljk)}\right),
+\label{theotherd}
+\end{equation}
+where $F^{\#}\left(\bU_a,\bU_b\right)$ is a flux function of two arguments instead of one!
+At the very least, it must be consistent with the physical flux function for a
+
+Gassner, Winters and Kopriva\cite{splitformnodaldg} (and the works cited therein)
+derive and explore several properties and features of these
+``\textbf{two-point split forms}'' for the Euler equations. They transform them
+to deformed spectral elements as follows.
+Let indices \emph{i,j,k,l} denote individual GLL nodes within $\buu$ in three-dimensional storage or matrix elements.
+First, fluxes must be transformed in a freestream-preserving way into the
+\textbf{contravariant frame} aligned along the GLL grid within a given element.
+Again, we subscript $\bH=\left(\bH_1,\bH_2,\bH_3\right)$ by the physical-space
+direction $j\in[1,3]$. Again, we distinguish Cartesian tensor indices from GLL
+nodes and matrix elements by writing, for example, the $x_2$-direction flux at
+the $i^{\mbox{th}}$ GLL node as $H_2\left(\bU_{(i)}\right)$ and \emph{demanding
+that summation convention apply} to the index on $H$ but \emph{NOT} to the
+index on $\bU$!!!
+Then, for a given conserved variable, the integrand in the volume integral in Equation~\ref{dghstrong} becomes
+% DONT CRY. PiCK YOURSELF UP OFF HTE FLOOR. NOW
+% ANSWER ONE QUESTION
+% IS rx MULTIPLIED BY J IN THE 2-POINT CODE OR NOT?
+\begin{equation}
+\left[\mathbf{D}_r\mathbf{h}\right]_{(ijk)}\approx
+\left[\mathbb{D}_r\left(F^{\#}\right)\right]_{(ijk)}\equiv
+2\sum_{l=1}^N\mathcal{D}_{(il)}
+\left\{\left\{J\mbox{diag}\left(\frac{\partial r_1}{\partial x_k}\right)\right\}\right\}_{((i,l)jk)}F^{\#}_k\left(\bU_{(ijk)},\bU_{(ljk)}\right),
+\label{splitr}
+\end{equation}
+\begin{equation}
+\left[\mathbf{D}_s\mathbf{h}\right]_{(ijk)}\approx
+\left[\mathbb{D}_s\left(F^{\#}\right)\right]_{(ijk)}\equiv
+2\sum_{l=1}^N\mathcal{D}_{(jl)}
+\left\{\left\{J\mbox{diag}\left(\frac{\partial r_2}{\partial x_k}\right)\right\}\right\}_{(i(j,l)k)}F^{\#}_k\left(\bU_{(ijk)},\bU_{(ilk)}\right),
+\label{splits}
+\end{equation}
+\begin{equation}
+\left[\mathbf{D}_t\mathbf{h}\right]_{(ijk)}\approx
+\left[\mathbb{D}_t\left(F^{\#}\right)\right]_{(ijk)}\equiv
+2\sum_{l=1}^N\mathcal{D}_{(kl)}
+\left\{\left\{J\mbox{diag}\left(\frac{\partial r_3}{\partial x_k}\right)\right\}\right\}_{(ij(k,l))}F^{\#}_k\left(\bU_{(ijk)},\bU_{(ijl)}\right),
+\label{splitt}
+\end{equation}
+% DONT CRY. PiCK YOURSELF UP OFF HTE FLOOR. NOW
+% ANSWER ONE QUESTION
+% IS rx MULTIPLIED BY J IN THE 2-POINT CODE OR NOT?
+where we have introduced notation for an \textbf{average} between two grid points
+along a line of fixed $r$ in the grid on the reference element,
+\begin{equation}
+\left\{\left\{U\right\}\right\}_{((i,l)jk)}\equiv\frac{1}{2}\left(U_{(ijk)}+U_{(ljk)}\right),
+\label{avgr}
+\end{equation}
+\begin{equation}
+\left\{\left\{U\right\}\right\}_{(i(j,l)k)}\equiv\frac{1}{2}\left(U_{(ijk)}+U_{(ilk)}\right),
+\label{avgs}
+\end{equation}
+\begin{equation}
+\left\{\left\{U\right\}\right\}_{(ij(k,l))}\equiv\frac{1}{2}\left(U_{(ijk)}+U_{(ijl)}\right).
+\label{avgt}
+\end{equation}
+These averages will be needed to define various flux functions of interest too. Equations~\ref{splitr} through~\ref{splitt} are applied component-wise to each of the conserved variables in
+$\mathbf{H}$ (with correponding components in $\mathbf{F}$).
+
+So, we have an elaborate way of writing the discrete approximation to the
+volume integral on the right-hand-side of Equation~\ref{dgsemifinal}:
+\begin{equation}
+I_{\mbox{vol}}\equiv \mbox{diag}\left(\frac{1}{J}\right)\sum_{j=1}^3\mathbb{D}_j\bh
+\label{shortvol}
+\end{equation}
+where $\mathbb{D}_j$ is defined by Equations~\ref{splitr} through~\ref{splitt}.
+
+\subsection{A short note on strong form}
+The extra discontinuous surface flux in Equation~\ref{dghstrong} is evaluated
+on the fly by modifying the differentiation matrix $\mathcal{D}$. In the
+code,
+\begin{equation}
+dstrong=\mathcal{D}-2\mbox{diag}\left(\left[-1/\omega_1,0,\dots,0,1/\omega_N\right]\right)\mathbb{D}
+\label{dstrong}
+\end{equation}
+is enough to include the surface integral from integrating by parts twice. dstrong
+is evaluated in chainrule\_metrics subroutine of intpdiff.
+%LINK THAT
+
+%The general flux function for all 5 governing equations is now noted 

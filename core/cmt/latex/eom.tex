@@ -1,0 +1,78 @@
+\section{Euler equations of gas dynamics\label{sec:gaseom}}
+We now present the Euler equations of gas dynamics
+In this section, bold-faced quantities are vectors in $\mathbb{R}^3$ except for the conserved variables
+$\bU$,
+\begin{equation}
+  \mathbf{U}=\left[\begin{array}{l} \phi_g \rho \\ \phi_g \rho u \\ \phi_g \rho v \\ \phi_g \rho w \\ \phi_g \rho E \end{array}\right],
+  \label{uvect}
+\end{equation}
+which live in $\mathbb{R}^5$. Conserved variables and their inviscid fluxes\footnote{\textcolor{red}{but not their viscous fluxes}}
+are weighted by the \textbf{gas volume fraction} $\phi_g$. To more easily subscript flux vectors we write the $m$\nth component of $\bU$ as being governed by the
+conservation law
+\begin{equation}
+%\pp{U_m}{t} + \divnce \bH_m=0,\, m=1,\dots,5.%R_m, I don't like having a period after an integer
+\pp{U_m}{t} + \divnce \bH_m=R_m,\, m\in\left[1,5\right].%R_m,
+\label{conslaw}
+\end{equation}
+The gas velocity $\mathbf{v}$ is % and spatial coordinate $\mathbf{x}$ are
+\begin{equation}
+\mathbf{v}=\left[\begin{array}{l} u \\ v \\ w \end{array}\right]=
+\left[\begin{array}{l} v_1 \\ v_2 \\ v_3 \end{array}\right],%, \qvad
+%\mathbf{x}=\left[\begin{array}{l} x \\ y \\ z \end{array}\right]=
+%\left[\begin{array}{l} x_1 \\ x_2 \\ x_3 \end{array}\right],
+\label{uxpedantic}
+\end{equation}
+and $\rho$ is the gas density, $E$ is the mass-specific total energy $e+\frac{1}{2}|\mathbf{v}|^2$ of
+the gas, $e$ is the gas internal energy, and $p$ is the thermodynamic gas pressure.
+
+$\bH_m(\bU,\nabla \bU) \mathbb{R}^{5\times 3}\rightarrow \mathbb{R}^3$
+is the flux vector of equation~$m$. Like \ref{convanddiff},
+$\bH_m$ is made up of a convective flux $\bH_{m,c}(\bU)$ and a
+diffusive flux $\bH_{m,d}(\bU,\nabla \bU)$. We consider the convective
+fluxes first. For gas density $\bH_{1,c}(\bU)$ is
+\begin{equation}\label{convh1}
+   \bH_{1,c}=\phi_g\rho \mathbf{v}= \left[U_2,U_3,U_4\right]^{\Txp}.
+\end{equation}
+For gas momentum $U_{2-4}$, the convective fluxes are
+\begin{align}
+   \bH_{2,c}=\phi_g\left[\begin{array}{l} \left(\rho u\right)u \!+\! p \\
+                                               \left(\rho u\right)v \\
+                                               \left(\rho u\right)w \end{array}\right],
+   \bH_{3,c}=\phi_g\left[\begin{array}{l} \left(\rho v\right)u \\
+                                               \left(\rho v\right)v \!+\! p \\
+                                               \left(\rho v\right)w \end{array}\right], %\nonumber \\
+   \bH_{4,c}=\phi_g\left[\begin{array}{l} \left(\rho w\right)u \\
+                                               \left(\rho w\right)v \\
+                                               \left(\rho w\right)w \!+\! p \end{array}\right],  \label{convh2to4}
+\end{align}
+and, for total energy $\rho E$,
+\begin{equation} \label{convh5}
+   \bH_{5,c}= \phi_g \mathbf{v}\left(\rho E +p\right).
+\end{equation}
+
+The system is closed by an equation of state,
+\begin{equation}
+\left[p,T\right]=\mbox{EOS}\left(\rho,e\right).
+\label{eos}
+\end{equation}
+Internal energy per
+unit mass $e=E-\frac{1}{2}|\mathbf{v}|^2$ is related to gas temperature $T$ by the intensive property $c_v$, the constant-volume specific heat, such that
+\begin{equation}
+   e=\int c_v(T)dT.
+   \label{cvt}
+\end{equation}
+Generally, \ref{cvt} must be solved for temperature $T$ implicitly, iteratively,
+or via tabulation.
+For calorically perfect gases, $c_v$ is constant. For both thermally and
+calorically perfect gases, pressure is obtained last via
+\begin{equation}
+p=\rho R T,
+\label{eos_tpg}
+\end{equation}
+where the specific gas constant $R=\left(\gamma-1\right)c_v$ requires the specification
+of $\gamma=c_p/c_v$, the ratio of constant-pressure specific heat $c_p$ to $c_v$. Finally, the sound
+speed is
+\begin{equation}
+a=\sqrt{\frac{\gamma p}{\rho}}.%=\sqrt{\gamma RT}.
+\label{asndtpg}
+\end{equation}

@@ -1,0 +1,118 @@
+\hypertarget{intpdiff_8f}{\section{intpdiff.\-f File Reference}
+\label{intpdiff_8f}\index{intpdiff.\-f@{intpdiff.\-f}}
+}
+
+
+interpolation and differentiation routines not already provided by nek5000  
+
+
+\subsection*{Functions/\-Subroutines}
+\begin{DoxyCompactItemize}
+\item 
+subroutine \hyperlink{intpdiff_8f_a5320a5bf1c50695504168747afc66c93}{compute\-\_\-gradients} (e)
+\begin{DoxyCompactList}\small\item\em Compute gradients of conserved variables (W\-I\-T\-H\-O\-U\-T volume fraction weighting) for a single element. Store them in gradu in /\-C\-M\-T\-G\-R\-A\-D\-U/. Uses legacy chain-\/rule metrics in D\-X\-Y\-Z (rxm1, etc.) and N\-O\-T freestream-\/preserving metrics. \end{DoxyCompactList}\item 
+subroutine \hyperlink{intpdiff_8f_a65689efbb78eee023a3a9a7d4b9caff7}{set\-\_\-dealias\-\_\-face}
+\begin{DoxyCompactList}\small\item\em Fills arrays in /\-F\-A\-C\-E\-W\-Z/ with Gauss-\/\-Legendre quadrature weights on the fine grid for dealiasing surface integrals. \end{DoxyCompactList}\item 
+\hypertarget{intpdiff_8f_a08d6fc46ac6dac9935c672df973519c9}{subroutine \hyperlink{intpdiff_8f_a08d6fc46ac6dac9935c672df973519c9}{cmt\-\_\-metrics} (istp)}\label{intpdiff_8f_a08d6fc46ac6dac9935c672df973519c9}
+
+\begin{DoxyCompactList}\small\item\em compute freestream-\/preserving metrics $Ja^i$ for transforming fluxes $F$ to $\tilde{F}$ in a contravariant frame according to Kopriva (2006) Follows methodology in F\-L\-U\-X\-O (github.\-com/project-\/fluxo/fluxo.git) Basically, isoparametric mappings are not freestream preserving. D\-G\-S\-E\-M needs metrics computed from low-\/order geometry interpolated up to polynomial order (when lx1$>$ngeo) O\-R ``dealiased'' metrics (when ngeo$>$lx1) \end{DoxyCompactList}\item 
+\hypertarget{intpdiff_8f_a354b767c6b8ae014e7292c05e45157c6}{subroutine {\bfseries xyztriv} (xl, yl, zl, nxl, nyl, nzl, e)}\label{intpdiff_8f_a354b767c6b8ae014e7292c05e45157c6}
+
+\item 
+\hypertarget{intpdiff_8f_adbe1ea1506fd5b21cfd8cab10fe0dbc1}{subroutine {\bfseries get\-\_\-int\-\_\-gll2gll} (ip, mx, md)}\label{intpdiff_8f_adbe1ea1506fd5b21cfd8cab10fe0dbc1}
+
+\item 
+\hypertarget{intpdiff_8f_a5d574fca7f7d37eff7a8d4403234b933}{subroutine {\bfseries gen\-\_\-int\-\_\-gll2gll} (jgl, jgt, mp, np, w)}\label{intpdiff_8f_a5d574fca7f7d37eff7a8d4403234b933}
+
+\item 
+\hypertarget{intpdiff_8f_a6f38dc1f5c137244ae1e261f5bd8279d}{subroutine {\bfseries proj\-\_\-legmodal} (promat, nin, nout)}\label{intpdiff_8f_a6f38dc1f5c137244ae1e261f5bd8279d}
+
+\item 
+\hypertarget{intpdiff_8f_acf24494d8b1303f196d15df7ee49f3ec}{subroutine {\bfseries discard\-\_\-rows} (trunc, matrix, nsmall, nlarge)}\label{intpdiff_8f_acf24494d8b1303f196d15df7ee49f3ec}
+
+\item 
+\hypertarget{intpdiff_8f_a2fb7b91baaeb2779459b988214efeb9e}{subroutine {\bfseries vandermonde\-\_\-legendre} (v, z, nx)}\label{intpdiff_8f_a2fb7b91baaeb2779459b988214efeb9e}
+
+\item 
+\hypertarget{intpdiff_8f_a8f6017ff4e0e2f0d51ed4e1ab69b4f4d}{subroutine {\bfseries gradm11\-\_\-t} (grad, uxyz, csgn, e)}\label{intpdiff_8f_a8f6017ff4e0e2f0d51ed4e1ab69b4f4d}
+
+\item 
+\hypertarget{intpdiff_8f_ad76b847e0448d4a237eca9f4f316ebac}{subroutine {\bfseries gradm11\-\_\-t\-\_\-contra} (grad, uxyz, csgn, e)}\label{intpdiff_8f_ad76b847e0448d4a237eca9f4f316ebac}
+
+\item 
+\hypertarget{intpdiff_8f_a0d378518f250568824942e9d861a008e}{subroutine {\bfseries gradm1\-\_\-t} (u, ux, uy, uz)}\label{intpdiff_8f_a0d378518f250568824942e9d861a008e}
+
+\end{DoxyCompactItemize}
+{\bf }\par
+\begin{DoxyCompactItemize}
+\item 
+subroutine \hyperlink{intpdiff_8f_a4bc9678542951a32332a86f8baf88f23}{compute\-\_\-gradients\-\_\-contra} (e)
+\begin{DoxyCompactList}\small\item\em Compute gradients of conserved variables (W\-I\-T\-H\-O\-U\-T volume fraction weighting) for a single element. Store them in gradu in /\-C\-M\-T\-G\-R\-A\-D\-U/. Uses freestream-\/preserving metrics that cmt\-\_\-metrics computes and stores in rx. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+{\bf }\par
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{intpdiff_8f_a996a690b6a44c187b06422d8f039344c}{subroutine \hyperlink{intpdiff_8f_a996a690b6a44c187b06422d8f039344c}{chainrule\-\_\-metrics} (istp)}\label{intpdiff_8f_a996a690b6a44c187b06422d8f039344c}
+
+\begin{DoxyCompactList}\small\item\em Keep chain-\/rule metrics as a stop-\/gap until cmt\-\_\-metrics works on deformed elements. Also fills jface with jacobian of mesh on mesh faces, w2m1 with quadrature weights, and dstrong with derivative matrix and appropriate weights for strong-\/form surface integrals. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+
+\subsection{Detailed Description}
+interpolation and differentiation routines not already provided by nek5000 
+
+\subsection{Function/\-Subroutine Documentation}
+\hypertarget{intpdiff_8f_a5320a5bf1c50695504168747afc66c93}{\index{intpdiff.\-f@{intpdiff.\-f}!compute\-\_\-gradients@{compute\-\_\-gradients}}
+\index{compute\-\_\-gradients@{compute\-\_\-gradients}!intpdiff.f@{intpdiff.\-f}}
+\subsubsection[{compute\-\_\-gradients}]{\setlength{\rightskip}{0pt plus 5cm}subroutine compute\-\_\-gradients (
+\begin{DoxyParamCaption}
+\item[{integer}]{e}
+\end{DoxyParamCaption}
+)}}\label{intpdiff_8f_a5320a5bf1c50695504168747afc66c93}
+
+
+Compute gradients of conserved variables (W\-I\-T\-H\-O\-U\-T volume fraction weighting) for a single element. Store them in gradu in /\-C\-M\-T\-G\-R\-A\-D\-U/. Uses legacy chain-\/rule metrics in D\-X\-Y\-Z (rxm1, etc.) and N\-O\-T freestream-\/preserving metrics. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em e} & e is intent(in). It is the index for the current element in the element loop in compute\-\_\-rhs\-\_\-and\-\_\-dt \\
+\hline
+\end{DoxyParams}
+Divide conserved variables by volume fraction
+
+Differentiate in the reference element. local\-\_\-grad routines are in core/navier5.\-f
+
+Convert d/dr to d/dx via chain-\/rule metrics.\hypertarget{intpdiff_8f_a4bc9678542951a32332a86f8baf88f23}{\index{intpdiff.\-f@{intpdiff.\-f}!compute\-\_\-gradients\-\_\-contra@{compute\-\_\-gradients\-\_\-contra}}
+\index{compute\-\_\-gradients\-\_\-contra@{compute\-\_\-gradients\-\_\-contra}!intpdiff.f@{intpdiff.\-f}}
+\subsubsection[{compute\-\_\-gradients\-\_\-contra}]{\setlength{\rightskip}{0pt plus 5cm}subroutine compute\-\_\-gradients\-\_\-contra (
+\begin{DoxyParamCaption}
+\item[{integer}]{e}
+\end{DoxyParamCaption}
+)}}\label{intpdiff_8f_a4bc9678542951a32332a86f8baf88f23}
+
+
+Compute gradients of conserved variables (W\-I\-T\-H\-O\-U\-T volume fraction weighting) for a single element. Store them in gradu in /\-C\-M\-T\-G\-R\-A\-D\-U/. Uses freestream-\/preserving metrics that cmt\-\_\-metrics computes and stores in rx. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em e} & e is intent(in). It is the index for the current element in the element loop in compute\-\_\-rhs\-\_\-and\-\_\-dt \\
+\hline
+\end{DoxyParams}
+Divide conserved variables by volume fraction
+
+Differentiate conserved variables in the reference element. local\-\_\-grad routines are in core/navier5.\-f \hypertarget{intpdiff_8f_a65689efbb78eee023a3a9a7d4b9caff7}{\index{intpdiff.\-f@{intpdiff.\-f}!set\-\_\-dealias\-\_\-face@{set\-\_\-dealias\-\_\-face}}
+\index{set\-\_\-dealias\-\_\-face@{set\-\_\-dealias\-\_\-face}!intpdiff.f@{intpdiff.\-f}}
+\subsubsection[{set\-\_\-dealias\-\_\-face}]{\setlength{\rightskip}{0pt plus 5cm}subroutine set\-\_\-dealias\-\_\-face (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{intpdiff_8f_a65689efbb78eee023a3a9a7d4b9caff7}
+
+
+Fills arrays in /\-F\-A\-C\-E\-W\-Z/ with Gauss-\/\-Legendre quadrature weights on the fine grid for dealiasing surface integrals. 
+
+Gauss-\/\-Legendre quadrature weights. Z\-W\-G\-L lives in core/speclib.\-f
+
+Tensor product in two dimensions for a face of a 3\-D element.
+
+faces are just edges in 1\-D. No tensor product
