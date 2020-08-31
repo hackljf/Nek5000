@@ -14,7 +14,7 @@ subroutine \hyperlink{group__diffhvol_ga6d611a250fb98acf77e8a3880c0e608d}{viscou
 subroutine \hyperlink{group__vsurf_ga98d826061a0ffb225d37cb73b86a9475}{igtu\-\_\-cmt} (qminus, ummcu, hface)
 \begin{DoxyCompactList}\small\item\em Computes $G^T U$, the volume integral of $[[u]]\cdot\{\{\nabla v\}\}$, and increments res1 with it. \end{DoxyCompactList}\item 
 subroutine \hyperlink{group__convhvol_ga77e7d7a46950fcbbf072e8e900cee272}{convective\-\_\-cmt} (e)
-\begin{DoxyCompactList}\small\item\em Evaluates inviscid volume terms for all toteq equations in two-\/point split form (Equation$\sim$shortvol\}and adds them to res1(\-:,\-:,\-:,e,\-:). \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em Evaluates inviscid volume terms for all toteq equations in two-\/point split form (Equation~\ref{shortvol} and adds them to res1(\-:,\-:,\-:,e,\-:). \end{DoxyCompactList}\item 
 \hypertarget{eqnsolver__cmt_8f_a2135bd9a2e75728f817f2b8af7124073}{subroutine {\bfseries fluxdiv\-\_\-2point\-\_\-slow} (res, e, ja)}\label{eqnsolver__cmt_8f_a2135bd9a2e75728f817f2b8af7124073}
 
 \item 
@@ -22,7 +22,7 @@ subroutine \hyperlink{group__convhvol_ga77e7d7a46950fcbbf072e8e900cee272}{convec
 
 \item 
 subroutine \hyperlink{group__convhvol_ga72c1cbe51bc537e14ec8927e62f0e3f3}{fluxdiv\-\_\-2point\-\_\-noscr} (res, fcons, e, ja)
-\begin{DoxyCompactList}\small\item\em Evaluates the two-\/point split form (Equations$\sim$splitr\} through splitt\}) of the volume integral $\int v \nabla\cdot\mathbf{H}^c dV$ and the discontinuous surface flux $\oint v \mathbf{H}^c\cdot\mathbf{n} dA$ for the inviscid flux function in a single element. \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em Evaluates the two-\/point split form (Equations~\ref{splitr} through \ref{splitt}) of the volume integral $\int v \nabla\cdot\mathbf{H}^c dV$ and the discontinuous surface flux $\oint v \mathbf{H}^c\cdot\mathbf{n} dA$ for the inviscid flux function in a single element. \end{DoxyCompactList}\item 
 subroutine \hyperlink{group__convhvol_gab4831bb28a78e1c8fd3ec09854bd15ad}{fluxdiv\-\_\-strong\-\_\-contra} (e)
 \begin{DoxyCompactList}\small\item\em Computes $\int v \nabla\cdot\mathbf{H}^c dV$ in aliased strong form for element $e$, and increments res1 with it. \end{DoxyCompactList}\item 
 subroutine \hyperlink{group__convhvol_gad9d70d83f1184d25495812d637698102}{evaluate\-\_\-aliased\-\_\-conv\-\_\-h} (e)
