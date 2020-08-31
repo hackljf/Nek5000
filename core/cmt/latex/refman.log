@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2020.4.2)  25 AUG 2020 14:27
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2020.4.2)  30 AUG 2020 18:01
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -999,10 +999,6 @@ LaTeX Warning: Label `group__state_ga9e9e837579897a93f40aae1fe6060255' multiply
  defined.
 
 
-LaTeX Warning: Label `group__convhvol_gab4831bb28a78e1c8fd3ec09854bd15ad' multi
-ply defined.
-
-
 LaTeX Warning: Label `group__convhvol_ga89ba8fe53f8afc523597773aca62a270' multi
 ply defined.
 
@@ -1073,36 +1069,36 @@ defined.
 )
 \openout1 = `refman.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 115.
-LaTeX Font Info:    ... okay on input line 115.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 115.
-LaTeX Font Info:    ... okay on input line 115.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 115.
-LaTeX Font Info:    ... okay on input line 115.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 115.
-LaTeX Font Info:    ... okay on input line 115.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 115.
-LaTeX Font Info:    ... okay on input line 115.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 115.
-LaTeX Font Info:    ... okay on input line 115.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 115.
-LaTeX Font Info:    Try loading font information for TS1+cmr on input line 115.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 116.
+LaTeX Font Info:    ... okay on input line 116.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 116.
+LaTeX Font Info:    ... okay on input line 116.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 116.
+LaTeX Font Info:    ... okay on input line 116.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 116.
+LaTeX Font Info:    ... okay on input line 116.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 116.
+LaTeX Font Info:    ... okay on input line 116.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 116.
+LaTeX Font Info:    ... okay on input line 116.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 116.
+LaTeX Font Info:    Try loading font information for TS1+cmr on input line 116.
 
  (/usr/share/texlive/texmf-dist/tex/latex/base/ts1cmr.fd
 File: ts1cmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
-LaTeX Font Info:    ... okay on input line 115.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 115.
-LaTeX Font Info:    ... okay on input line 115.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 115.
-LaTeX Font Info:    ... okay on input line 115.
-LaTeX Font Info:    Try loading font information for T1+phv on input line 115.
+LaTeX Font Info:    ... okay on input line 116.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 116.
+LaTeX Font Info:    ... okay on input line 116.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 116.
+LaTeX Font Info:    ... okay on input line 116.
+LaTeX Font Info:    Try loading font information for T1+phv on input line 116.
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/t1phv.fd
 File: t1phv.fd 2001/06/04 scalable font definitions for T1/phv.
 )
 LaTeX Font Info:    Font shape `T1/phv/m/n' will be
-(Font)              scaled to size 8.99994pt on input line 115.
+(Font)              scaled to size 8.99994pt on input line 116.
 
 (/usr/share/texlive/texmf-dist/tex/context/base/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
@@ -1167,8 +1163,8 @@ e
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
 \AtBeginShipoutBox=\box59
-Package backref Info: ** backref set up for natbib ** on input line 115.
-Package hyperref Info: Link coloring ON on input line 115.
+Package backref Info: ** backref set up for natbib ** on input line 116.
+Package hyperref Info: Link coloring ON on input line 116.
 (/usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2012/10/27 v2.43 Cross-referencing by name of section
 
@@ -1177,21 +1173,21 @@ Package: gettitlestring 2010/12/03 v1.4 Cleanup title references (HO)
 )
 \c@section@level=\count144
 )
-LaTeX Info: Redefining \ref on input line 115.
-LaTeX Info: Redefining \pageref on input line 115.
-LaTeX Info: Redefining \nameref on input line 115.
+LaTeX Info: Redefining \ref on input line 116.
+LaTeX Info: Redefining \pageref on input line 116.
+LaTeX Info: Redefining \nameref on input line 116.
 
 (./refman.out) (./refman.out)
 \@outlinefile=\write4
 \openout4 = `refman.out'.
 
-Package hyperref Info: Option `pageanchor' set `false' on input line 118.
+Package hyperref Info: Option `pageanchor' set `false' on input line 119.
 LaTeX Font Info:    Font shape `T1/phv/m/n' will be
-(Font)              scaled to size 12.9599pt on input line 123.
+(Font)              scaled to size 12.9599pt on input line 124.
 LaTeX Font Info:    Font shape `T1/phv/m/n' will be
-(Font)              scaled to size 10.79993pt on input line 125.
+(Font)              scaled to size 10.79993pt on input line 126.
 LaTeX Font Info:    Font shape `T1/phv/m/n' will be
-(Font)              scaled to size 8.09995pt on input line 127.
+(Font)              scaled to size 8.09995pt on input line 128.
  [1
 
 
@@ -1199,13 +1195,13 @@ LaTeX Font Info:    Font shape `T1/phv/m/n' will be
 
 ]
 LaTeX Font Info:    Font shape `T1/phv/m/n' will be
-(Font)              scaled to size 22.39185pt on input line 131.
+(Font)              scaled to size 22.39185pt on input line 132.
 LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <24.88> not available
-(Font)              Font shape `T1/phv/b/n' tried instead on input line 131.
+(Font)              Font shape `T1/phv/b/n' tried instead on input line 132.
 LaTeX Font Info:    Font shape `T1/phv/b/n' will be
-(Font)              scaled to size 22.39185pt on input line 131.
+(Font)              scaled to size 22.39185pt on input line 132.
 LaTeX Font Info:    Font shape `T1/phv/bc/n' will be
-(Font)              scaled to size 22.39185pt on input line 131.
+(Font)              scaled to size 22.39185pt on input line 132.
  (./refman.toc
 LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <10> not available
 (Font)              Font shape `T1/phv/b/n' tried instead on input line 1.
@@ -1259,22 +1255,22 @@ LaTeX Font Info:    Font shape `T1/phv/b/n' will be
 (Font)              scaled to size 6.29996pt on input line 70.
  [4] [5]
 LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <12> not available
-(Font)              Font shape `T1/phv/b/n' tried instead on input line 115.
+(Font)              Font shape `T1/phv/b/n' tried instead on input line 118.
 LaTeX Font Info:    Font shape `T1/phv/b/n' will be
-(Font)              scaled to size 10.79993pt on input line 115.
+(Font)              scaled to size 10.79993pt on input line 118.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <12> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 115.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 118.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <9> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 115.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 118.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <7> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 115.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 118.
 )
 \tf@toc=\write5
 \openout5 = `refman.toc'.
 
 
 [6]
-Package hyperref Info: Option `pageanchor' set `true' on input line 134.
+Package hyperref Info: Option `pageanchor' set `true' on input line 135.
  (./formulation.tex
 Chapter 1.
 LaTeX Font Info:    Font shape `T1/phv/m/n' will be
@@ -1289,7 +1285,7 @@ LaTeX Font Info:    Font shape `T1/phv/bc/n' will be
 Package natbib Warning: Citation `hw08' on page 1 undefined on input line 6.
 
 
-Package natbib Warning: Citation `DFDG' on page 1 undefined on input line 6.
+Package natbib Warning: Citation `CHQZ3' on page 1 undefined on input line 6.
 
 (./dgkernel.tex
 LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <14.4> not available
@@ -1306,7 +1302,7 @@ LaTeX Font Info:    Font shape `T1/phv/bc/n' will be
 
 LaTeX Warning: Reference `' on page 1 undefined on input line 36.
 
-<elements.pdf, id=611, 633.36626pt x 314.17375pt>
+<elements.pdf, id=626, 633.36626pt x 314.17375pt>
 File: elements.pdf Graphic file (type pdf)
  <use elements.pdf>
 Package pdftex.def Info: elements.pdf used on input line 40.
@@ -1364,7 +1360,7 @@ Package natbib Warning: Citation `walchidk' on page 4 undefined on input line 8
 Package natbib Warning: Citation `splitformnodaldg' on page 4 undefined on inpu
 t line 96.
 
-) (./surface.tex [4]) [5] [6
+[4]) (./surface.tex) [5] [6
 
 ]
 Chapter 2.
@@ -1401,8 +1397,8 @@ Package natbib Warning: Citation `kg' on page 11 undefined on input line 31.
 
 ]
 
-LaTeX Warning: Reference `eq:vfjac,lazya' on page 12 undefined on input line 10
-0.
+LaTeX Warning: Reference `eq:vfjac,lazya' on page 12 undefined on input line 99
+.
 
 ) [12]
 Chapter 5.
@@ -1429,32 +1425,36 @@ LaTeX Font Info:    Font shape `T1/phv/m/it' in size <9> not available
 LaTeX Font Info:    Font shape `T1/phv/m/sl' will be
 (Font)              scaled to size 8.09995pt on input line 8.
 LaTeX Font Info:    Font shape `T1/phv/bc/n' will be
-(Font)              scaled to size 8.99994pt on input line 36.
+(Font)              scaled to size 8.99994pt on input line 35.
 LaTeX Font Info:    Font shape `T1/phv/bc/it' in size <10> not available
-(Font)              Font shape `T1/phv/bc/sl' tried instead on input line 36.
+(Font)              Font shape `T1/phv/bc/sl' tried instead on input line 35.
 LaTeX Font Info:    Font shape `T1/phv/bc/sl' will be
-(Font)              scaled to size 8.99994pt on input line 36.
+(Font)              scaled to size 8.99994pt on input line 35.
  [17]
-<group__convhvol_ga77e7d7a46950fcbbf072e8e900cee272_cgraph.pdf, id=897, 351.312
+<group__convhvol_ga77e7d7a46950fcbbf072e8e900cee272_cgraph.pdf, id=914, 351.312
 5pt x 176.66pt>
 File: group__convhvol_ga77e7d7a46950fcbbf072e8e900cee272_cgraph.pdf Graphic fil
 e (type pdf)
 
 <use group__convhvol_ga77e7d7a46950fcbbf072e8e900cee272_cgraph.pdf>
 Package pdftex.def Info: group__convhvol_ga77e7d7a46950fcbbf072e8e900cee272_cgr
-aph.pdf used on input line 76.
+aph.pdf used on input line 78.
 (pdftex.def)             Requested size: 350.0pt x 176.0126pt.
-) [18 <./group__convhvol_ga77e7d7a46950fcbbf072e8e900cee272_cgraph.pdf>]
+ [18 <./group__convhvol_ga77e7d7a46950fcbbf072e8e900cee272_cgraph.pdf>])
+Underfull \hbox (badness 10000) in paragraph at lines 136--151
+
+ []
+
+[19]
 \openout2 = `group__bcond.aux'.
 
+ (./group__bcond.tex [20
 
-(./group__bcond.tex [19
-
-] [20]) [21]
+] [21]) [22]
 \openout2 = `group__diffhvol.aux'.
 
  (./group__diffhvol.tex
-<group__diffhvol_ga6d611a250fb98acf77e8a3880c0e608d_cgraph.pdf, id=959, 479.792
+<group__diffhvol_ga6d611a250fb98acf77e8a3880c0e608d_cgraph.pdf, id=980, 479.792
 5pt x 519.9425pt>
 File: group__diffhvol_ga6d611a250fb98acf77e8a3880c0e608d_cgraph.pdf Graphic fil
 e (type pdf)
@@ -1466,19 +1466,19 @@ aph.pdf used on input line 67.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [22
+ [23
 
 
 ])
-[23 <./group__diffhvol_ga6d611a250fb98acf77e8a3880c0e608d_cgraph.pdf>]
+[24 <./group__diffhvol_ga6d611a250fb98acf77e8a3880c0e608d_cgraph.pdf>]
 \openout2 = `group__vfjac.aux'.
 
 
-(./group__vfjac.tex [24
+(./group__vfjac.tex [25
 
 
 ]
-<group__vfjac_ga9087d56c6c467d3ffeb9aa6be3f43e82_cgraph.pdf, id=1023, 335.2525p
+<group__vfjac_ga9087d56c6c467d3ffeb9aa6be3f43e82_cgraph.pdf, id=1045, 335.2525p
 t x 519.9425pt>
 File: group__vfjac_ga9087d56c6c467d3ffeb9aa6be3f43e82_cgraph.pdf Graphic file (
 type pdf)
@@ -1487,8 +1487,8 @@ type pdf)
 Package pdftex.def Info: group__vfjac_ga9087d56c6c467d3ffeb9aa6be3f43e82_cgraph
 .pdf used on input line 86.
 (pdftex.def)             Requested size: 334.0pt x 517.99748pt.
- [25 <./group__vfjac_ga9087d56c6c467d3ffeb9aa6be3f43e82_cgraph.pdf>]
-<group__vfjac_ga15f8f8f0e3d305dc065f004aa09de57c_cgraph.pdf, id=1044, 319.1925p
+ [26 <./group__vfjac_ga9087d56c6c467d3ffeb9aa6be3f43e82_cgraph.pdf>]
+<group__vfjac_ga15f8f8f0e3d305dc065f004aa09de57c_cgraph.pdf, id=1065, 319.1925p
 t x 100.375pt>
 File: group__vfjac_ga15f8f8f0e3d305dc065f004aa09de57c_cgraph.pdf Graphic file (
 type pdf)
@@ -1498,7 +1498,7 @@ Package pdftex.def Info: group__vfjac_ga15f8f8f0e3d305dc065f004aa09de57c_cgraph
 .pdf used on input line 108.
 (pdftex.def)             Requested size: 318.0pt x 100.00102pt.
 
-<group__vfjac_ga2c0d85531a9af69b9d464571ca530e5d_cgraph.pdf, id=1045, 248.93pt 
+<group__vfjac_ga2c0d85531a9af69b9d464571ca530e5d_cgraph.pdf, id=1066, 248.93pt 
 x 519.9425pt>
 File: group__vfjac_ga2c0d85531a9af69b9d464571ca530e5d_cgraph.pdf Graphic file (
 type pdf)
@@ -1509,16 +1509,16 @@ Package pdftex.def Info: group__vfjac_ga2c0d85531a9af69b9d464571ca530e5d_cgraph
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [26 <./group__vfjac_ga15f8f8f0e3d305dc065f004aa09de57c_cgraph.pdf>]) [27 <./gr
+ [27 <./group__vfjac_ga15f8f8f0e3d305dc065f004aa09de57c_cgraph.pdf>]) [28 <./gr
 oup__vfjac_ga2c0d85531a9af69b9d464571ca530e5d_cgraph.pdf>]
 \openout2 = `group__isurf.aux'.
 
- (./group__isurf.tex [28
+ (./group__isurf.tex [29
 
 
 ]
-[29]
-<group__isurf_ga0013a607a259d0c07734b1816f8c9f60_cgraph.pdf, id=1108, 943.525pt
+[30]
+<group__isurf_ga0013a607a259d0c07734b1816f8c9f60_cgraph.pdf, id=1129, 943.525pt
  x 558.085pt>
 File: group__isurf_ga0013a607a259d0c07734b1816f8c9f60_cgraph.pdf Graphic file (
 type pdf)
@@ -1529,8 +1529,8 @@ Package pdftex.def Info: group__isurf_ga0013a607a259d0c07734b1816f8c9f60_cgraph
 
 Underfull \vbox (badness 4403) has occurred while \output is active []
 
- [30 <./group__isurf_ga0013a607a259d0c07734b1816f8c9f60_cgraph.pdf>] [31]
-<group__isurf_ga15e4fb7f0dbe0767ef81c6b291f611cb_cgraph.pdf, id=1133, 238.8925p
+ [31 <./group__isurf_ga0013a607a259d0c07734b1816f8c9f60_cgraph.pdf>] [32]
+<group__isurf_ga15e4fb7f0dbe0767ef81c6b291f611cb_cgraph.pdf, id=1154, 238.8925p
 t x 100.375pt>
 File: group__isurf_ga15e4fb7f0dbe0767ef81c6b291f611cb_cgraph.pdf Graphic file (
 type pdf)
@@ -1540,7 +1540,7 @@ Package pdftex.def Info: group__isurf_ga15e4fb7f0dbe0767ef81c6b291f611cb_cgraph
 .pdf used on input line 241.
 (pdftex.def)             Requested size: 238.0pt x 99.9995pt.
 
-<group__isurf_ga0293ec162f23a55a9e89cf0797cbf2b2_cgraph.pdf, id=1134, 244.915pt
+<group__isurf_ga0293ec162f23a55a9e89cf0797cbf2b2_cgraph.pdf, id=1155, 244.915pt
  x 100.375pt>
 File: group__isurf_ga0293ec162f23a55a9e89cf0797cbf2b2_cgraph.pdf Graphic file (
 type pdf)
@@ -1548,7 +1548,7 @@ type pdf)
 Package pdftex.def Info: group__isurf_ga0293ec162f23a55a9e89cf0797cbf2b2_cgraph
 .pdf used on input line 286.
 (pdftex.def)             Requested size: 244.0pt x 100.00255pt.
-) [32 <./group__isurf_ga15e4fb7f0dbe0767ef81c6b291f611cb_cgraph.pdf> <./group__
+) [33 <./group__isurf_ga15e4fb7f0dbe0767ef81c6b291f611cb_cgraph.pdf> <./group__
 isurf_ga0293ec162f23a55a9e89cf0797cbf2b2_cgraph.pdf
 
 pdfTeX warning: pdflatex (file ./group__isurf_ga0293ec162f23a55a9e89cf0797cbf2b
@@ -1558,7 +1558,7 @@ e page
 \openout2 = `group__vsurf.aux'.
 
  (./group__vsurf.tex
-<group__vsurf_ga98d826061a0ffb225d37cb73b86a9475_cgraph.pdf, id=1171, 431.6125p
+<group__vsurf_ga98d826061a0ffb225d37cb73b86a9475_cgraph.pdf, id=1192, 431.6125p
 t x 519.9425pt>
 File: group__vsurf_ga98d826061a0ffb225d37cb73b86a9475_cgraph.pdf Graphic file (
 type pdf)
@@ -1570,16 +1570,16 @@ Package pdftex.def Info: group__vsurf_ga98d826061a0ffb225d37cb73b86a9475_cgraph
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [33
+ [34
 
 
 ])
-[34 <./group__vsurf_ga98d826061a0ffb225d37cb73b86a9475_cgraph.pdf>]
+[35 <./group__vsurf_ga98d826061a0ffb225d37cb73b86a9475_cgraph.pdf>]
 \openout2 = `group__flux.aux'.
 
 
 (./group__flux.tex
-<group__flux_gab4541d3a9fc0c10583e47fa4b6cc9f2d_cgraph.pdf, id=1203, 582.175pt 
+<group__flux_gab4541d3a9fc0c10583e47fa4b6cc9f2d_cgraph.pdf, id=1225, 582.175pt 
 x 519.9425pt>
 File: group__flux_gab4541d3a9fc0c10583e47fa4b6cc9f2d_cgraph.pdf Graphic file (t
 ype pdf)
@@ -1590,11 +1590,11 @@ pdf used on input line 73.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [35
+ [36
 
 
 ]
-<group__flux_ga4498a8903b8de21f2c0afd0d34c5e00c_cgraph.pdf, id=1227, 682.55pt x
+<group__flux_ga4498a8903b8de21f2c0afd0d34c5e00c_cgraph.pdf, id=1248, 682.55pt x
  558.085pt>
 File: group__flux_ga4498a8903b8de21f2c0afd0d34c5e00c_cgraph.pdf Graphic file (t
 ype pdf)
@@ -1605,25 +1605,25 @@ pdf used on input line 121.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [36 <./group__flux_gab4541d3a9fc0c10583e47fa4b6cc9f2d_cgraph.pdf>]) [37 <./gro
+ [37 <./group__flux_gab4541d3a9fc0c10583e47fa4b6cc9f2d_cgraph.pdf>]) [38 <./gro
 up__flux_ga4498a8903b8de21f2c0afd0d34c5e00c_cgraph.pdf>]
 \openout2 = `group__faceops.aux'.
 
- (./group__faceops.tex) [38
+ (./group__faceops.tex) [39
 
 
 ]
 \openout2 = `group__twopoint.aux'.
 
 
-(./group__twopoint.tex) [39
+(./group__twopoint.tex) [40
 
 
 ]
 \openout2 = `group__initialconds.aux'.
 
  (./group__initialconds.tex
-<group__initialconds_ga1be8524b895b1b95b04e8707aa0ba4ae_cgraph.pdf, id=1280, 31
+<group__initialconds_ga1be8524b895b1b95b04e8707aa0ba4ae_cgraph.pdf, id=1301, 31
 7.185pt x 100.375pt>
 File: group__initialconds_ga1be8524b895b1b95b04e8707aa0ba4ae_cgraph.pdf Graphic
  file (type pdf)
@@ -1633,7 +1633,7 @@ Package pdftex.def Info: group__initialconds_ga1be8524b895b1b95b04e8707aa0ba4ae
 _cgraph.pdf used on input line 37.
 (pdftex.def)             Requested size: 316.0pt x 100.00868pt.
 
-<group__initialconds_ga3e2114ab9f0c76a032cd4d0f708bdc24_cgraph.pdf, id=1281, 22
+<group__initialconds_ga3e2114ab9f0c76a032cd4d0f708bdc24_cgraph.pdf, id=1302, 22
 6.8475pt x 100.375pt>
 File: group__initialconds_ga3e2114ab9f0c76a032cd4d0f708bdc24_cgraph.pdf Graphic
  file (type pdf)
@@ -1643,7 +1643,7 @@ Package pdftex.def Info: group__initialconds_ga3e2114ab9f0c76a032cd4d0f708bdc24
 _cgraph.pdf used on input line 59.
 (pdftex.def)             Requested size: 226.0pt x 100.00102pt.
 )
-[40
+[41
 
 
  <./group__initialconds_ga1be8524b895b1b95b04e8707aa0ba4ae_cgraph.pdf> <./group
@@ -1656,7 +1656,7 @@ a single page
 \openout2 = `group__state.aux'.
 
  (./group__state.tex
-<group__state_ga150496cc6bdf94171d8f6822cd697145_cgraph.pdf, id=1309, 411.5375p
+<group__state_ga150496cc6bdf94171d8f6822cd697145_cgraph.pdf, id=1331, 411.5375p
 t x 138.5175pt>
 File: group__state_ga150496cc6bdf94171d8f6822cd697145_cgraph.pdf Graphic file (
 type pdf)
@@ -1665,11 +1665,11 @@ type pdf)
 Package pdftex.def Info: group__state_ga150496cc6bdf94171d8f6822cd697145_cgraph
 .pdf used on input line 60.
 (pdftex.def)             Requested size: 350.0pt x 117.80594pt.
- [41
+ [42
 
 
  <./group__state_ga150496cc6bdf94171d8f6822cd697145_cgraph.pdf>]
-<group__state_ga91fd597ad604e7412e8d78a79beefe34_cgraph.pdf, id=1328, 228.855pt
+<group__state_ga91fd597ad604e7412e8d78a79beefe34_cgraph.pdf, id=1349, 228.855pt
  x 100.375pt>
 File: group__state_ga91fd597ad604e7412e8d78a79beefe34_cgraph.pdf Graphic file (
 type pdf)
@@ -1677,7 +1677,10 @@ type pdf)
 Package pdftex.def Info: group__state_ga91fd597ad604e7412e8d78a79beefe34_cgraph
 .pdf used on input line 89.
 (pdftex.def)             Requested size: 228.0pt x 100.00409pt.
-) [42 <./group__state_ga91fd597ad604e7412e8d78a79beefe34_cgraph.pdf>]
+) [43 <./group__state_ga91fd597ad604e7412e8d78a79beefe34_cgraph.pdf>] [44
+
+
+]
 Chapter 8.
 (./bc_8f.texpdfTeX warning (ext4): destination with the same identifier (name{g
 roup__bcond_ga45475eec850fc7ef33c51a25b4f86602}) has been already used, duplica
@@ -1704,11 +1707,9 @@ ga9a5825c588243a1c261d107376f5a873}) has been already used, duplicate ignored
                    \relax 
 l.21 ...tic\-\_\-wall} (eflx, f, e, d\-U, wstate)}
                                                   \label{group__bcond_ga9a58...
-) (./diffusive__cmt_8f.tex [43
-
-
-]pdfTeX warning (ext4): destination with the same identifier (name{group__vfjac
-_ga34cccfbb67ddce8c68e7f2742a94af96}) has been already used, duplicate ignored
+) (./diffusive__cmt_8f.tex [45]pdfTeX warning (ext4): destination with the same
+ identifier (name{group__vfjac_ga34cccfbb67ddce8c68e7f2742a94af96}) has been al
+ready used, duplicate ignored
 <to be read again> 
                    \relax 
 l.29 ...742a94af96}{a51klduldxk} (flux, d\-U, ie)}
@@ -1779,7 +1780,7 @@ ga7d4c71aaaae94de9cd5f41a93836699a}) has been already used, duplicate ignored
                    \relax 
 l.62 ...a93836699a}{a43klduldxk} (flux, d\-U, ie)}
                                                   \label{group__vfjac_ga7d4c...
-) (./drive1__cmt_8f.tex [44]
+) (./drive1__cmt_8f.tex [46]
 LaTeX Font Info:    Font shape `T1/phv/bx/it' in size <9> not available
 (Font)              Font shape `T1/phv/b/it' tried instead on input line 18.
 LaTeX Font Info:    Font shape `T1/phv/b/it' in size <9> not available
@@ -1787,27 +1788,27 @@ LaTeX Font Info:    Font shape `T1/phv/b/it' in size <9> not available
 LaTeX Font Info:    Font shape `T1/phv/b/sl' will be
 (Font)              scaled to size 8.09995pt on input line 18.
 
-<drive1__cmt_8f_af21718debad3a2fefd68afcc5991813a_cgraph.pdf, id=1385, 911.405p
+<drive1__cmt_8f_af21718debad3a2fefd68afcc5991813a_cgraph.pdf, id=1410, 911.405p
 t x 653.44125pt>
 File: drive1__cmt_8f_af21718debad3a2fefd68afcc5991813a_cgraph.pdf Graphic file 
 (type pdf)
 
 <use drive1__cmt_8f_af21718debad3a2fefd68afcc5991813a_cgraph.pdf>
 Package pdftex.def Info: drive1__cmt_8f_af21718debad3a2fefd68afcc5991813a_cgrap
-h.pdf used on input line 53.
+h.pdf used on input line 54.
 (pdftex.def)             Requested size: 350.0pt x 250.94252pt.
- [45 <./drive1__cmt_8f_af21718debad3a2fefd68afcc5991813a_cgraph.pdf>]
-<drive1__cmt_8f_a001e854c71bfa7c25b504caaa09b7681_cgraph.pdf, id=1413, 770.88pt
+ [47 <./drive1__cmt_8f_af21718debad3a2fefd68afcc5991813a_cgraph.pdf>]
+<drive1__cmt_8f_a001e854c71bfa7c25b504caaa09b7681_cgraph.pdf, id=1439, 770.88pt
  x 672.5125pt>
 File: drive1__cmt_8f_a001e854c71bfa7c25b504caaa09b7681_cgraph.pdf Graphic file 
 (type pdf)
 
 <use drive1__cmt_8f_a001e854c71bfa7c25b504caaa09b7681_cgraph.pdf>
 Package pdftex.def Info: drive1__cmt_8f_a001e854c71bfa7c25b504caaa09b7681_cgrap
-h.pdf used on input line 79.
+h.pdf used on input line 81.
 (pdftex.def)             Requested size: 350.0pt x 305.33691pt.
 )
-(./drive2__cmt_8f.tex [46 <./drive1__cmt_8f_a001e854c71bfa7c25b504caaa09b7681_c
+(./drive2__cmt_8f.tex [48 <./drive1__cmt_8f_a001e854c71bfa7c25b504caaa09b7681_c
 graph.pdf>]) (./driver3__cmt_8f.texpdfTeX warning (ext4): destination with the 
 same identifier (name{group__initialconds_ga0427858fb7b0c582bcd5ff776de86a09}) 
 has been already used, duplicate ignored
@@ -1821,19 +1822,12 @@ ga9e9e837579897a93f40aae1fe6060255}) has been already used, duplicate ignored
                    \relax 
 l.23 ...f40aae1fe6060255}{poscheck} (ifail, what)}
                                                   \label{group__state_ga9e9e...
-) (./eqnsolver__cmt_8f.texpdfTeX warning (ext4): destination with the same iden
-tifier (name{group__convhvol_gab4831bb28a78e1c8fd3ec09854bd15ad}) has been alre
-ady used, duplicate ignored
+) (./eqnsolver__cmt_8f.tex [49]pdfTeX warning (ext4): destination with the same
+ identifier (name{group__convhvol_ga89ba8fe53f8afc523597773aca62a270}) has been
+ already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.26 ...5ad}{fluxdiv\-\_\-strong\-\_\-contra} (e)}
-                                                  \label{group__convhvol_gab...
-[47]pdfTeX warning (ext4): destination with the same identifier (name{group__co
-nvhvol_ga89ba8fe53f8afc523597773aca62a270}) has been already used, duplicate ig
-nored
-<to be read again> 
-                   \relax 
-l.31 ...\-\_\-dealiased\-\_\-weak\-\_\-chain} (e)}
+l.30 ...\-\_\-dealiased\-\_\-weak\-\_\-chain} (e)}
                                                   \label{group__convhvol_ga8...
 ) (./face_8f.tex) (./fluxfn_8f.texpdfTeX warning (ext4): destination with the s
 ame identifier (name{group__isurf_ga2b8162e02f3f2266c59f717fa1363226}) has been
@@ -1842,8 +1836,8 @@ ame identifier (name{group__isurf_ga2b8162e02f3f2266c59f717fa1363226}) has been
                    \relax 
 l.15 ... rr, ur, vr, wr, pr, ar, tr, flx, el, er)}
                                                   \label{group__isurf_ga2b81...
-[48]) (./intpdiff_8f.tex [49]) (./outflow__bc_8f.tex [50]
-<outflow__bc_8f_ac197c7083c48cd1062073f9c2b56b573_cgraph.pdf, id=1528, 335.2525
+[50]) (./intpdiff_8f.tex [51]) (./outflow__bc_8f.tex [52]
+<outflow__bc_8f_ac197c7083c48cd1062073f9c2b56b573_cgraph.pdf, id=1551, 335.2525
 pt x 100.375pt>
 File: outflow__bc_8f_ac197c7083c48cd1062073f9c2b56b573_cgraph.pdf Graphic file 
 (type pdf)
@@ -1853,16 +1847,16 @@ Package pdftex.def Info: outflow__bc_8f_ac197c7083c48cd1062073f9c2b56b573_cgrap
 h.pdf used on input line 64.
 (pdftex.def)             Requested size: 334.0pt x 99.9995pt.
 )
-(./step_8f.tex) (./surface__fluxes_8f.texpdfTeX warning (ext4): destination wit
-h the same identifier (name{group__isurf_gaecf15d43e4c71d130e4ef9e4a6a7821a}) h
-as been already used, duplicate ignored
+(./step_8f.tex) (./surface__fluxes_8f.tex [53 <./outflow__bc_8f_ac197c7083c48cd
+1062073f9c2b56b573_cgraph.pdf>]pdfTeX warning (ext4): destination with the same
+ identifier (name{group__isurf_gaecf15d43e4c71d130e4ef9e4a6a7821a}) has been al
+ready used, duplicate ignored
 <to be read again> 
                    \relax 
 l.12 ...5d43e4c71d130e4ef9e4a6a7821a}{fillujumpu}}
                                                   \label{group__isurf_gaecf1...
-[51 <./outflow__bc_8f_ac197c7083c48cd1062073f9c2b56b573_cgraph.pdf>]pdfTeX warn
-ing (ext4): destination with the same identifier (name{group__flux_ga07b6f239f6
-de61d489a639234c55dac3}) has been already used, duplicate ignored
+pdfTeX warning (ext4): destination with the same identifier (name{group__flux_g
+a07b6f239f6de61d489a639234c55dac3}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
 l.35 ...lux} (wminus, wplus, flux, nstate, nflux)}
@@ -1945,34 +1939,34 @@ ae3c480e559a6d01be27381e8517a210d}) has been already used, duplicate ignored
                    \relax 
 l.74 ...rot} (wminus, wplus, flux, nstate, nflux)}
                                                   \label{group__flux_gae3c48...
-) (./wall__bc_8f.tex [52]) [53] (./refman.ind
-Underfull \hbox (badness 1043) in paragraph at lines 26--28
+) (./wall__bc_8f.tex [54]) [55] (./refman.ind
+Underfull \hbox (badness 1043) in paragraph at lines 39--41
 []| \T1/phv/m/n/10 Ther-mo-dy-namic state vari-ables from con-served
  []
 
+[56
 
-Underfull \hbox (badness 1043) in paragraph at lines 148--150
+]
+Underfull \hbox (badness 1043) in paragraph at lines 191--193
 []| \T1/phv/m/n/10 Ther-mo-dy-namic state vari-ables from con-served
  []
 
-[54
-
-] [55
+[57
 
 ])
 
 Package natbib Warning: There were undefined citations.
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 184.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 184.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 183.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 183.
 (./refman.aux (./group__bcond.aux) (./group__diffhvol.aux) (./group__vfjac.aux)
 (./group__isurf.aux) (./group__vsurf.aux) (./group__flux.aux)
 (./group__faceops.aux) (./group__twopoint.aux) (./group__initialconds.aux)
 (./group__state.aux))
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 184.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 184.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 183.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 183.
 Package rerunfilecheck Info: File `refman.out' has not changed.
-(rerunfilecheck)             Checksum: 258E3FA64E7E43F1321ED4031C48C7FA;20721.
+(rerunfilecheck)             Checksum: 4F72DABEF85F17F99FA4416732030074;21208.
 
 
 LaTeX Warning: There were undefined references.
@@ -1980,16 +1974,16 @@ LaTeX Warning: There were undefined references.
 
 LaTeX Warning: There were multiply-defined labels.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 184.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 183.
  ) 
 Here is how much of TeX's memory you used:
- 13933 strings out of 494820
- 201940 string characters out of 3178050
- 280332 words of memory out of 3000000
- 16289 multiletter control sequences out of 15000+200000
+ 13945 strings out of 494820
+ 202125 string characters out of 3178050
+ 280381 words of memory out of 3000000
+ 16295 multiletter control sequences out of 15000+200000
  122062 words of font info for 180 fonts, out of 3000000 for 9000
  198 hyphenation exceptions out of 8191
- 48i,15n,43p,560b,533s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 48i,15n,43p,560b,537s stack positions out of 5000i,500n,10000p,200000b,50000s
 {/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/texliv
 e/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texm
 f-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist
@@ -2008,10 +2002,10 @@ pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/symbol/usyr.pfb></usr/share/
 texlive/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-d
 ist/fonts/type1/urw/times/utmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1
 /urw/times/utmri8a.pfb>
-Output written on refman.pdf (61 pages, 944254 bytes).
+Output written on refman.pdf (63 pages, 949853 bytes).
 PDF statistics:
- 1818 PDF objects out of 2073 (max. 8388607)
- 1636 compressed objects within 17 object streams
- 411 named destinations out of 1000 (max. 500000)
- 1016 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 1871 PDF objects out of 2073 (max. 8388607)
+ 1687 compressed objects within 17 object streams
+ 417 named destinations out of 1000 (max. 500000)
+ 1040 words of extra memory for PDF output out of 10000 (max. 10000000)
 

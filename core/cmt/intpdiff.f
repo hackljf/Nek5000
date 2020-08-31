@@ -235,6 +235,8 @@ C> appropriate weights for strong-form surface integrals
       call get_dgll_ptr(ilx1,lx1,lx1)
 
 ! JH060418 strong-form derivative matrix for 2-point fluxes + surface
+C> dstrong in Equation~\ref{dstrong} used to evaluate discontinuous
+C> surface flux on the fly.
       call copy (dstrong,d(ilx1),lx1**2)
       call cmult(dstrong,2.0,    lx1**2)
       dstrong(1,1)     = 2.0*d(ilx1)         +1.0/wxm1(1)

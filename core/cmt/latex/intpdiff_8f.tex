@@ -52,8 +52,7 @@ subroutine \hyperlink{intpdiff_8f_a4bc9678542951a32332a86f8baf88f23}{compute\-\_
 {\bf }\par
 \begin{DoxyCompactItemize}
 \item 
-\hypertarget{intpdiff_8f_a996a690b6a44c187b06422d8f039344c}{subroutine \hyperlink{intpdiff_8f_a996a690b6a44c187b06422d8f039344c}{chainrule\-\_\-metrics} (istp)}\label{intpdiff_8f_a996a690b6a44c187b06422d8f039344c}
-
+subroutine \hyperlink{intpdiff_8f_a996a690b6a44c187b06422d8f039344c}{chainrule\-\_\-metrics} (istp)
 \begin{DoxyCompactList}\small\item\em Keep chain-\/rule metrics as a stop-\/gap until cmt\-\_\-metrics works on deformed elements. Also fills jface with jacobian of mesh on mesh faces, w2m1 with quadrature weights, and dstrong with derivative matrix and appropriate weights for strong-\/form surface integrals. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
@@ -62,7 +61,18 @@ subroutine \hyperlink{intpdiff_8f_a4bc9678542951a32332a86f8baf88f23}{compute\-\_
 interpolation and differentiation routines not already provided by nek5000 
 
 \subsection{Function/\-Subroutine Documentation}
-\hypertarget{intpdiff_8f_a5320a5bf1c50695504168747afc66c93}{\index{intpdiff.\-f@{intpdiff.\-f}!compute\-\_\-gradients@{compute\-\_\-gradients}}
+\hypertarget{intpdiff_8f_a996a690b6a44c187b06422d8f039344c}{\index{intpdiff.\-f@{intpdiff.\-f}!chainrule\-\_\-metrics@{chainrule\-\_\-metrics}}
+\index{chainrule\-\_\-metrics@{chainrule\-\_\-metrics}!intpdiff.f@{intpdiff.\-f}}
+\subsubsection[{chainrule\-\_\-metrics}]{\setlength{\rightskip}{0pt plus 5cm}subroutine chainrule\-\_\-metrics (
+\begin{DoxyParamCaption}
+\item[{}]{istp}
+\end{DoxyParamCaption}
+)}}\label{intpdiff_8f_a996a690b6a44c187b06422d8f039344c}
+
+
+Keep chain-\/rule metrics as a stop-\/gap until cmt\-\_\-metrics works on deformed elements. Also fills jface with jacobian of mesh on mesh faces, w2m1 with quadrature weights, and dstrong with derivative matrix and appropriate weights for strong-\/form surface integrals. 
+
+dstrong in Equation$\sim$dstrong\} used to evaluate discontinuous surface flux on the fly. \hypertarget{intpdiff_8f_a5320a5bf1c50695504168747afc66c93}{\index{intpdiff.\-f@{intpdiff.\-f}!compute\-\_\-gradients@{compute\-\_\-gradients}}
 \index{compute\-\_\-gradients@{compute\-\_\-gradients}!intpdiff.f@{intpdiff.\-f}}
 \subsubsection[{compute\-\_\-gradients}]{\setlength{\rightskip}{0pt plus 5cm}subroutine compute\-\_\-gradients (
 \begin{DoxyParamCaption}

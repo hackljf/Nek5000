@@ -1,179 +1,234 @@
 \begin{theindex}
 
+  \item {a51duadia}
+    \subitem {Surface integrals due to boundary conditions}, 
+		\hyperpage{20}
+  \item {a52duadia}
+    \subitem {Surface integrals due to boundary conditions}, 
+		\hyperpage{20}
+  \item {a53duadia}
+    \subitem {Surface integrals due to boundary conditions}, 
+		\hyperpage{20}
   \item {agradu}
-    \subitem {Jacobians for viscous fluxes}, \hyperpage{9}
+    \subitem {Jacobians for viscous fluxes}, \hyperpage{25}
   \item {avg\discretionary {-}{}{}\_\discretionary {-}{}{}and\discretionary {-}{}{}\_\discretionary {-}{}{}jump}
-    \subitem {Inviscid surface terms}, \hyperpage{10}
+    \subitem {Inviscid surface terms}, \hyperpage{29}
 
   \indexspace
 
-  \item {bc.\discretionary {-}{}{}f}, \hyperpage{23}
+  \item {bc.\discretionary {-}{}{}f}, \hyperpage{45}
+  \item {br1auxflux}
+    \subitem {Viscous surface terms}, \hyperpage{34}
 
   \indexspace
 
+  \item {chainrule\discretionary {-}{}{}\_\discretionary {-}{}{}metrics}
+    \subitem {intpdiff.\discretionary {-}{}{}f}, \hyperpage{52}
   \item {cmt\discretionary {-}{}{}\_\discretionary {-}{}{}ics}
-    \subitem {flow field initialization routines}, \hyperpage{19}
+    \subitem {flow field initialization routines}, \hyperpage{41}
   \item {cmt\discretionary {-}{}{}\_\discretionary {-}{}{}nek\discretionary {-}{}{}\_\discretionary {-}{}{}advance}
     \subitem {drive1\discretionary {-}{}{}\_\discretionary {-}{}{}cmt.\discretionary {-}{}{}f}, 
-		\hyperpage{25}
+		\hyperpage{47}
   \item {cmtuic}
-    \subitem {flow field initialization routines}, \hyperpage{19}
+    \subitem {flow field initialization routines}, \hyperpage{41}
   \item {compute\discretionary {-}{}{}\_\discretionary {-}{}{}gradients}
-    \subitem {intpdiff.\discretionary {-}{}{}f}, \hyperpage{29}
+    \subitem {intpdiff.\discretionary {-}{}{}f}, \hyperpage{52}
   \item {compute\discretionary {-}{}{}\_\discretionary {-}{}{}gradients\discretionary {-}{}{}\_\discretionary {-}{}{}contra}
-    \subitem {intpdiff.\discretionary {-}{}{}f}, \hyperpage{30}
+    \subitem {intpdiff.\discretionary {-}{}{}f}, \hyperpage{52}
   \item {compute\discretionary {-}{}{}\_\discretionary {-}{}{}primitive\discretionary {-}{}{}\_\discretionary {-}{}{}vars}
     \subitem {Thermodynamic state variables from conserved variables}, 
-		\hyperpage{20}
+		\hyperpage{42}
   \item {compute\discretionary {-}{}{}\_\discretionary {-}{}{}rhs\discretionary {-}{}{}\_\discretionary {-}{}{}and\discretionary {-}{}{}\_\discretionary {-}{}{}dt}
     \subitem {drive1\discretionary {-}{}{}\_\discretionary {-}{}{}cmt.\discretionary {-}{}{}f}, 
-		\hyperpage{25}
+		\hyperpage{47}
+  \item {compute\discretionary {-}{}{}\_\discretionary {-}{}{}transport\discretionary {-}{}{}\_\discretionary {-}{}{}props}
+    \subitem {Jacobians for viscous fluxes}, \hyperpage{26}
   \item {contravariant\discretionary {-}{}{}\_\discretionary {-}{}{}flux}
-    \subitem {Volume integral for inviscid fluxes}, \hyperpage{5}
+    \subitem {Volume integral for inviscid fluxes}, \hyperpage{17}
   \item {convective\discretionary {-}{}{}\_\discretionary {-}{}{}cmt}
-    \subitem {Volume integral for inviscid fluxes}, \hyperpage{6}
+    \subitem {Volume integral for inviscid fluxes}, \hyperpage{18}
 
   \indexspace
 
   \item {dg\discretionary {-}{}{}\_\discretionary {-}{}{}face\discretionary {-}{}{}\_\discretionary {-}{}{}avg}
-    \subitem {Inviscid surface terms}, \hyperpage{11}
+    \subitem {Inviscid surface terms}, \hyperpage{30}
   \item {diffusive\discretionary {-}{}{}\_\discretionary {-}{}{}cmt.\discretionary {-}{}{}f}, 
-		\hyperpage{23}
+		\hyperpage{45}
   \item {drive1\discretionary {-}{}{}\_\discretionary {-}{}{}cmt.\discretionary {-}{}{}f}, 
-		\hyperpage{24}
+		\hyperpage{46}
     \subitem {cmt\discretionary {-}{}{}\_\discretionary {-}{}{}nek\discretionary {-}{}{}\_\discretionary {-}{}{}advance}, 
-		\hyperpage{25}
+		\hyperpage{47}
     \subitem {compute\discretionary {-}{}{}\_\discretionary {-}{}{}rhs\discretionary {-}{}{}\_\discretionary {-}{}{}and\discretionary {-}{}{}\_\discretionary {-}{}{}dt}, 
-		\hyperpage{25}
+		\hyperpage{47}
   \item {drive2\discretionary {-}{}{}\_\discretionary {-}{}{}cmt.\discretionary {-}{}{}f}, 
-		\hyperpage{26}
+		\hyperpage{48}
   \item {driver3\discretionary {-}{}{}\_\discretionary {-}{}{}cmt.\discretionary {-}{}{}f}, 
-		\hyperpage{26}
+		\hyperpage{49}
 
   \indexspace
 
   \item {eqnsolver\discretionary {-}{}{}\_\discretionary {-}{}{}cmt.\discretionary {-}{}{}f}, 
-		\hyperpage{27}
+		\hyperpage{49}
   \item {evaluate\discretionary {-}{}{}\_\discretionary {-}{}{}aliased\discretionary {-}{}{}\_\discretionary {-}{}{}conv\discretionary {-}{}{}\_\discretionary {-}{}{}h}
-    \subitem {Volume integral for inviscid fluxes}, \hyperpage{6}
+    \subitem {Volume integral for inviscid fluxes}, \hyperpage{18}
 
   \indexspace
 
-  \item {face.\discretionary {-}{}{}f}, \hyperpage{28}
+  \item {face.\discretionary {-}{}{}f}, \hyperpage{50}
   \item {face\discretionary {-}{}{}\_\discretionary {-}{}{}state\discretionary {-}{}{}\_\discretionary {-}{}{}commo}
-    \subitem {Inviscid surface terms}, \hyperpage{11}
+    \subitem {Inviscid surface terms}, \hyperpage{30}
   \item {faceu}
-    \subitem {Inviscid surface terms}, \hyperpage{11}
+    \subitem {Inviscid surface terms}, \hyperpage{30}
   \item {fillq}
-    \subitem {Inviscid surface terms}, \hyperpage{11}
-  \item {flow field initialization routines}, \hyperpage{19}
+    \subitem {Inviscid surface terms}, \hyperpage{30}
+  \item {flow field initialization routines}, \hyperpage{41}
     \subitem {cmt\discretionary {-}{}{}\_\discretionary {-}{}{}ics}, 
-		\hyperpage{19}
-    \subitem {cmtuic}, \hyperpage{19}
-  \item {Flux functions and wrappers}, \hyperpage{15}
+		\hyperpage{41}
+    \subitem {cmtuic}, \hyperpage{41}
+  \item {Flux functions and wrappers}, \hyperpage{36}
     \subitem {gtu\discretionary {-}{}{}\_\discretionary {-}{}{}wrapper}, 
-		\hyperpage{15}
+		\hyperpage{36}
     \subitem {sequential\discretionary {-}{}{}\_\discretionary {-}{}{}flux}, 
-		\hyperpage{15}
+		\hyperpage{37}
+  \item {fluxdiv\discretionary {-}{}{}\_\discretionary {-}{}{}2point\discretionary {-}{}{}\_\discretionary {-}{}{}noscr}
+    \subitem {Volume integral for inviscid fluxes}, \hyperpage{18}
+  \item {fluxdiv\discretionary {-}{}{}\_\discretionary {-}{}{}strong\discretionary {-}{}{}\_\discretionary {-}{}{}contra}
+    \subitem {Volume integral for inviscid fluxes}, \hyperpage{19}
   \item {fluxes\discretionary {-}{}{}\_\discretionary {-}{}{}full\discretionary {-}{}{}\_\discretionary {-}{}{}field\discretionary {-}{}{}\_\discretionary {-}{}{}kg}
-    \subitem {Inviscid surface terms}, \hyperpage{12}
-  \item {fluxfn.\discretionary {-}{}{}f}, \hyperpage{28}
+    \subitem {Inviscid surface terms}, \hyperpage{31}
+  \item {fluxfn.\discretionary {-}{}{}f}, \hyperpage{50}
+  \item {fluxj\discretionary {-}{}{}\_\discretionary {-}{}{}ns}
+    \subitem {Jacobians for viscous fluxes}, \hyperpage{27}
 
   \indexspace
 
   \item {gtu\discretionary {-}{}{}\_\discretionary {-}{}{}wrapper}
-    \subitem {Flux functions and wrappers}, \hyperpage{15}
+    \subitem {Flux functions and wrappers}, \hyperpage{36}
+
+  \indexspace
+
+  \item {half\discretionary {-}{}{}\_\discretionary {-}{}{}iku\discretionary {-}{}{}\_\discretionary {-}{}{}cmt}
+    \subitem {Volume integral for viscous fluxes}, \hyperpage{23}
 
   \indexspace
 
   \item {igtu\discretionary {-}{}{}\_\discretionary {-}{}{}cmt}
-    \subitem {Viscous surface terms}, \hyperpage{14}
+    \subitem {Viscous surface terms}, \hyperpage{34}
+  \item {imqqtu}
+    \subitem {Viscous surface terms}, \hyperpage{35}
+  \item {imqqtu\discretionary {-}{}{}\_\discretionary {-}{}{}dirichlet}
+    \subitem {Surface integrals due to boundary conditions}, 
+		\hyperpage{20}
   \item {inflow\discretionary {-}{}{}\_\discretionary {-}{}{}df}
-    \subitem {Inviscid surface terms}, \hyperpage{12}
-  \item {intpdiff.\discretionary {-}{}{}f}, \hyperpage{29}
+    \subitem {Inviscid surface terms}, \hyperpage{31}
+  \item {intpdiff.\discretionary {-}{}{}f}, \hyperpage{51}
+    \subitem {chainrule\discretionary {-}{}{}\_\discretionary {-}{}{}metrics}, 
+		\hyperpage{52}
     \subitem {compute\discretionary {-}{}{}\_\discretionary {-}{}{}gradients}, 
-		\hyperpage{29}
+		\hyperpage{52}
     \subitem {compute\discretionary {-}{}{}\_\discretionary {-}{}{}gradients\discretionary {-}{}{}\_\discretionary {-}{}{}contra}, 
-		\hyperpage{30}
+		\hyperpage{52}
     \subitem {set\discretionary {-}{}{}\_\discretionary {-}{}{}dealias\discretionary {-}{}{}\_\discretionary {-}{}{}face}, 
-		\hyperpage{30}
-  \item {Inviscid surface terms}, \hyperpage{10}
+		\hyperpage{52}
+  \item {Inviscid surface terms}, \hyperpage{29}
     \subitem {avg\discretionary {-}{}{}\_\discretionary {-}{}{}and\discretionary {-}{}{}\_\discretionary {-}{}{}jump}, 
-		\hyperpage{10}
+		\hyperpage{29}
     \subitem {dg\discretionary {-}{}{}\_\discretionary {-}{}{}face\discretionary {-}{}{}\_\discretionary {-}{}{}avg}, 
-		\hyperpage{11}
+		\hyperpage{30}
     \subitem {face\discretionary {-}{}{}\_\discretionary {-}{}{}state\discretionary {-}{}{}\_\discretionary {-}{}{}commo}, 
-		\hyperpage{11}
-    \subitem {faceu}, \hyperpage{11}
-    \subitem {fillq}, \hyperpage{11}
+		\hyperpage{30}
+    \subitem {faceu}, \hyperpage{30}
+    \subitem {fillq}, \hyperpage{30}
     \subitem {fluxes\discretionary {-}{}{}\_\discretionary {-}{}{}full\discretionary {-}{}{}\_\discretionary {-}{}{}field\discretionary {-}{}{}\_\discretionary {-}{}{}kg}, 
-		\hyperpage{12}
+		\hyperpage{31}
     \subitem {inflow\discretionary {-}{}{}\_\discretionary {-}{}{}df}, 
-		\hyperpage{12}
+		\hyperpage{31}
     \subitem {outflow\discretionary {-}{}{}\_\discretionary {-}{}{}df}, 
-		\hyperpage{13}
+		\hyperpage{33}
 
   \indexspace
 
-  \item {Jacobians for viscous fluxes}, \hyperpage{9}
-    \subitem {agradu}, \hyperpage{9}
+  \item {Jacobians for viscous fluxes}, \hyperpage{25}
+    \subitem {agradu}, \hyperpage{25}
+    \subitem {compute\discretionary {-}{}{}\_\discretionary {-}{}{}transport\discretionary {-}{}{}\_\discretionary {-}{}{}props}, 
+		\hyperpage{26}
+    \subitem {fluxj\discretionary {-}{}{}\_\discretionary {-}{}{}ns}, 
+		\hyperpage{27}
 
   \indexspace
 
   \item {outflow}
     \subitem {outflow\discretionary {-}{}{}\_\discretionary {-}{}{}bc.\discretionary {-}{}{}f}, 
-		\hyperpage{30}
+		\hyperpage{53}
   \item {outflow\discretionary {-}{}{}\_\discretionary {-}{}{}bc.\discretionary {-}{}{}f}, 
-		\hyperpage{30}
-    \subitem {outflow}, \hyperpage{30}
+		\hyperpage{52}
+    \subitem {outflow}, \hyperpage{53}
   \item {outflow\discretionary {-}{}{}\_\discretionary {-}{}{}df}
-    \subitem {Inviscid surface terms}, \hyperpage{13}
+    \subitem {Inviscid surface terms}, \hyperpage{33}
 
   \indexspace
 
   \item {sequential\discretionary {-}{}{}\_\discretionary {-}{}{}flux}
-    \subitem {Flux functions and wrappers}, \hyperpage{15}
+    \subitem {Flux functions and wrappers}, \hyperpage{37}
   \item {set\discretionary {-}{}{}\_\discretionary {-}{}{}dealias\discretionary {-}{}{}\_\discretionary {-}{}{}face}
-    \subitem {intpdiff.\discretionary {-}{}{}f}, \hyperpage{30}
-  \item {step.\discretionary {-}{}{}f}, \hyperpage{31}
+    \subitem {intpdiff.\discretionary {-}{}{}f}, \hyperpage{52}
+  \item {step.\discretionary {-}{}{}f}, \hyperpage{53}
   \item {structure for symmetric flux functions in split forms}, 
-		\hyperpage{18}
-  \item {Surface integrals due to boundary conditions}, \hyperpage{7}
+		\hyperpage{40}
+  \item {Surface integrals due to boundary conditions}, \hyperpage{20}
+    \subitem {a51duadia}, \hyperpage{20}
+    \subitem {a52duadia}, \hyperpage{20}
+    \subitem {a53duadia}, \hyperpage{20}
+    \subitem {imqqtu\discretionary {-}{}{}\_\discretionary {-}{}{}dirichlet}, 
+		\hyperpage{20}
+  \item {Surface\_data}, \hyperpage{7}
   \item {surface\discretionary {-}{}{}\_\discretionary {-}{}{}fluxes.\discretionary {-}{}{}f}, 
-		\hyperpage{31}
+		\hyperpage{54}
 
   \indexspace
 
   \item {tdstate}
     \subitem {Thermodynamic state variables from conserved variables}, 
-		\hyperpage{20}
+		\hyperpage{42}
   \item {Thermodynamic state variables from conserved variables}, 
-		\hyperpage{20}
+		\hyperpage{42}
     \subitem {compute\discretionary {-}{}{}\_\discretionary {-}{}{}primitive\discretionary {-}{}{}\_\discretionary {-}{}{}vars}, 
-		\hyperpage{20}
-    \subitem {tdstate}, \hyperpage{20}
+		\hyperpage{42}
+    \subitem {tdstate}, \hyperpage{42}
 
   \indexspace
 
-  \item {utility functions for manipulating face data}, \hyperpage{17}
+  \item {utility functions for manipulating face data}, \hyperpage{39}
 
   \indexspace
 
-  \item {Viscous surface terms}, \hyperpage{14}
+  \item {Viscous surface terms}, \hyperpage{34}
+    \subitem {br1auxflux}, \hyperpage{34}
     \subitem {igtu\discretionary {-}{}{}\_\discretionary {-}{}{}cmt}, 
-		\hyperpage{14}
-  \item {Volume integral for inviscid fluxes}, \hyperpage{5}
+		\hyperpage{34}
+    \subitem {imqqtu}, \hyperpage{35}
+  \item {viscous\discretionary {-}{}{}\_\discretionary {-}{}{}cmt}
+    \subitem {Volume integral for viscous fluxes}, \hyperpage{23}
+  \item {Volume integral for inviscid fluxes}, \hyperpage{17}
     \subitem {contravariant\discretionary {-}{}{}\_\discretionary {-}{}{}flux}, 
-		\hyperpage{5}
+		\hyperpage{17}
     \subitem {convective\discretionary {-}{}{}\_\discretionary {-}{}{}cmt}, 
-		\hyperpage{6}
+		\hyperpage{18}
     \subitem {evaluate\discretionary {-}{}{}\_\discretionary {-}{}{}aliased\discretionary {-}{}{}\_\discretionary {-}{}{}conv\discretionary {-}{}{}\_\discretionary {-}{}{}h}, 
-		\hyperpage{6}
-  \item {Volume integral for viscous fluxes}, \hyperpage{8}
+		\hyperpage{18}
+    \subitem {fluxdiv\discretionary {-}{}{}\_\discretionary {-}{}{}2point\discretionary {-}{}{}\_\discretionary {-}{}{}noscr}, 
+		\hyperpage{18}
+    \subitem {fluxdiv\discretionary {-}{}{}\_\discretionary {-}{}{}strong\discretionary {-}{}{}\_\discretionary {-}{}{}contra}, 
+		\hyperpage{19}
+  \item {Volume integral for viscous fluxes}, \hyperpage{23}
+    \subitem {half\discretionary {-}{}{}\_\discretionary {-}{}{}iku\discretionary {-}{}{}\_\discretionary {-}{}{}cmt}, 
+		\hyperpage{23}
+    \subitem {viscous\discretionary {-}{}{}\_\discretionary {-}{}{}cmt}, 
+		\hyperpage{23}
 
   \indexspace
 
   \item {wall\discretionary {-}{}{}\_\discretionary {-}{}{}bc.\discretionary {-}{}{}f}, 
-		\hyperpage{32}
+		\hyperpage{55}
 
 \end{theindex}

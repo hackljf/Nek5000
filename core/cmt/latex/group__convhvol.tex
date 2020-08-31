@@ -5,19 +5,18 @@
 \begin{DoxyCompactItemize}
 \item 
 subroutine \hyperlink{group__convhvol_ga77e7d7a46950fcbbf072e8e900cee272}{convective\-\_\-cmt} (e)
-\begin{DoxyCompactList}\small\item\em Evaluates inviscid volume terms for all toteq equations in two-\/point split form and adds them to res1(\-:,\-:,\-:,e,\-:). \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em Evaluates inviscid volume terms for all toteq equations in two-\/point split form (Equation$\sim$shortvol\}and adds them to res1(\-:,\-:,\-:,e,\-:). \end{DoxyCompactList}\item 
 subroutine \hyperlink{group__convhvol_ga72c1cbe51bc537e14ec8927e62f0e3f3}{fluxdiv\-\_\-2point\-\_\-noscr} (res, fcons, e, ja)
-\begin{DoxyCompactList}\small\item\em Evaluates the two-\/point split form of the volume integral $\int v \nabla\cdot\mathbf{H}^c dV$ and the discontinuous surface flux $\oint v \mathbf{H}^c\cdot\mathbf{n} dA$ for the inviscid flux function in a single element. \end{DoxyCompactList}\item 
-\hypertarget{group__convhvol_gab4831bb28a78e1c8fd3ec09854bd15ad}{subroutine \hyperlink{group__convhvol_gab4831bb28a78e1c8fd3ec09854bd15ad}{fluxdiv\-\_\-strong\-\_\-contra} (e)}\label{group__convhvol_gab4831bb28a78e1c8fd3ec09854bd15ad}
-
+\begin{DoxyCompactList}\small\item\em Evaluates the two-\/point split form (Equations$\sim$splitr\} through splitt\}) of the volume integral $\int v \nabla\cdot\mathbf{H}^c dV$ and the discontinuous surface flux $\oint v \mathbf{H}^c\cdot\mathbf{n} dA$ for the inviscid flux function in a single element. \end{DoxyCompactList}\item 
+subroutine \hyperlink{group__convhvol_gab4831bb28a78e1c8fd3ec09854bd15ad}{fluxdiv\-\_\-strong\-\_\-contra} (e)
 \begin{DoxyCompactList}\small\item\em Computes $\int v \nabla\cdot\mathbf{H}^c dV$ in aliased strong form for element $e$, and increments res1 with it. \end{DoxyCompactList}\item 
 subroutine \hyperlink{group__convhvol_gad9d70d83f1184d25495812d637698102}{evaluate\-\_\-aliased\-\_\-conv\-\_\-h} (e)
-\begin{DoxyCompactList}\small\item\em Evaluates consistent (i.\-e. $F^{\#}(U_{i,j,k},U_{l,j,k}),i=l$) flux function at all G\-L\-L nodes and stores it in convh. \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em Evaluates consistent (i.\-e. $F^{\#}(U_{i,j,k},U_{l,j,k})=H_{(eq),i},i=l$) flux function at all G\-L\-L nodes and stores it in convh. \end{DoxyCompactList}\item 
 \hypertarget{group__convhvol_ga89ba8fe53f8afc523597773aca62a270}{subroutine \hyperlink{group__convhvol_ga89ba8fe53f8afc523597773aca62a270}{fluxdiv\-\_\-dealiased\-\_\-weak\-\_\-chain} (e)}\label{group__convhvol_ga89ba8fe53f8afc523597773aca62a270}
 
 \begin{DoxyCompactList}\small\item\em $(\nabla v)\cdot \mathbf{H}^c=\mathcal{I}^{\intercal}\mathbf{D}^{\intercal}\cdots$ for equation eq, element e \end{DoxyCompactList}\item 
 subroutine \hyperlink{group__convhvol_ga72103225babeca7679ef8b9a41d08f2e}{contravariant\-\_\-flux} (frst, fxyz, ja, nel)
-\begin{DoxyCompactList}\small\item\em Transforms consistent (i.\-e. $F^{\#}(U_{i,j,k},U_{l,j,k}),i=l$) flux for one conserved variable to the contravariant frame. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Transforms consistent (i.\-e. $F^{\#}(U_{i,j,k},U_{l,j,k})=H_{(eq),i},i=l$) flux for one conserved variable to the contravariant frame by contracting H\-\_\-i with J diag $\left(\partial r_j/\partial x_i\right)$. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \subsection{Detailed Description}
@@ -31,12 +30,12 @@ subroutine \hyperlink{group__convhvol_ga72103225babeca7679ef8b9a41d08f2e}{contra
 \item[{real, dimension(nx1$\ast$ny1$\ast$nz1,ldim,nel)}]{frst, }
 \item[{real, dimension(nx1$\ast$ny1$\ast$nz1,ldim,nel)}]{fxyz, }
 \item[{real, dimension(nx1$\ast$ny1$\ast$nz1,ldim$\ast$ldim,nel)}]{ja, }
-\item[{}]{nel}
+\item[{integer}]{nel}
 \end{DoxyParamCaption}
 )}}\label{group__convhvol_ga72103225babeca7679ef8b9a41d08f2e}
 
 
-Transforms consistent (i.\-e. $F^{\#}(U_{i,j,k},U_{l,j,k}),i=l$) flux for one conserved variable to the contravariant frame. 
+Transforms consistent (i.\-e. $F^{\#}(U_{i,j,k},U_{l,j,k})=H_{(eq),i},i=l$) flux for one conserved variable to the contravariant frame by contracting H\-\_\-i with J diag $\left(\partial r_j/\partial x_i\right)$. 
 
 
 \begin{DoxyParams}{Parameters}
@@ -44,7 +43,9 @@ Transforms consistent (i.\-e. $F^{\#}(U_{i,j,k},U_{l,j,k}),i=l$) flux for one co
 \hline
 {\em frst} & Spatial vector of contravariant flux for one variable, nel elements (intent(out))\\
 \hline
-{\em fxyz} & Spatial vector of physical flux for one variable, nel elements (intent(in)) \\
+{\em fxyz} & Spatial vector of physical flux for one variable, nel elements (intent(in))\\
+\hline
+{\em nel} & Number of elements (intent(in)) \\
 \hline
 \end{DoxyParams}
 \hypertarget{group__convhvol_ga77e7d7a46950fcbbf072e8e900cee272}{\index{Volume integral for inviscid fluxes@{Volume integral for inviscid fluxes}!convective\-\_\-cmt@{convective\-\_\-cmt}}
@@ -56,7 +57,7 @@ Transforms consistent (i.\-e. $F^{\#}(U_{i,j,k},U_{l,j,k}),i=l$) flux for one co
 )}}\label{group__convhvol_ga77e7d7a46950fcbbf072e8e900cee272}
 
 
-Evaluates inviscid volume terms for all toteq equations in two-\/point split form and adds them to res1(\-:,\-:,\-:,e,\-:). 
+Evaluates inviscid volume terms for all toteq equations in two-\/point split form (Equation$\sim$shortvol\}and adds them to res1(\-:,\-:,\-:,e,\-:). 
 
 
 \begin{DoxyParams}{Parameters}
@@ -69,7 +70,8 @@ Transform the consistent flux to the contravariant frame in the reference elemen
 
 Compute the flux divergence in 2-\/point form using the flux function defined in cmt\-\_\-usrflx and the consistent contravariant flux stored in convh. store it in totalh and add it to res1(\-:,\-:,\-:,e,\-:)
 
-Here is the call graph for this function\-:\nopagebreak
+Here is the call graph for this function\-:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -87,11 +89,11 @@ Here is the call graph for this function\-:\nopagebreak
 )}}\label{group__convhvol_gad9d70d83f1184d25495812d637698102}
 
 
-Evaluates consistent (i.\-e. $F^{\#}(U_{i,j,k},U_{l,j,k}),i=l$) flux function at all G\-L\-L nodes and stores it in convh. 
+Evaluates consistent (i.\-e. $F^{\#}(U_{i,j,k},U_{l,j,k})=H_{(eq),i},i=l$) flux function at all G\-L\-L nodes and stores it in convh. 
 
 
 \begin{DoxyParams}{Parameters}
-{\em e} & integer index of the element \\
+{\em e} & integer index of the element (intent(in)) \\
 \hline
 \end{DoxyParams}
 \hypertarget{group__convhvol_ga72c1cbe51bc537e14ec8927e62f0e3f3}{\index{Volume integral for inviscid fluxes@{Volume integral for inviscid fluxes}!fluxdiv\-\_\-2point\-\_\-noscr@{fluxdiv\-\_\-2point\-\_\-noscr}}
@@ -106,8 +108,32 @@ Evaluates consistent (i.\-e. $F^{\#}(U_{i,j,k},U_{l,j,k}),i=l$) flux function at
 )}}\label{group__convhvol_ga72c1cbe51bc537e14ec8927e62f0e3f3}
 
 
-Evaluates the two-\/point split form of the volume integral $\int v \nabla\cdot\mathbf{H}^c dV$ and the discontinuous surface flux $\oint v \mathbf{H}^c\cdot\mathbf{n} dA$ for the inviscid flux function in a single element. 
+Evaluates the two-\/point split form (Equations$\sim$splitr\} through splitt\}) of the volume integral $\int v \nabla\cdot\mathbf{H}^c dV$ and the discontinuous surface flux $\oint v \mathbf{H}^c\cdot\mathbf{n} dA$ for the inviscid flux function in a single element. 
 
+
+\begin{DoxyParams}{Parameters}
+{\em res} & R\-H\-S for all equations, all elements (intent(inout))\\
+\hline
+{\em ja} & Metrics for the e'th elements (intent(in))\\
+\hline
+{\em fcons} & Consistent contravariant flux $Jdiag\left(\partial r_i/\partial x_k\right) \bH_k$ (intent(in)) \\
+\hline
+\end{DoxyParams}
 Both $\int v \nabla\cdot\mathbf{H}^c dV$ and flux $\oint v \mathbf{H}^c\cdot\mathbf{n} dA$ for the inviscid flux are added to res1 for the element $e$. The volume integrand is approximated by $\sum D_{il} F^{\#}(z_{i,j,k},z_{l,j,k})$ in each of the ndim directions of the reference element. The two-\/point flux function $F^{\#}(z_1,z_2)$ is taken from \hyperlink{fluxfn_8f}{fluxfn.\-f} and specified in the usr file in cmt\-\_\-usr2pt.
 
-The parameter vector $z$ is computed from primitive variables in element $e$ of S\-O\-L\-N and stored one element at a time in /scrns/ zaux according to cmt\-\_\-usrz. $U$ is transposed and stored for element $e$ in ut.
+The parameter vector $z$ is computed from primitive variables in element $e$ of S\-O\-L\-N and stored one element at a time in /scrns/ zaux according to cmt\-\_\-usrz. $U$ is transposed and stored for element $e$ in ut.\hypertarget{group__convhvol_gab4831bb28a78e1c8fd3ec09854bd15ad}{\index{Volume integral for inviscid fluxes@{Volume integral for inviscid fluxes}!fluxdiv\-\_\-strong\-\_\-contra@{fluxdiv\-\_\-strong\-\_\-contra}}
+\index{fluxdiv\-\_\-strong\-\_\-contra@{fluxdiv\-\_\-strong\-\_\-contra}!Volume integral for inviscid fluxes@{Volume integral for inviscid fluxes}}
+\subsubsection[{fluxdiv\-\_\-strong\-\_\-contra}]{\setlength{\rightskip}{0pt plus 5cm}subroutine fluxdiv\-\_\-strong\-\_\-contra (
+\begin{DoxyParamCaption}
+\item[{integer}]{e}
+\end{DoxyParamCaption}
+)}}\label{group__convhvol_gab4831bb28a78e1c8fd3ec09854bd15ad}
+
+
+Computes $\int v \nabla\cdot\mathbf{H}^c dV$ in aliased strong form for element $e$, and increments res1 with it. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em e} & integer index of the element (intent(in)) \\
+\hline
+\end{DoxyParams}

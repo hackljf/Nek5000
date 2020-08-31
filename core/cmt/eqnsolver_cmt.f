@@ -177,7 +177,7 @@ C> @}
 C> \ingroup convhvol
 C> @{
 C> Evaluates inviscid volume terms for all toteq equations in two-point split form
-C> and adds them to res1(:,:,:,e,:).
+C> (Equation~\ref{shortvol}and adds them to res1(:,:,:,e,:).
       subroutine convective_cmt(e)
 ! JH081916 convective flux divergence integrated in weak form and
 !          placed in res1.
@@ -438,7 +438,8 @@ C> @}
 
 C> \ingroup convhvol
 C> @{
-C> Evaluates the two-point split form of the volume integral
+C> Evaluates the two-point split form (Equations~\ref{splitr} through
+C> \ref{splitt}) of the volume integral
 C> \f$\int v \nabla\cdot\mathbf{H}^c dV\f$ and the discontinuous surface
 C> flux \f$\oint v \mathbf{H}^c\cdot\mathbf{n} dA\f$ for the inviscid
 C> flux function in a single element.
@@ -456,9 +457,12 @@ C> flux function in a single element.
 !          cmt_usr2pt passes arguments to F# in the usr file
 !          and FLUXO (github.com/project-fluxo/fluxo)
       integer e,eq
+C> RHS for all equations, all elements (intent(inout))
       real res(lx1,ly1,lz1,lelt,toteq) ! res1 lurks in CMTDATA
+C> Metrics for the e'th elements (intent(in))
       real ja(lx1,ly1,lz1,ldim,ldim)   ! rst outermost
-      real fcons(lx1,ly1,lz1,3,toteq)   ! consistent ``1-point'' flux
+C> Consistent contravariant flux \f$Jdiag\left(\partial r_i/\partial x_k\right) \bH_k\f$ (intent(in))
+      real fcons(lx1,ly1,lz1,3,toteq)
 ! scratch element for extra variables (hardcoded) and conserved variables U
 ! transposed to quantity-innermost. unvectorizable?
       common /scrns/ zaux (nparm,lx1,ly1,lz1),ut(toteq,lx1,ly1,lz1),
@@ -563,7 +567,9 @@ C> for element \f$e\f$, and increments res1 with it.
       include  'MASS'
       include  'CMTDATA'
 
-      integer  e,eq
+C> integer index of the element (intent(in))
+      integer  e
+      integer  eq
       parameter (ldd=lx1*ly1*lz1)
       parameter (ldg=lx1**3,lwkd=2*ldg)
       common /ctmp1/ ur(ldd),us(ldd),ut(ldd),ju(ldd),ud(ldd),tu(ldd)
@@ -602,7 +608,7 @@ C> @}
 
 C> \ingroup convhvol
 C> @{
-C> Evaluates consistent (i.e. \f$F^{\#}(U_{i,j,k},U_{l,j,k}),i=l\f$)
+C> Evaluates consistent (i.e. \f$F^{\#}(U_{i,j,k},U_{l,j,k})=H_{(eq),i},i=l\f$)
 C> flux function at all GLL nodes and stores it in convh.
       subroutine evaluate_aliased_conv_h(e)
       include  'SIZE'
@@ -614,7 +620,7 @@ C> flux function at all GLL nodes and stores it in convh.
       parameter (ldd=lx1*ly1*lz1)
       common /ctmp1/ ju(ldd),jv(ldd)!,ur(ldd),us(ldd),ud(ldd),tu(ldd)
       real ju,jv
-C> integer index of the element
+C> integer index of the element (intent(in))
       integer e
       integer eq
 
@@ -786,8 +792,9 @@ C> @}
 
 C> \ingroup convhvol
 C> @{
-C> Transforms consistent (i.e. \f$F^{\#}(U_{i,j,k},U_{l,j,k}),i=l\f$)
-C> flux for one conserved variable to the contravariant frame.
+C> Transforms consistent (i.e. \f$F^{\#}(U_{i,j,k},U_{l,j,k})=H_{(eq),i},i=l\f$)
+C> flux for one conserved variable to the contravariant frame by
+C> contracting H_i with J diag\f$\left(\partial r_j/\partial x_i\right)\f$.
       subroutine contravariant_flux(frst,fxyz,ja,nel)
       include 'SIZE'
 C> Metrics for the nel elements (intent(in))
@@ -796,6 +803,8 @@ C> Spatial vector of contravariant flux for one variable, nel elements (intent(o
       real frst(nx1*ny1*nz1,ldim,nel)
 C> Spatial vector of physical flux for one variable, nel elements (intent(in))
       real fxyz(nx1*ny1*nz1,ldim,nel)
+C> Number of elements (intent(in))
+      integer nel
       parameter (l11=lx1*ly1*lz1)
       common /ctmp1/ ftmp(l11,ldim)
       integer e
